@@ -385,12 +385,12 @@ details.src li{margin:4px 0}
       <h2 class="sec">第三步 · 我的方案</h2>
       <p class="lead" id="planHead"></p>
       <div class="tabs" id="planTabs">
+        <button class="tab" data-p="today">📅 今日</button>
         <button class="tab on" data-p="diet">🍚 饮食方案</button>
         <button class="tab" data-p="train">🏋️ 运动方案</button>
         <button class="tab" data-p="why">💡 原理说明</button>
         <button class="tab" data-p="faq">❓ 常见问题</button>
         <button class="tab" data-p="log">📈 每周记录</button>
-        <button class="tab" data-p="today">📅 今日</button>
       </div>
     </div>
     <div id="planBody"></div>
@@ -677,7 +677,7 @@ function dayFeedback(day, P){
 
 /* ---------- 最近 7 天统计 ---------- */
 function weekStats(){
-  const out = {logged:[], daysLogged:0, sleeps:[], badSleep:0, proteinHit:0, avgKcal:null, avgCarb:null, avgP:null};
+  const out = {logged:[], daysLogged:0, sleeps:[], badSleep:0, shortSleep:0, proteinHit:0, avgKcal:null, avgCarb:null, avgP:null};
   for(let i = 6; i >= 0; i--){
     const iso = shiftDate(todayISO(), -i);
     const d = (S.days || {})[iso];
@@ -686,6 +686,7 @@ function weekStats(){
     const h = num(st.sleepH);
     if(h > 0) out.sleeps.push(h);
     if(st.sleepQ === 'bad' || st.sleepQ === 'late' || (h > 0 && h < 6) || st.lateNight) out.badSleep++;
+    if(h > 0 && h < 7) out.shortSleep = (out.shortSleep || 0) + 1;
     const t = dayTotals(d);
     if(t.k > 0){ out.logged.push({iso, d, t}); out.daysLogged++; }
   }
@@ -701,52 +702,109 @@ function weekStats(){
 /* ---------- 每周校准 ---------- */
 function weeklyCalibration(P){
   const w = weekStats();
-  const items = [];
-  let carbAdj = 0;
-  if(w.badSleep >= 3){
-    carbAdj += 0.2;
-    items.push({k:'睡眠', v:'最近 7 天有 ' + w.badSleep + ' 天没睡好', a:'低碳日碳水自动上调 0.2 g/kg（约 +' + Math.round(0.2*P.s.weight) + ' g）——先把状态稳住，再谈压碳水', src:[15], hit:true});
+  const items = [], adj = [];
+  const kgWk = (a,b) => { const d = Math.max(1, Math.round((new Date(b.date) - new Date(a.date)) / 86400000)); return (num(b.weight) - num(a.weight)) / d * 7; };
+
+  /* ---- 睡眠 ---- */
+  const sn = w.shortSleep || 0;
+  if(sn >= 3){
+    const d = sn >= 5 ? 30 : 25;
+    items.push({k:'睡眠', v:'最近 7 天有 ' + sn + ' 天睡眠不足 7 小时', a:'低碳日碳水 + ' + d + ' g —— 缺觉时再压碳水，训练状态和情绪都顶不住', hit:true, src:[15]});
+    adj.push({reason:'连续 ' + sn + ' 天睡眠不足 7 小时', target:'低碳日碳水', delta:'+ ' + d + ' g', kind:'low', value:d});
   }else if(w.avgSleep){
-    items.push({k:'睡眠', v:'平均 ' + r1(w.avgSleep) + ' 小时', a:'睡眠够，碳循环可以按计划执行', src:[15]});
+    items.push({k:'睡眠', v:'平均 ' + r1(w.avgSleep) + ' 小时' + (sn ? ('，有 ' + sn + ' 天不足 7 小时') : '，睡眠达标'), a:'碳循环可以按计划执行', src:[15]});
   }else{
     items.push({k:'睡眠', v:'还没有记录', a:'到「今日」里记一下睡眠，连续睡不好会直接影响碳循环能不能执行', src:[15]});
   }
+
+  /* ---- 蛋白质 ---- */
   if(w.daysLogged >= 3){
+    const gap = Math.max(0, Math.round(P.protein - w.avgP));
     if(w.proteinHit < Math.ceil(w.daysLogged*0.5)){
-      items.push({k:'蛋白质', v:w.daysLogged + ' 天里只有 ' + w.proteinHit + ' 天达标', a:'蛋白经常不够：' + proteinOptions(P.s), src:[6], hit:true});
+      items.push({k:'蛋白质', v:w.daysLogged + ' 天里只有 ' + w.proteinHit + ' 天达标，平均差 ' + gap + ' g/天', a:'不改方案，用吃的补：' + proteinOptions(P.s), hit:true, src:[6]});
     }else{
-      items.push({k:'蛋白质', v:w.daysLogged + ' 天里有 ' + w.proteinHit + ' 天达标', a:'蛋白执行得不错，保持', src:[6]});
+      items.push({k:'蛋白质', v:w.daysLogged + ' 天里有 ' + w.proteinHit + ' 天达标（平均 ' + Math.round(w.avgP) + ' g）', a:'蛋白执行得不错，保持', src:[6]});
     }
   }else{
-    items.push({k:'蛋白质', v:'有效记录 ' + w.daysLogged + ' 天', a:'至少记满 3 天才能判断蛋白执行情况', src:[6]});
+    items.push({k:'蛋白质', v:'有效记录 ' + w.daysLogged + ' 天', a:'记满 3 天才能判断蛋白执行情况', src:[6]});
   }
+
+  /* ---- 体重 ---- */
   const logs = (S.logs || []).slice().sort((a,b) => a.date < b.date ? -1 : 1);
   if(logs.length >= 2){
     const a = logs[logs.length-2], b = logs[logs.length-1];
-    const dw = num(b.weight) - num(a.weight);
-    const dd = Math.max(1, Math.round((new Date(b.date) - new Date(a.date)) / 86400000));
-    const pct = num(a.weight) > 0 ? dw/num(a.weight)*(7/dd)*100 : 0;
+    const kw = kgWk(a,b);
+    const pct = num(a.weight) > 0 ? kw / num(a.weight) * 100 : 0;
     const dwW = (num(b.waist) && num(a.waist)) ? num(b.waist) - num(a.waist) : null;
-    const wtxt = '每周 ' + (pct>0?'+':'') + r1(pct) + '%' + (dwW !== null ? '，腰围 ' + (dwW>0?'+':'') + r1(dwW) + ' cm' : '');
+    const vt = '每周 ' + (kw>0?'+':'') + r1(kw) + ' kg（' + (pct>0?'+':'') + r1(pct) + '%）' + (dwW !== null ? ('，腰围 ' + (dwW>0?'+':'') + r1(dwW) + ' cm') : '');
     if(P.s.goal === 'cut'){
-      if(pct < -1.0){ carbAdj += 0.2; items.push({k:'体重', v:wtxt + '（掉太快）', a:'缺口收小一点：碳水 +0.2 g/kg，或减少一次有氧' + R(1) + R(8), src:[1,8], hit:true}); }
-      else if(pct > 0.2){ carbAdj -= 0.2; items.push({k:'体重', v:wtxt, a:'方向反了：碳水 -0.2 g/kg，同时检查有没有漏记（油、酱汁、饮料、坚果）', src:[1,7], hit:true}); }
-      else if(Math.abs(pct) < 0.2 && w.daysLogged >= 4){
-        if(dwW !== null && dwW < -0.3) items.push({k:'体重', v:wtxt, a:'体重不掉但腰围在降 —— 说明你在同时增肌减脂，这是最好的情况，不要动方案', src:[14]});
-        else items.push({k:'体重', v:wtxt + '（基本不动）', a:'腰围也没降的话，把碳水降 0.2 g/kg，或每天加 15 分钟有氧', src:[14], hit:true});
+      if(pct < -1.0){
+        const d = pct < -1.5 ? 200 : 150;
+        items.push({k:'体重', v:vt + '，掉速偏快', a:'每日摄入 + ' + d + ' kcal —— 掉太快丢的多半是水分和肌肉', hit:true, src:[1,8]});
+        adj.push({reason:'上周体重掉速偏快（' + Math.abs(r1(kw)) + ' kg / 周）', target:'每日摄入', delta:'+ ' + d + ' kcal', kind:'kcal', value:d});
+      }else if(pct > 0.2){
+        items.push({k:'体重', v:vt + '，方向反了', a:'每日摄入 - 150 kcal，同时检查有没有漏记（油、酱汁、饮料、坚果）', hit:true, src:[1,7]});
+        adj.push({reason:'上周体重不降反升（' + (kw>0?'+':'') + r1(kw) + ' kg / 周）', target:'每日摄入', delta:'- 150 kcal', kind:'kcal', value:-150});
+      }else if(Math.abs(pct) < 0.2 && w.daysLogged >= 4){
+        if(dwW !== null && dwW < -0.3){
+          items.push({k:'体重', v:vt + '，但腰围在降', a:'这是同时增肌减脂，不用动方案', src:[14]});
+        }else{
+          items.push({k:'体重', v:vt + '，连续两周基本不动', a:'每日摄入 - 100 kcal，或每天加 15 分钟有氧', hit:true, src:[14]});
+          adj.push({reason:'体重连续两周基本不动（' + (kw>0?'+':'') + r1(kw) + ' kg / 周）', target:'每日摄入', delta:'- 100 kcal', kind:'kcal', value:-100});
+        }
+      }else{
+        items.push({k:'体重', v:vt, a:'在合理区间（每周 0.2%~1%），不用调整', src:[1]});
       }
-      else items.push({k:'体重', v:wtxt, a:'在合理区间，不用调整', src:[1]});
     }else{
-      items.push({k:'体重', v:wtxt, a:pct > 1.2 ? '涨得偏快，多出来多半是脂肪，把盈余收一点' : '增肌期体重慢涨是对的，保持', src:[6]});
+      items.push({k:'体重', v:vt, a:pct > 1.2 ? '涨得偏快，多出来的多半是脂肪，把盈余收一点' : '增肌期体重慢涨是对的，保持', src:[6]});
     }
   }else{
-    items.push({k:'体重', v:'还没有足够的周记录', a:'到「每周记录」记一次体重和腰围，才能做体重校准', src:[14]});
+    items.push({k:'体重', v:'还没有两次周记录', a:'到「每周记录」记一次体重和腰围，才能做体重校准', src:[14]});
   }
-  if(w.daysLogged < 3){
-    items.push({k:'记录执行', v:'最近 7 天只记了 ' + w.daysLogged + ' 天', a:'记录少于 3 天，校准会不准。先坚持记一周再回来看这里', src:[]});
-  }
-  return {items, carbAdj, w};
+  if(w.daysLogged < 3) items.push({k:'记录执行', v:'最近 7 天只记了 ' + w.daysLogged + ' 天', a:'记录少于 3 天，校准会不准。先坚持记一周再回来看', src:[]});
+  return {items, adj, w};
 }
+
+/* ---------- 校准应用 ---------- */
+function calibText(){
+  const c = S.calib || {}; const out = [];
+  if(c.kcal) out.push('每日摄入 ' + (c.kcal>0?'+':'') + c.kcal + ' kcal');
+  if(c.low) out.push('低碳日碳水 +' + c.low + ' g');
+  return out.join('，') || '无';
+}
+function calibHTML(P){
+  const cal = weeklyCalibration(P);
+  const applied = !!(S.calib && (S.calib.kcal || S.calib.low));
+  let h = '<div class="card"><h2 class="sec">本周校准</h2>' +
+    '<p class="lead">根据最近 7 天的饮食记录、睡眠和体重变化，判断方案要不要动。每条都写明<b>调整原因 + 具体数值</b>。</p>' +
+    '<div class="scroll"><table><tr><th>调整原因</th><th>调整项</th><th>变化</th></tr>' +
+    (cal.adj.length
+      ? cal.adj.map(a => '<tr><td>' + a.reason + '</td><td>' + a.target + '</td><td><b style="color:var(--teal)">' + a.delta + '</b></td></tr>').join('')
+      : '<tr><td colspan="3" class="muted">本周没有需要调整的地方（或者数据还不够）</td></tr>') +
+    '</table></div>';
+  if(cal.adj.length){
+    h += '<div class="actions"><button class="btn" onclick="applyAllCalib()">✓ 一键应用全部调整</button>' +
+      (applied ? '<button class="btn ghost" onclick="clearCalib()">清除全部调整</button>' : '') + '</div>';
+  }
+  if(applied) h += '<div class="note ok" style="margin-top:10px"><b>已应用到方案：</b>' + calibText() +
+    '<div class="muted" style="margin-top:3px">方案的碳水量和「计算过程」已经同步更新。</div></div>';
+  h += '<h3 class="sub">判断明细</h3>' +
+    cal.items.map(it => '<div class="calib"><div class="lab">' + it.k + '</div><div><b>' + esc(it.v) + '</b>' +
+      (it.hit ? ' <span class="pill warn">已建议调整</span>' : '') +
+      '<div class="muted" style="margin-top:2px">' + it.a + (it.src && it.src.length ? ' ' + it.src.map(x => R(x)).join(' ') : '') + '</div></div></div>').join('');
+  h += '</div>';
+  return h;
+}
+function applyAllCalib(){
+  const cal = weeklyCalibration(buildPlan(S));
+  if(!cal.adj.length) return alert('本周没有需要调整的地方。');
+  let kcal = 0, low = 0;
+  cal.adj.forEach(a => { if(a.kind === 'kcal') kcal += a.value; else if(a.kind === 'low') low += a.value; });
+  S.calib = {kcal, low, at: todayISO()};
+  saveS(); renderPlanBody();
+  alert('已应用全部调整：' + calibText() + '\n方案的碳水量与计算过程已同步更新。');
+}
+function clearCalib(){ S.calib = {kcal:0, low:0}; saveS(); renderPlanBody(); }
 
 /* ---------- 碳循环智能调度 ---------- */
 function cycleDayAdvice(P, iso){
@@ -772,7 +830,7 @@ let S = {
   goal:'cut', cutMode:'weight',
   cutWeight:12, cutWeeks:12, cutFat:20, cutFatWeeks:12,
   bulkWeight:8, bulkMonths:6,
-  cycleLevel:'auto', cycleOn:null, logs:[], days:{}, calibAdj:0
+  cycleLevel:'auto', cycleOn:null, logs:[], days:{}, calib:null
 };
 
 const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
@@ -983,8 +1041,9 @@ function buildPlan(s){
   const cs = carbScale(s);
   const wj = waistJudge(s);
   let carb = carbRaw * cs.k;
-  const calibAdj = num(s.calibAdj) || 0;
-  if(calibAdj) carb = Math.max(60, carb + calibAdj);
+  const calObj = s.calib || {};
+  const calKcal = num(calObj.kcal) || 0, calLow = num(calObj.low) || 0;
+  if(calKcal) carb = Math.max(60, carb + calKcal/4);
   let intake2 = protein*4 + fat*9 + carb*4;
 
   if(s.goal === 'cut'){
@@ -1014,7 +1073,7 @@ function buildPlan(s){
   }
   if(defCap) notes.push('把碳水降下来之后缺口超过了 TDEE 的 25%，已自动回补一部分碳水，缺口控制在安全上限内。');
   if(floorHit) notes.push('碳水下调后总摄入低于安全下限，已按下限回补碳水。想更快，应该增加运动消耗而不是继续少吃。');
-  if(calibAdj) trace.push({k:'⑨b 本周校准', f:'手动应用了每周校准建议', v:(calibAdj>0?'+':'') + r0(calibAdj) + ' g 碳水', src:[14, 15]});
+  if(calKcal) trace.push({k:'⑨b 本周校准', f:'每日摄入 ' + (calKcal>0?'+':'') + calKcal + ' kcal（折算进碳水）', v:'碳水 ' + (calKcal>0?'+':'') + r0(calKcal/4) + ' g', src:[1, 8, 15]});
   trace.push({k:'⑩ 最终每日摄入', f:r0(protein*4) + ' ＋ ' + r0(fat*9) + ' ＋ ' + r0(carb*4) + ' kcal', v:r0(intake) + ' kcal（' + (s.goal==='cut'?'缺口 ':'盈余 ') + r0(Math.abs(deficit)) + ' kcal）', src:[7]});
 
   const kcalPerMin = 0.105 * s.weight;
@@ -1029,11 +1088,14 @@ function buildPlan(s){
   const cm = 1.00;
   const cl = s.goal === 'cut' ? cyi.cl : Math.max(cyi.cl, 0.85);
   const kk = 7 / (cy.h*ch + cy.m*cm + cy.l*cl);
-  const carbHigh = carb*ch*kk, carbMid = carb*cm*kk, carbLow = carb*cl*kk;
+  const carbHigh = carb*ch*kk, carbMid = carb*cm*kk;
+  let carbLow = carb*cl*kk;
+  if(calLow) carbLow = Math.max(20, carbLow + calLow);
   trace.push({k:'⑪ 碳循环', f: useCycle
       ? ('强度「' + cyi.name + '」：高 ' + ch + ' / 中 ' + cm + ' / 低 ' + cl + '，按训练日分布')
       : '未启用（改回每天恒定碳水）',
     v: useCycle ? (r0(carbHigh) + ' / ' + r0(carbMid) + ' / ' + r0(carbLow) + ' g') : (r0(carb) + ' g × 7 天'), src:[11]});
+  if(calLow) trace.push({k:'⑪b 本周校准', f:'低碳日单独上调', v:'低碳日碳水 +' + r0(calLow) + ' g', src:[15]});
 
   const life = cs.life;
   return {
@@ -1835,19 +1897,7 @@ function renderLog(P){
   const moodTxt = {hungry:'很饿', ok:'微微饿', full:'不饿/撑', '':''};
   const today = new Date();
   const t = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
-  const cal = weeklyCalibration(P);
-  let h = '<div class="card"><h2 class="sec">本周校准</h2>' +
-    '<p class="lead">根据最近 7 天的饮食记录、睡眠和体重变化，判断方案要不要动。</p>' +
-    cal.items.map(it => '<div class="calib"><div class="lab">' + it.k + '</div><div><b>' + esc(it.v) + '</b>' +
-      (it.hit ? ' <span class="pill warn">已建议调整</span>' : '') + '<div class="muted" style="margin-top:2px">' + it.a +
-      (it.src && it.src.length ? ' ' + it.src.map(x => R(x)).join(' ') : '') + '</div></div></div>').join('') +
-    (cal.carbAdj ? '<div class="note warn" style="margin-top:10px"><b>本周建议调整：碳水 ' + (cal.carbAdj>0?'+':'') + r1(cal.carbAdj) + ' g/kg（约 ' +
-        (cal.carbAdj>0?'+':'') + Math.round(cal.carbAdj*P.s.weight) + ' g/天）</b><br>' +
-        '应用后，方案里所有碳水量（含高/中/低碳日）会跟着变，计算过程里也会标出这一条。' +
-        '<div class="actions"><button class="btn sm" onclick="applyCalib(' + Math.round(cal.carbAdj*P.s.weight) + ')">应用到方案</button>' +
-        (S.calibAdj ? '<button class="btn ghost sm" onclick="applyCalib(0)">清除校准</button>' : '') + '</div></div>'
-      : (S.calibAdj ? '<div class="note" style="margin-top:10px">当前已应用手动校准：' + (S.calibAdj>0?'+':'') + Math.round(S.calibAdj) + ' g 碳水。<div class="actions"><button class="btn ghost sm" onclick="applyCalib(0)">清除校准</button></div></div>' : '')) +
-    '</div>';
+  let h = calibHTML(P);
   h += '<div class="card"><h2 class="sec">下一周该怎么调</h2>' +
     '<div class="row" style="align-items:center"><div style="flex:1"><b style="font-size:15px;color:var(--ink)">' + esc(a.title) + '</b></div>' +
     '<span class="pill ' + (a.tone === 'ok' ? 'ok' : (a.tone === 'bad' ? 'bad' : (a.tone === 'warn' ? 'warn' : 'info'))) + '">' + esc(a.adj) + '</span></div>' +
@@ -1895,7 +1945,7 @@ function saveLog(){
   alert('已记录 ' + d + (item.weight ? '，体重 ' + item.weight + ' kg' : '') + '。最新数据已回写到基础信息。');
   renderPlanBody();
 }
-function applyCalib(g){ S.calibAdj = num(g) || 0; saveS(); renderPlanBody(); }
+
 function delLog(i){
   if(i < 0 || !S.logs || !S.logs[i]) return;
   if(!confirm('删除 ' + S.logs[i].date + ' 的记录？')) return;
@@ -1993,7 +2043,7 @@ function boot(){
   }
 }
 document.addEventListener('DOMContentLoaded', boot);
-window.goStep = goStep; window.setCycleLevel = setCycleLevel; window.saveLog = saveLog; window.delLog = delLog; window.applyCalib = applyCalib;
+window.goStep = goStep; window.setCycleLevel = setCycleLevel; window.saveLog = saveLog; window.delLog = delLog; window.applyAllCalib = applyAllCalib; window.clearCalib = clearCalib;
 window.openPicker = openPicker; window.closePicker = closePicker; window.pickScene = pickScene;
 window.pickFood = pickFood; window.setMult = setMult; window.toggleMod = toggleMod;
 window.confirmAdd = confirmAdd; window.delItem = delItem; window.goDay = goDay; window.setStatus = setStatus; window.setCycleOn = setCycleOn; window.toggleEstimator = toggleEstimator; window.applyEstimate = applyEstimate; window.pickBF = pickBF;
