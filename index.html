@@ -345,6 +345,10 @@ details.src{background:#FAFDFC;border-radius:14px}
 .card > h2.sec:first-child{border-bottom:1px solid var(--line);padding-bottom:11px;margin-bottom:11px}
 .card > .lead:first-child + h2.sec{border-bottom:1px solid var(--line);padding-bottom:11px;margin-bottom:11px}
 .fooditem b{font-size:13.5px}
+.daynav{display:flex;align-items:center;gap:8px;margin-top:8px}
+.daynav .btn{flex:0 0 auto;min-width:0;padding:8px 12px;font-size:13px;white-space:nowrap}
+.daynav .dn-date{flex:1;text-align:center;font-weight:800;color:var(--ink);font-size:13.5px;letter-spacing:.2px;white-space:nowrap}
+@media(max-width:400px){.daynav .btn{padding:8px 9px;font-size:12.5px}.daynav .dn-date{font-size:12.5px}}
 .footer{opacity:.9}
 @media print{body{background:#fff}}
 </style>
@@ -1954,10 +1958,10 @@ function renderToday(P){
   let h = '';
 
   h += '<div class="card"><h2 class="sec">' + (isToday ? '今天吃了什么' : iso) + '</h2>' +
-    '<div class="row" style="align-items:center;margin-top:6px">' +
-      '<button class="btn ghost sm" style="flex:0 0 auto" onclick="goDay(-1)">← 前一天</button>' +
-      '<div style="text-align:center;font-weight:700;color:var(--ink)">' + iso + (isToday ? '（今天）' : '') + '</div>' +
-      '<button class="btn ghost sm" style="flex:0 0 auto" onclick="goDay(1)">后一天 →</button>' +
+    '<div class="daynav">' +
+      '<button class="btn ghost sm" onclick="goDay(-1)">← 前一天</button>' +
+      '<div class="dn-date">' + iso + (isToday ? ' <span class="pill info">今天</span>' : '') + '</div>' +
+      '<button class="btn ghost sm" onclick="goDay(1)">后一天 →</button>' +
     '</div>';
 
   const remain = Math.round(P.intake - t.k);
