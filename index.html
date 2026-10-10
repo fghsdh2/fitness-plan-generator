@@ -154,6 +154,199 @@ details.src li{margin:4px 0}
 .bar{height:8px;border-radius:99px;background:var(--teal-l);overflow:hidden;margin-top:7px}
 .bar>i{display:block;height:100%;background:var(--teal)}
 @media print{header.top,.no-print{display:none!important}.wrap{max-width:none;padding:0}.card{box-shadow:none;border:1px solid var(--line)}}
+
+/* ==========================================================
+   视觉升级 v2 —— 统一设计系统（覆盖前面基础样式）
+   ========================================================== */
+:root{
+  --teal:#0F5C55; --teal-2:#17857A; --teal-d:#0A3F3B; --teal-l:#E9F4F1; --teal-b:#CFE3DF;
+  --amber:#C2701A; --amber-l:#FDF3E5; --coral:#E4572E; --coral-l:#FDEEE9;
+  --ink:#16211F; --body:#3A4744; --gray:#7C8B88; --line:#E8EFED;
+  --bg1:#F6FAF9; --bg2:#EDF3F1; --card:#FFFFFF;
+  --green:#1E9A64; --p-carb:#E0A22E; --p-fat:#7C8AA5;
+  --grad:linear-gradient(135deg,#0A3F3B 0%,#0F5C55 45%,#17857A 100%);
+  --grad-warm:linear-gradient(135deg,#F4A259,#E4572E);
+  --r:18px; --r-sm:12px;
+  --sh1:0 1px 2px rgba(10,63,59,.05);
+  --sh2:0 2px 6px rgba(10,63,59,.05), 0 12px 28px -8px rgba(10,63,59,.10);
+  --sh3:0 18px 44px -16px rgba(10,63,59,.26);
+}
+body{
+  background:radial-gradient(1200px 600px at 50% -180px,#E4F0ED 0%,var(--bg1) 55%,var(--bg2) 100%);
+  background-attachment:fixed;
+  color:var(--body);
+}
+header.top{
+  background:var(--grad); border-radius:0 0 26px 26px;
+  box-shadow:0 10px 30px -12px rgba(10,63,59,.55);
+  position:relative; overflow:hidden; padding:16px 16px 14px;
+}
+header.top::after{
+  content:""; position:absolute; width:320px; height:320px; right:-110px; top:-190px;
+  background:radial-gradient(circle, rgba(255,255,255,.22), transparent 62%); pointer-events:none;
+}
+header.top h1{letter-spacing:.4px;font-size:17.5px}
+header.top .logo{
+  background:linear-gradient(135deg,rgba(255,255,255,.30),rgba(255,255,255,.10));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.35), 0 6px 14px -6px rgba(0,0,0,.35);
+}
+.stepbox{
+  padding:4px 10px; border-radius:999px; background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.10); flex:0 0 auto;
+}
+.stepbox.on{background:rgba(255,255,255,.96);box-shadow:0 6px 16px -6px rgba(0,0,0,.35)}
+.stepbox.on .steplbl{color:var(--teal-d)}
+.stepbox.done{background:rgba(143,211,198,.16);border-color:rgba(143,211,198,.35)}
+.stepnum{background:transparent;color:rgba(255,255,255,.92);font-weight:800}
+.stepbox.on .stepnum{color:var(--teal-d)}
+.stepbox.done .stepnum{background:#7FE3D2;color:#0A3F3B;box-shadow:0 3px 8px -3px rgba(0,0,0,.4)}
+.stepbox.done .steplbl{color:#CFF3EC}
+.stepbar{flex:0 0 10px;background:rgba(255,255,255,.18)}
+.steps{gap:6px}
+
+.card{
+  border-radius:var(--r); border:1px solid rgba(15,92,85,.055);
+  box-shadow:var(--sh2); padding:18px 18px 16px;
+}
+h2.sec{font-size:16px;letter-spacing:.2px;gap:9px}
+h2.sec::before{
+  width:5px;height:17px;border-radius:3px;background:var(--grad);
+  box-shadow:0 2px 6px -1px rgba(23,133,122,.5);
+}
+h3.sub{font-size:14px;margin:18px 0 7px}
+h4.subsub{font-size:13.5px}
+.lead{color:var(--gray)}
+
+.stat{
+  background:linear-gradient(160deg,#F2F8F6,#E9F4F1);
+  border:1px solid rgba(15,92,85,.06); border-radius:var(--r-sm); padding:12px 13px;
+}
+.stat .k{font-size:11.5px;letter-spacing:.2px}
+.stat .v{font-size:23px;letter-spacing:-.3px;font-variant-numeric:tabular-nums}
+.stat.amber{background:linear-gradient(160deg,#FDF6EC,#FBEEDC)}
+.stat.amber .v{color:var(--amber)}
+
+.btn{
+  border-radius:var(--r-sm); background:var(--grad); font-weight:700; letter-spacing:.2px;
+  box-shadow:0 6px 18px -8px rgba(15,92,85,.9); transition:transform .12s, box-shadow .12s, filter .12s;
+}
+.btn:hover{filter:brightness(1.05);box-shadow:0 10px 22px -8px rgba(15,92,85,.9)}
+.btn:active{transform:translateY(1px) scale(.99)}
+.btn.ghost{background:#fff;color:var(--teal);border:1px solid var(--teal-b);box-shadow:var(--sh1)}
+.btn.ghost:hover{background:var(--teal-l);filter:none}
+.btn.danger{box-shadow:none}
+.btn.sm{padding:8px 14px}
+.btn.lg{padding:15px 22px;border-radius:14px;font-size:16px}
+
+.chip{
+  border-radius:999px; border:1.5px solid var(--teal-b); background:#fff; color:#2C6B64;
+  padding:8px 15px; font-size:13.5px; transition:all .15s ease; box-shadow:var(--sh1);
+}
+.chip:hover{border-color:var(--teal-2);background:#F6FBFA}
+.chip.on{
+  background:var(--grad); color:#fff; border-color:transparent;
+  box-shadow:0 8px 18px -8px rgba(15,92,85,.95);
+}
+.chip.opt.on{background:#fff;color:var(--teal);border-color:var(--teal);box-shadow:inset 0 0 0 1.5px var(--teal)}
+
+.tab{
+  border-radius:999px; border:1.5px solid var(--teal-b); background:#fff; color:#2C6B64;
+  padding:10px 17px; font-size:14px; transition:all .15s ease; box-shadow:var(--sh1);
+}
+.tab:hover{border-color:var(--teal-2);background:#F6FBFA}
+.tab.on{background:var(--grad);color:#fff;border-color:transparent;box-shadow:0 8px 18px -8px rgba(15,92,85,.95)}
+.tabs{gap:8px;padding:2px 0 6px}
+
+.note{
+  border-left:4px solid var(--teal-2); border-radius:14px;
+  background:linear-gradient(120deg,#EDF6F4,#F5FAF9); padding:12px 14px; font-size:13.2px;
+}
+.note.warn{border-left-color:#E0A22E;background:linear-gradient(120deg,#FDF5E9,#FEFAF3)}
+.note.bad{border-left-color:var(--coral);background:linear-gradient(120deg,#FDEFEA,#FEF8F6)}
+.note.ok{border-left-color:var(--green);background:linear-gradient(120deg,#EAF7F1,#F5FBF8)}
+
+th{background:var(--grad);font-size:12.5px;letter-spacing:.2px;padding:10px 9px;border:0}
+td{padding:9px 9px;border-bottom:1px solid #EEF4F2}
+tr:nth-child(even) td{background:#F8FCFB}
+table{border-radius:12px;overflow:hidden}
+
+input,select,textarea{
+  border-radius:var(--r-sm); border:1.5px solid var(--line); background:#FBFDFC;
+  transition:border-color .15s, box-shadow .15s, background .15s;
+}
+input:hover,select:hover,textarea:hover{border-color:var(--teal-b)}
+input:focus,select:focus,textarea:focus{background:#fff;border-color:var(--teal-2);box-shadow:0 0 0 4px rgba(23,133,122,.12)}
+
+.field>label{font-weight:700;color:#5C6B68;font-size:12px;letter-spacing:.2px}
+
+.pill{border-radius:8px;padding:4px 10px;font-size:11.5px}
+.pill.info{background:var(--teal-l);color:var(--teal)}
+.pill.warn{background:var(--amber-l);color:var(--amber)}
+.pill.bad{background:var(--coral-l);color:var(--coral)}
+.pill.ok{background:#E7F6EF;color:var(--green)}
+
+.pbar{height:8px;background:#EFF4F3}
+.pbar>i{background:var(--grad)}
+
+.ref{background:rgba(23,133,122,.10);color:var(--teal-2);border-radius:6px;font-size:9px;padding:2px 5px}
+.ref:hover{background:var(--teal-2);color:#fff}
+
+/* 今日页：环形进度 + 概览 */
+.ringgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px}
+@media(max-width:700px){.ringgrid{grid-template-columns:repeat(3,1fr)}}
+.ringbox{position:relative;text-align:center}
+.ringbox svg{width:100%;max-width:92px;height:auto;display:block;margin:0 auto}
+.ringwrap{position:relative;max-width:92px;margin:0 auto}
+.ringtxt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;pointer-events:none}
+.ringtxt b{display:block;font-size:17px;font-weight:800;color:var(--ink);line-height:1.1;font-variant-numeric:tabular-nums}
+.ringtxt span{display:block;font-size:10px;color:var(--gray);font-variant-numeric:tabular-nums}
+.ringlab{font-size:12px;font-weight:800;color:var(--teal-d);margin-top:5px}
+.ringdelta{font-size:11.5px;margin-top:1px;font-weight:700}
+.hero{
+  background:var(--grad); border-radius:20px; padding:18px; color:#fff;
+  display:flex; align-items:center; gap:16px; box-shadow:var(--sh3); position:relative; overflow:hidden;
+}
+.hero::after{content:"";position:absolute;width:260px;height:260px;right:-90px;top:-150px;
+  background:radial-gradient(circle,rgba(255,255,255,.22),transparent 62%);pointer-events:none}
+.hero .hring{position:relative;width:104px;flex:0 0 auto}
+.hero .hring svg{width:104px;height:104px;display:block}
+.hero .htxt{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.hero .htxt b{font-size:21px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums}
+.hero .htxt span{font-size:10px;opacity:.85;margin-top:2px}
+.hero .hl{font-size:12.5px;opacity:.85;letter-spacing:.3px}
+.hero .hv{font-size:27px;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}
+.hero .hv small{font-size:13px;font-weight:600;opacity:.85}
+.hero .hs{font-size:12px;opacity:.8;margin-top:4px}
+
+/* 食物卡片 */
+.scenegrid{grid-template-columns:repeat(2,1fr);gap:9px}
+@media(min-width:700px){.scenegrid{grid-template-columns:repeat(3,1fr)}}
+.fcard{
+  border-radius:14px; border:1.5px solid var(--line); padding:11px 12px; background:#fff;
+  transition:all .15s ease; box-shadow:var(--sh1); display:flex; gap:10px; align-items:flex-start;
+}
+.fcard:hover{border-color:var(--teal-2);transform:translateY(-2px);box-shadow:var(--sh2)}
+.fcard .emo{font-size:20px;line-height:1;flex:0 0 auto}
+.fcard .n{font-size:13.5px;font-weight:800;color:var(--ink)}
+.fcard .m{font-size:10.5px;color:var(--gray);margin-top:2px;line-height:1.35}
+.fcard .k{font-size:12px;color:var(--teal-2);font-weight:800;margin-top:4px}
+.fooditem{padding:10px 0}
+.fooditem .emo{font-size:17px;flex:0 0 auto;line-height:1.4}
+.mealhead{margin:16px 0 2px;padding-top:10px;border-top:1px dashed var(--line)}
+.addbtn{
+  border:1.5px dashed var(--teal-b); border-radius:999px; padding:5px 14px; color:var(--teal-2);
+  font-weight:800; transition:all .15s;
+}
+.addbtn:hover{border-color:var(--teal-2);background:var(--teal-l)}
+
+.calib{padding:10px 0}
+.calib .lab{font-weight:800;color:var(--teal-d)}
+details.src{background:#FAFDFC;border-radius:14px}
+.card > h2.sec:first-child{border-bottom:1px solid var(--line);padding-bottom:11px;margin-bottom:11px}
+.card > .lead:first-child + h2.sec{border-bottom:1px solid var(--line);padding-bottom:11px;margin-bottom:11px}
+.fooditem b{font-size:13.5px}
+.footer{opacity:.9}
+@media print{body{background:#fff}}
 </style>
 </head>
 <body>
@@ -1715,6 +1908,41 @@ function renderWhy(P){
 let curDay = todayISO();
 let pick = {meal:null, food:null, mult:1, mods:[]};
 
+function ring(v, g, label, unit, color){
+  const R = 33, C = 2*Math.PI*R;
+  const p = g > 0 ? Math.min(1, v/g) : 0;
+  const over = v > g*1.05;
+  const d = Math.round(v - g);
+  return '<div class="ringbox"><div class="ringwrap"><svg viewBox="0 0 84 84">' +
+    '<circle cx="42" cy="42" r="' + R + '" fill="none" stroke="#EFF4F3" stroke-width="9"/>' +
+    '<circle cx="42" cy="42" r="' + R + '" fill="none" stroke="' + (over ? '#E4572E' : color) + '" stroke-width="9" stroke-linecap="round" ' +
+      'stroke-dasharray="' + (C*p).toFixed(1) + ' ' + (C+1).toFixed(1) + '" transform="rotate(-90 42 42)"/></svg>' +
+    '<div class="ringtxt"><b>' + Math.round(v) + '</b><span>/' + Math.round(g) + ' ' + unit + '</span></div></div>' +
+    '<div class="ringlab">' + label + '</div>' +
+    '<div class="ringdelta" style="color:' + (d > 0 ? 'var(--coral)' : (d < 0 ? 'var(--amber)' : 'var(--green)')) + '">' +
+      (d === 0 ? '刚好达标' : (d > 0 ? ('超 ' + d + unit) : ('差 ' + Math.abs(d) + unit))) + '</div></div>';
+}
+function heroRing(v, g){
+  const R = 44, C = 2*Math.PI*R, p = g > 0 ? Math.min(1, v/g) : 0;
+  return '<svg viewBox="0 0 104 104">' +
+    '<circle cx="52" cy="52" r="' + R + '" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="10"/>' +
+    '<circle cx="52" cy="52" r="' + R + '" fill="none" stroke="' + (v > g ? '#FFB4A0' : '#7FE3D2') + '" stroke-width="10" stroke-linecap="round" ' +
+      'stroke-dasharray="' + (C*p).toFixed(1) + ' ' + (C+1).toFixed(1) + '" transform="rotate(-90 52 52)"/></svg>' +
+    '<div class="htxt"><b>' + Math.round(p*100) + '%</b><span>今日进度</span></div>';
+}
+function foodEmoji(name){
+  const m = [
+    [/饺子/, '🥟'], [/汉堡|麦当劳|三明治/, '🍔'], [/沙拉|轻食|时蔬|青菜/, '🥗'],
+    [/鸡腿|鸡胸|黄焖鸡/, '🍗'], [/牛肉|拉面|牛肉面/, '🍜'], [/麻辣|香锅/, '🌶️'],
+    [/饭团|盖浇|炒饭|米饭|饭/, '🍚'], [/米线|米粉|面/, '🍜'], [/鱼|三文鱼/, '🐟'],
+    [/虾/, '🦐'], [/蛋/, '🥚'], [/奶|酸奶|豆浆/, '🥛'], [/玉米/, '🌽'], [/红薯/, '🍠'],
+    [/苹果/, '🍎'], [/坚果|花生/, '🥜'], [/豆腐|豆干/, '🧊'], [/馒头|包子|面包/, '🍞'],
+    [/红烧肉|肉|肠/, '🥩'], [/汤/, '🍲'], [/关东煮/, '🍢'], [/泡面/, '🍜'], [/蛋白棒/, '🍫'], [/油/, '🫗']
+  ];
+  for(const [re, e] of m) if(re.test(name)) return e;
+  return '🍽️';
+}
+
 function pbar(v, g, color){
   const p = g > 0 ? Math.min(100, v/g*100) : 0;
   return '<div class="pbar"><i style="width:' + p.toFixed(0) + '%;background:' + color + '"></i></div>';
@@ -1732,18 +1960,15 @@ function renderToday(P){
       '<button class="btn ghost sm" style="flex:0 0 auto" onclick="goDay(1)">后一天 →</button>' +
     '</div>';
 
-  const cell = (label, v, g, unit, color) => {
-    const d = Math.round(v - g);
-    const cls = Math.abs(d) < (g*0.05) ? 'muted' : (d > 0 ? 'over' : 'under');
-    return '<div class="stat"><div class="k">' + label + '</div><div class="v">' + Math.round(v) +
-      ' <span class="u">/ ' + Math.round(g) + ' ' + unit + '</span></div>' + pbar(v, g, color) +
-      '<div class="' + cls + '" style="font-size:12px;margin-top:3px">' + (d === 0 ? '刚好达标' : (d > 0 ? '超 ' : '差 ') + Math.abs(d) + ' ' + unit) + '</div></div>';
-  };
-  h += '<div class="grid4" style="margin-top:10px">' +
-      cell('热量', t.k, P.intake, 'kcal', 'var(--teal)') +
-      cell('蛋白质', t.p, P.protein, 'g', '#1F7A4D') +
-      cell('碳水', t.c, P.carb, 'g', '#A84E08') +
-      cell('脂肪', t.f, P.fat, 'g', '#6B7280') +
+  const remain = Math.round(P.intake - t.k);
+  h += '<div class="hero" style="margin-top:12px"><div class="hring">' + heroRing(t.k, P.intake) + '</div>' +
+    '<div style="flex:1;min-width:0"><div class="hl">' + (remain >= 0 ? '今天还能吃' : '今天已超出') + '</div>' +
+    '<div class="hv">' + Math.abs(remain) + ' <small>kcal</small></div>' +
+    '<div class="hs">已吃 ' + Math.round(t.k) + ' kcal · 目标 ' + Math.round(P.intake) + ' kcal</div></div></div>' +
+    '<div class="ringgrid">' +
+      ring(t.p, P.protein, '蛋白质', 'g', '#1E9A64') +
+      ring(t.c, P.carb, '碳水', 'g', '#E0A22E') +
+      ring(t.f, P.fat, '脂肪', 'g', '#7C8AA5') +
     '</div>';
 
   h += '<div class="note ' + (fb.tone === 'info' ? '' : fb.tone) + '" style="margin-top:12px"><b>' + esc(fb.title) + '</b><br>' +
@@ -1762,7 +1987,7 @@ function renderToday(P){
     else h += list.map((e, i) => {
       const x = mealTotals(e), f = FOODS.find(z => z.id === e.id) || {n:'?', base:''};
       const modTxt = (e.mods || []).map(j => (f.mods[j] || {}).n).filter(Boolean).join(' · ');
-      return '<div class="fooditem"><div style="flex:1"><b>' + esc(f.n) + '</b> ' +
+      return '<div class="fooditem"><div class="emo">' + foodEmoji(f.n) + '</div><div style="flex:1"><b>' + esc(f.n) + '</b> ' +
         '<span class="muted">' + esc(MULT.find(mx => mx.v === e.mult) ? MULT.find(mx => mx.v === e.mult).n : '') + (modTxt ? ' · ' + esc(modTxt) : '') + '</span>' +
         '<div class="muted">' + Math.round(x.k) + ' kcal · 蛋白 ' + r1(x.p) + ' g · 碳水 ' + r1(x.c) + ' g · 脂肪 ' + r1(x.f) + ' g</div></div>' +
         '<span class="x" onclick="delItem(\'' + m.id + '\',' + i + ')">删除</span></div>';
@@ -1812,8 +2037,9 @@ function renderPicker(P){
     '<span class="chip' + (pick.scene === s ? ' on' : '') + '" onclick="pickScene(\'' + s + '\')">' + s + '</span>').join('') + '</div>';
   if(pick.scene && !f){
     h += '<div class="scenegrid">' + list.map(x =>
-      '<div class="fcard" onclick="pickFood(\'' + x.id + '\')"><div class="n">' + esc(x.n) + '</div>' +
-      '<div class="m">' + esc(x.base) + '</div><div class="k">' + x.k + ' kcal</div></div>').join('') + '</div>';
+      '<div class="fcard" onclick="pickFood(\'' + x.id + '\')"><div class="emo">' + foodEmoji(x.n) + '</div>' +
+      '<div style="flex:1;min-width:0"><div class="n">' + esc(x.n) + '</div>' +
+      '<div class="m">' + esc(x.base) + '</div><div class="k">' + x.k + ' kcal</div></div></div>').join('') + '</div>';
   }
   if(f){
     h += '<h4 class="subsub">' + esc(f.n) + '　<span class="muted">' + esc(f.base) + '　基准 ' + f.k + ' kcal</span></h4>' +
