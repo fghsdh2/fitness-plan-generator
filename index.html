@@ -127,6 +127,28 @@ details.src li{margin:4px 0}
 .trace .k{font-weight:700;color:var(--teal-d);white-space:nowrap}
 .trace .v{font-weight:700;color:var(--ink);white-space:nowrap}
 .trace .f{color:var(--gray);font-size:12px}
+.fooditem{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--line)}
+.fooditem:last-child{border-bottom:0}
+.fooditem .x{color:var(--red);font-size:12px;cursor:pointer;flex:0 0 auto;padding-top:2px}
+.mealhead{display:flex;align-items:center;gap:8px;margin:14px 0 4px}
+.mealhead .ttl{font-weight:700;color:var(--ink);font-size:14px}
+.mealhead .k{margin-left:auto;font-size:12.5px;color:var(--gray)}
+.addbtn{border:1px dashed var(--teal-b);background:#fff;color:var(--teal);border-radius:8px;
+  padding:4px 12px;font-size:13px;font-weight:700;cursor:pointer}
+.scenegrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:8px}
+@media(max-width:700px){.scenegrid{grid-template-columns:repeat(2,1fr)}}
+.fcard{border:1px solid var(--line);border-radius:10px;padding:9px 10px;cursor:pointer;background:#fff}
+.fcard:hover{border-color:var(--teal-b);background:#FAFCFB}
+.fcard.on{border-color:var(--teal);background:var(--teal-l)}
+.fcard .n{font-weight:700;font-size:13px;color:var(--ink)}
+.fcard .m{font-size:11px;color:var(--gray);margin-top:2px}
+.fcard .k{font-size:12px;color:var(--teal);font-weight:700;margin-top:3px}
+.pbar{height:7px;border-radius:99px;background:#EDF1F0;overflow:hidden;margin-top:5px}
+.pbar>i{display:block;height:100%;border-radius:99px}
+.over{color:var(--red)}.under{color:var(--amber)}
+.calib{display:flex;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:13px}
+.calib:last-child{border-bottom:0}
+.calib .lab{flex:0 0 62px;font-weight:700;color:var(--teal-d);font-size:12.5px}
 .hidden{display:none!important}
 .footer{text-align:center;color:var(--gray);font-size:11.5px;padding:18px 6px 6px;line-height:1.7}
 .bar{height:8px;border-radius:99px;background:var(--teal-l);overflow:hidden;margin-top:7px}
@@ -368,6 +390,7 @@ details.src li{margin:4px 0}
         <button class="tab" data-p="why">💡 原理说明</button>
         <button class="tab" data-p="faq">❓ 常见问题</button>
         <button class="tab" data-p="log">📈 每周记录</button>
+        <button class="tab" data-p="today">📅 今日</button>
       </div>
     </div>
     <div id="planBody"></div>
@@ -480,6 +503,266 @@ const FOOD = [
   {n:'大豆油',        c:0,    p:0,    f:100,  unit:'100 g', kcal:900}
 ];
 
+/* ==========================================================
+   常见食物库（按场景分类）
+   营养值参考《中国食物成分表 标准版（第 6 版）》[来源 12]，
+   结合常见外食份量估算，个体差异约 ±10%。k=热量kcal p=蛋白g c=碳水g f=脂肪g
+   ========================================================== */
+const FOODS = [
+  /* ---------- 外卖 ---------- */
+  {id:'w_jitui', s:'外卖', n:'鸡腿饭', base:'一份（米饭＋卤鸡腿＋青菜）', k:650,p:32,c:85,f:18,
+   mods:[{n:'多加一个鸡腿',k:180,p:18,c:0,f:10},{n:'米饭少一半',k:-110,p:-2,c:-25,f:0},{n:'鸡腿去皮',k:-60,p:0,c:0,f:-7},{n:'加一份青菜',k:40,p:2,c:6,f:1}]},
+  {id:'w_huangmen', s:'外卖', n:'黄焖鸡米饭', base:'一份（含米饭）', k:780,p:38,c:90,f:28,
+   mods:[{n:'加一份米饭',k:110,p:2,c:25,f:0},{n:'不喝汤汁',k:-80,p:-2,c:-3,f:-8},{n:'去皮',k:-70,p:0,c:0,f:-8}]},
+  {id:'w_malatang', s:'外卖', n:'麻辣烫', base:'一份（清汤、少麻酱）', k:450,p:25,c:45,f:18,
+   mods:[{n:'加麻酱',k:150,p:2,c:5,f:15},{n:'加面条/粉丝',k:110,p:1,c:25,f:0},{n:'多加肉',k:80,p:10,c:0,f:4},{n:'多点蔬菜',k:30,p:2,c:5,f:0}]},
+  {id:'w_lanzhou', s:'外卖', n:'兰州牛肉面', base:'一碗（标准）', k:620,p:26,c:88,f:16,
+   mods:[{n:'加一份牛肉',k:70,p:10,c:0,f:3},{n:'少面',k:-100,p:-3,c:-22,f:0},{n:'加个蛋',k:75,p:6,c:1,f:5}]},
+  {id:'w_mcd', s:'外卖', n:'麦当劳套餐', base:'板烧鸡腿堡＋中薯＋可乐', k:860,p:30,c:110,f:34,
+   mods:[{n:'不要薯条',k:-320,p:-4,c:-40,f:-16},{n:'可乐换无糖',k:-140,p:0,c:-35,f:0},{n:'不加酱',k:-60,p:0,c:-2,f:-6},{n:'加沙拉',k:60,p:3,c:8,f:2}]},
+  {id:'w_shaxian', s:'外卖', n:'沙县拌面＋扁肉汤', base:'一份', k:620,p:24,c:82,f:18,
+   mods:[{n:'不要汤',k:-150,p:-8,c:-5,f:-8},{n:'加个卤蛋',k:80,p:7,c:1,f:5},{n:'面少一点',k:-90,p:-3,c:-20,f:0}]},
+  {id:'w_gaijiao', s:'外卖', n:'盖浇饭', base:'一份（番茄蛋／青椒肉丝等）', k:700,p:26,c:95,f:22,
+   mods:[{n:'米饭少一半',k:-115,p:-2,c:-26,f:0},{n:'少油',k:-80,p:0,c:0,f:-9},{n:'加个蛋',k:75,p:6,c:1,f:5}]},
+  {id:'w_qingshi', s:'外卖', n:'轻食沙拉（鸡胸＋杂粮）', base:'一份', k:420,p:32,c:40,f:14,
+   mods:[{n:'酱汁全加',k:120,p:1,c:4,f:12},{n:'加一份鸡胸',k:90,p:20,c:0,f:2},{n:'加油醋汁',k:60,p:0,c:2,f:6}]},
+  {id:'w_jiaozi', s:'外卖', n:'饺子（猪肉白菜）', base:'12 个', k:560,p:22,c:62,f:24,
+   mods:[{n:'6 个（半份）',k:-280,p:-11,c:-31,f:-12},{n:'加醋不加油',k:-20,p:0,c:-1,f:-2}]},
+  {id:'w_chaofan', s:'外卖', n:'蛋炒饭', base:'一份', k:700,p:18,c:95,f:26,
+   mods:[{n:'米饭少一半',k:-180,p:-3,c:-30,f:-5},{n:'加个蛋',k:75,p:6,c:1,f:5},{n:'少油',k:-90,p:0,c:0,f:-10}]},
+  {id:'w_mixian', s:'外卖', n:'米线／米粉', base:'一碗', k:520,p:18,c:78,f:14,
+   mods:[{n:'加牛肉',k:80,p:10,c:0,f:4},{n:'换清汤',k:-60,p:-2,c:-2,f:-6},{n:'少粉',k:-110,p:-3,c:-25,f:0}]},
+  {id:'w_malaxiangguo', s:'外卖', n:'麻辣香锅', base:'一份（2 人份的一半）', k:900,p:28,c:60,f:55,
+   mods:[{n:'少油少辣',k:-200,p:0,c:-5,f:-22},{n:'多加蔬菜',k:40,p:3,c:6,f:0}]},
+
+  /* ---------- 食堂 ---------- */
+  {id:'c_2h1s', s:'食堂', n:'两荤一素＋米饭', base:'标准餐盘', k:750,p:30,c:95,f:26,
+   mods:[{n:'米饭减半',k:-110,p:-2,c:-25,f:0},{n:'荤菜改清蒸/卤',k:-90,p:0,c:0,f:-10},{n:'加一份青菜',k:40,p:2,c:6,f:1},{n:'不要汤',k:-50,p:-2,c:-3,f:-4}]},
+  {id:'c_1h2s', s:'食堂', n:'一荤两素＋半份米饭', base:'标准餐盘', k:620,p:26,c:78,f:20,
+   mods:[{n:'米饭正常一份',k:110,p:2,c:25,f:0},{n:'加个水煮蛋',k:75,p:6,c:1,f:5}]},
+  {id:'c_shuizhurou', s:'食堂', n:'水煮肉片＋米饭', base:'一份', k:820,p:32,c:90,f:34,
+   mods:[{n:'不喝汤油',k:-150,p:-3,c:-3,f:-16},{n:'米饭减半',k:-110,p:-2,c:-25,f:0}]},
+  {id:'c_qingzhengyu', s:'食堂', n:'清蒸鱼＋青菜＋米饭', base:'一份', k:560,p:32,c:72,f:12,
+   mods:[{n:'米饭减半',k:-110,p:-2,c:-25,f:0},{n:'加一份青菜',k:40,p:2,c:6,f:1}]},
+  {id:'c_fanqie', s:'食堂', n:'番茄炒蛋＋青菜＋米饭', base:'一份', k:640,p:20,c:92,f:18,
+   mods:[{n:'米饭减半',k:-110,p:-2,c:-25,f:0},{n:'加个蛋',k:75,p:6,c:1,f:5},{n:'少油',k:-80,p:0,c:0,f:-9}]},
+  {id:'c_mian', s:'食堂', n:'打卤面／拌面', base:'一碗', k:560,p:18,c:85,f:14,
+   mods:[{n:'加卤蛋',k:80,p:7,c:1,f:5},{n:'面少一半',k:-150,p:-5,c:-33,f:-2}]},
+  {id:'c_jianshen', s:'食堂', n:'健身餐窗口（鸡胸＋杂粮饭）', base:'一份', k:450,p:38,c:42,f:12,
+   mods:[{n:'加一份鸡胸',k:90,p:20,c:0,f:2},{n:'加个蛋',k:75,p:6,c:1,f:5}]},
+
+  /* ---------- 便利店 ---------- */
+  {id:'s_egg', s:'便利店', n:'茶叶蛋', base:'1 个', k:78,p:7,c:1,f:5, mods:[{n:'再来 1 个',k:78,p:7,c:1,f:5}]},
+  {id:'s_doujiang', s:'便利店', n:'无糖豆浆', base:'400 ml', k:130,p:7,c:12,f:6, mods:[{n:'换成有糖',k:60,p:0,c:15,f:0}]},
+  {id:'s_corn', s:'便利店', n:'玉米', base:'1 根', k:130,p:4,c:28,f:2, mods:[{n:'抹黄油',k:70,p:0,c:0,f:8}]},
+  {id:'s_guandong', s:'便利店', n:'关东煮', base:'萝卜＋豆腐＋魔芋＋蛋', k:220,p:14,c:18,f:10,
+   mods:[{n:'加 2 串肉',k:120,p:10,c:4,f:8},{n:'避开油炸串',k:-150,p:-2,c:-8,f:-12}]},
+  {id:'s_fantuan', s:'便利店', n:'饭团', base:'1 个（金枪鱼／三文鱼）', k:230,p:8,c:38,f:5,
+   mods:[{n:'加 1 个',k:230,p:8,c:38,f:5}]},
+  {id:'s_sanmingzhi', s:'便利店', n:'三明治（火腿蛋）', base:'1 个', k:320,p:14,c:34,f:14, mods:[{n:'不加蛋黄酱',k:-80,p:0,c:-2,f:-9}]},
+  {id:'s_yogurt', s:'便利店', n:'无糖酸奶', base:'200 g', k:140,p:7,c:10,f:7, mods:[{n:'有糖版',k:70,p:0,c:17,f:0}]},
+  {id:'s_milk', s:'便利店', n:'牛奶', base:'250 ml', k:135,p:8,c:12,f:8, mods:[{n:'加 1 盒',k:135,p:8,c:12,f:8}]},
+  {id:'s_bar', s:'便利店', n:'蛋白棒', base:'1 根', k:200,p:15,c:20,f:8, mods:[]},
+  {id:'s_salad', s:'便利店', n:'鸡胸沙拉', base:'1 盒', k:300,p:25,c:20,f:13,
+   mods:[{n:'酱汁全加',k:90,p:1,c:3,f:9},{n:'加鸡胸',k:90,p:20,c:0,f:2}]},
+  {id:'s_paomian', s:'便利店', n:'桶装泡面', base:'1 桶', k:470,p:10,c:60,f:22, mods:[{n:'不喝汤',k:-60,p:-2,c:-4,f:-5},{n:'加个蛋',k:75,p:6,c:1,f:5}]},
+  {id:'s_sausage', s:'便利店', n:'烤肠', base:'1 根', k:200,p:7,c:2,f:18, mods:[]},
+  {id:'s_baozi', s:'便利店', n:'包子', base:'1 个（肉／菜）', k:200,p:7,c:30,f:6, mods:[{n:'再来 1 个',k:200,p:7,c:30,f:6}]},
+
+  /* ---------- 家常 ---------- */
+  {id:'h_rice', s:'家常', n:'米饭', base:'1 碗（约 150 g 熟）', k:175,p:4,c:39,f:0.5, mods:[{n:'半碗',k:-88,p:-2,c:-20,f:0},{n:'2 碗',k:175,p:4,c:39,f:0.5}]},
+  {id:'h_mantou', s:'家常', n:'馒头', base:'1 个（100 g）', k:223,p:7,c:47,f:1, mods:[{n:'半个',k:-112,p:-4,c:-24,f:-1}]},
+  {id:'h_noodle', s:'家常', n:'面条（煮）', base:'1 碗', k:280,p:10,c:55,f:1.5, mods:[{n:'加个蛋',k:75,p:6,c:1,f:5},{n:'半碗',k:-140,p:-5,c:-28,f:-1}]},
+  {id:'h_egg', s:'家常', n:'煮鸡蛋', base:'1 个', k:72,p:6.5,c:0.7,f:4.5, mods:[{n:'2 个',k:72,p:6.5,c:0.7,f:4.5}]},
+  {id:'h_veg', s:'家常', n:'清炒时蔬', base:'一份（约 200 g）', k:120,p:4,c:10,f:7, mods:[{n:'水煮不放油',k:-70,p:0,c:0,f:-8}]},
+  {id:'h_hongshao', s:'家常', n:'红烧肉', base:'一小碗', k:480,p:18,c:12,f:40, mods:[{n:'只吃 3 块',k:-240,p:-9,c:-6,f:-20}]},
+  {id:'h_fanqie', s:'家常', n:'番茄炒蛋', base:'一份', k:220,p:12,c:10,f:14, mods:[{n:'少油',k:-60,p:0,c:0,f:-7},{n:'加个蛋',k:75,p:6,c:1,f:5}]},
+  {id:'h_jixiong', s:'家常', n:'鸡胸肉', base:'一份（150 g）', k:177,p:37,c:1,f:3, mods:[{n:'加 100 g',k:118,p:25,c:0,f:2},{n:'用油煎',k:60,p:0,c:0,f:7}]},
+  {id:'h_niurou', s:'家常', n:'瘦牛肉／酱牛肉', base:'一份（100 g）', k:106,p:20,c:0,f:2.3, mods:[{n:'加 100 g',k:106,p:20,c:0,f:2.3}]},
+  {id:'h_yu', s:'家常', n:'清蒸鱼', base:'一份（150 g）', k:150,p:26,c:0,f:5, mods:[{n:'红烧做法',k:110,p:1,c:6,f:9}]},
+  {id:'h_tofu', s:'家常', n:'北豆腐', base:'一份（150 g）', k:174,p:18,c:6,f:7, mods:[{n:'油煎',k:90,p:1,c:1,f:10}]},
+  {id:'h_soup', s:'家常', n:'家常汤（紫菜蛋花等）', base:'1 碗', k:80,p:5,c:5,f:4, mods:[{n:'浓汤／骨头汤',k:120,p:3,c:3,f:10}]},
+  {id:'h_apple', s:'家常', n:'苹果', base:'1 个（约 200 g）', k:90,p:0.5,c:22,f:0.3, mods:[{n:'再来 1 个',k:90,p:0.5,c:22,f:0.3}]},
+  {id:'h_nuts', s:'家常', n:'坚果', base:'一小把（10 g）', k:57,p:2.4,c:2,f:4.9, mods:[{n:'一把大的（30 g）',k:114,p:4.8,c:4,f:9.8}]},
+
+  /* ---------- 其他 ---------- */
+  {id:'o_unknown', s:'其他', n:'其他 / 记不清', base:'按感觉估', k:550,p:22,c:60,f:22,
+   mods:[{n:'小份（半份感）',k:-200,p:-8,c:-22,f:-8},{n:'大份（加倍感）',k:250,p:10,c:28,f:10}]}
+];
+
+/* 份量按感知选 */
+const MULT = [
+  {n:'正常一份', v:1},
+  {n:'吃了大半', v:0.75},
+  {n:'吃了一半', v:0.5},
+  {n:'只吃了几口', v:0.25},
+  {n:'吃了两份', v:2}
+];
+
+const MEALS = [
+  {id:'breakfast', n:'早餐', emoji:'🌅'},
+  {id:'lunch', n:'午餐', emoji:'🍱'},
+  {id:'dinner', n:'晚餐', emoji:'🌙'},
+  {id:'snack', n:'加餐 / 夜宵', emoji:'🍎'}
+];
+
+/* ==========================================================
+   每日记录：食物记账 + 状态 + 反馈 + 校准
+   ========================================================== */
+const todayISO = () => { const d = new Date(); return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0'); };
+function shiftDate(iso, n){
+  const d = new Date(iso + 'T00:00:00'); d.setDate(d.getDate() + n);
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+}
+function getDay(iso, create){
+  S.days = S.days || {};
+  if(!S.days[iso] && create) S.days[iso] = {meals:{breakfast:[],lunch:[],dinner:[],snack:[]}, status:{}};
+  return S.days[iso] || null;
+}
+const MEALKEYS = ['breakfast','lunch','dinner','snack'];
+
+/* 单条食物的营养（含份量倍数与加料） */
+function mealTotals(e){
+  const f = FOODS.find(x => x.id === e.id);
+  if(!f) return {k:0,p:0,c:0,f:0};
+  const t = {k:f.k*e.mult, p:f.p*e.mult, c:f.c*e.mult, f:f.f*e.mult};
+  (e.mods || []).forEach(i => { const m = f.mods[i]; if(m){ t.k += m.k; t.p += m.p; t.c += m.c; t.f += m.f; } });
+  return t;
+}
+function dayTotals(day){
+  const t = {k:0,p:0,c:0,f:0};
+  if(!day) return t;
+  MEALKEYS.forEach(m => ((day.meals||{})[m]||[]).forEach(e => {
+    const x = mealTotals(e); t.k += x.k; t.p += x.p; t.c += x.c; t.f += x.f;
+  }));
+  return t;
+}
+function mealCal(day, m){ const t={k:0,p:0,c:0,f:0}; ((day&&day.meals&&day.meals[m])||[]).forEach(e=>{const x=mealTotals(e);t.k+=x.k;t.p+=x.p;t.c+=x.c;t.f+=x.f;}); return t; }
+function foodName(id){ const f = FOODS.find(x=>x.id===id); return f ? f.n : '未知'; }
+
+/* 方便的补蛋白选项（按饮食偏好给） */
+function proteinOptions(s){
+  const d = (s && s.diet) || [];
+  if(d.indexOf('素食') >= 0) return '加一份北豆腐（+18 g）、一杯无糖豆浆（+7 g）或一份毛豆（+11 g）';
+  if(d.indexOf('乳糖不耐') >= 0) return '加 1 个茶叶蛋（+7 g）、一份豆腐干（+16 g）或一份鸡胸（+25 g）';
+  return '加 1 个茶叶蛋（+7 g）、一盒无糖酸奶（+7 g）或一份便利店鸡胸（+25 g）';
+}
+
+/* ---------- 当日小反馈 ---------- */
+function dayFeedback(day, P){
+  const t = dayTotals(day);
+  if(!day || t.k <= 0) return {tone:'info', title:'今天还没记录', lines:['点下面的餐次，按场景选食物、按感觉选份量，30 秒就能记完。','记完立刻会告诉你今天哪个吃超了、哪个还差多少。']};
+  const dK = t.k - P.intake, dP = t.p - P.protein, dC = t.c - P.carb, dF = t.f - P.fat;
+  const parts = [];
+  if(Math.abs(dK) >= 50) parts.push('热量' + (dK>0?'超':'少') + ' ' + Math.abs(Math.round(dK)) + ' kcal');
+  if(Math.abs(dP) >= 10) parts.push('蛋白' + (dP>0?'多':'差') + ' ' + Math.abs(Math.round(dP)) + ' g');
+  if(Math.abs(dC) >= 15) parts.push('碳水' + (dC>0?'超':'少') + ' ' + Math.abs(Math.round(dC)) + ' g');
+  if(Math.abs(dF) >= 8) parts.push('脂肪' + (dF>0?'超':'少') + ' ' + Math.abs(Math.round(dF)) + ' g');
+  let tone = 'ok', title;
+  if(!parts.length){ title = '今天吃得挺准'; }
+  else { title = '今天' + parts.join('、'); tone = (dK > 200 || dP < -25 || dC > 45 || dF > 25) ? 'warn' : 'ok'; }
+  const lines = [];
+  if(!parts.length) lines.push('热量和三大营养素都在目标附近，保持这个节奏就行。');
+  const acts = [];
+  if(dC > 30) acts.push('明天米饭少打一半，或把主食换成杂粮');
+  if(dC < -40) acts.push('明天训练前加一份主食（一碗饭 / 一个馒头），不然练起来没劲');
+  if(dP < -20) acts.push('蛋白还差 ' + Math.round(-dP) + ' g：' + proteinOptions(P.s));
+  if(dF > 15) acts.push('明天点餐时备注「少油少酱」，油炸和勾芡的先避开');
+  if(dK > 300) acts.push('今天超得有点多，但明天不用刻意饿回来，按目标正常吃就行');
+  if(dK < -400) acts.push('今天吃得偏少，连着几天这样代谢会往下走，明天把缺口补回来');
+  if(acts.length) lines.push('<b>明天可以这样调整</b>：' + acts.join('；') + '。');
+  else if(parts.length) lines.push('幅度不大，明天按计划吃就行。');
+  return {tone, title, lines, totals:t, dK, dP, dC, dF};
+}
+
+/* ---------- 最近 7 天统计 ---------- */
+function weekStats(){
+  const out = {logged:[], daysLogged:0, sleeps:[], badSleep:0, proteinHit:0, avgKcal:null, avgCarb:null, avgP:null};
+  for(let i = 6; i >= 0; i--){
+    const iso = shiftDate(todayISO(), -i);
+    const d = (S.days || {})[iso];
+    if(!d) continue;
+    const st = d.status || {};
+    const h = num(st.sleepH);
+    if(h > 0) out.sleeps.push(h);
+    if(st.sleepQ === 'bad' || st.sleepQ === 'late' || (h > 0 && h < 6) || st.lateNight) out.badSleep++;
+    const t = dayTotals(d);
+    if(t.k > 0){ out.logged.push({iso, d, t}); out.daysLogged++; }
+  }
+  if(out.sleeps.length) out.avgSleep = out.sleeps.reduce((a,b)=>a+b,0)/out.sleeps.length;
+  if(out.daysLogged){
+    out.avgKcal = out.logged.reduce((a,x)=>a+x.t.k,0)/out.daysLogged;
+    out.avgCarb = out.logged.reduce((a,x)=>a+x.t.c,0)/out.daysLogged;
+    out.avgP = out.logged.reduce((a,x)=>a+x.t.p,0)/out.daysLogged;
+  }
+  return out;
+}
+
+/* ---------- 每周校准 ---------- */
+function weeklyCalibration(P){
+  const w = weekStats();
+  const items = [];
+  let carbAdj = 0;
+  if(w.badSleep >= 3){
+    carbAdj += 0.2;
+    items.push({k:'睡眠', v:'最近 7 天有 ' + w.badSleep + ' 天没睡好', a:'低碳日碳水自动上调 0.2 g/kg（约 +' + Math.round(0.2*P.s.weight) + ' g）——先把状态稳住，再谈压碳水', src:[15], hit:true});
+  }else if(w.avgSleep){
+    items.push({k:'睡眠', v:'平均 ' + r1(w.avgSleep) + ' 小时', a:'睡眠够，碳循环可以按计划执行', src:[15]});
+  }else{
+    items.push({k:'睡眠', v:'还没有记录', a:'到「今日」里记一下睡眠，连续睡不好会直接影响碳循环能不能执行', src:[15]});
+  }
+  if(w.daysLogged >= 3){
+    if(w.proteinHit < Math.ceil(w.daysLogged*0.5)){
+      items.push({k:'蛋白质', v:w.daysLogged + ' 天里只有 ' + w.proteinHit + ' 天达标', a:'蛋白经常不够：' + proteinOptions(P.s), src:[6], hit:true});
+    }else{
+      items.push({k:'蛋白质', v:w.daysLogged + ' 天里有 ' + w.proteinHit + ' 天达标', a:'蛋白执行得不错，保持', src:[6]});
+    }
+  }else{
+    items.push({k:'蛋白质', v:'有效记录 ' + w.daysLogged + ' 天', a:'至少记满 3 天才能判断蛋白执行情况', src:[6]});
+  }
+  const logs = (S.logs || []).slice().sort((a,b) => a.date < b.date ? -1 : 1);
+  if(logs.length >= 2){
+    const a = logs[logs.length-2], b = logs[logs.length-1];
+    const dw = num(b.weight) - num(a.weight);
+    const dd = Math.max(1, Math.round((new Date(b.date) - new Date(a.date)) / 86400000));
+    const pct = num(a.weight) > 0 ? dw/num(a.weight)*(7/dd)*100 : 0;
+    const dwW = (num(b.waist) && num(a.waist)) ? num(b.waist) - num(a.waist) : null;
+    const wtxt = '每周 ' + (pct>0?'+':'') + r1(pct) + '%' + (dwW !== null ? '，腰围 ' + (dwW>0?'+':'') + r1(dwW) + ' cm' : '');
+    if(P.s.goal === 'cut'){
+      if(pct < -1.0){ carbAdj += 0.2; items.push({k:'体重', v:wtxt + '（掉太快）', a:'缺口收小一点：碳水 +0.2 g/kg，或减少一次有氧' + R(1) + R(8), src:[1,8], hit:true}); }
+      else if(pct > 0.2){ carbAdj -= 0.2; items.push({k:'体重', v:wtxt, a:'方向反了：碳水 -0.2 g/kg，同时检查有没有漏记（油、酱汁、饮料、坚果）', src:[1,7], hit:true}); }
+      else if(Math.abs(pct) < 0.2 && w.daysLogged >= 4){
+        if(dwW !== null && dwW < -0.3) items.push({k:'体重', v:wtxt, a:'体重不掉但腰围在降 —— 说明你在同时增肌减脂，这是最好的情况，不要动方案', src:[14]});
+        else items.push({k:'体重', v:wtxt + '（基本不动）', a:'腰围也没降的话，把碳水降 0.2 g/kg，或每天加 15 分钟有氧', src:[14], hit:true});
+      }
+      else items.push({k:'体重', v:wtxt, a:'在合理区间，不用调整', src:[1]});
+    }else{
+      items.push({k:'体重', v:wtxt, a:pct > 1.2 ? '涨得偏快，多出来多半是脂肪，把盈余收一点' : '增肌期体重慢涨是对的，保持', src:[6]});
+    }
+  }else{
+    items.push({k:'体重', v:'还没有足够的周记录', a:'到「每周记录」记一次体重和腰围，才能做体重校准', src:[14]});
+  }
+  if(w.daysLogged < 3){
+    items.push({k:'记录执行', v:'最近 7 天只记了 ' + w.daysLogged + ' 天', a:'记录少于 3 天，校准会不准。先坚持记一周再回来看这里', src:[]});
+  }
+  return {items, carbAdj, w};
+}
+
+/* ---------- 碳循环智能调度 ---------- */
+function cycleDayAdvice(P, iso){
+  if(!P.useCycle) return null;
+  const st = ((getDay(shiftDate(iso,-1)) || {}).status) || {};
+  const h = num(st.sleepH);
+  const bad = st.sleepQ === 'bad' || st.sleepQ === 'late' || (h > 0 && h < 6) || st.lateNight;
+  if(!bad) return null;
+  const reason = st.lateNight ? '昨晚熬夜了' : (h > 0 ? ('昨晚只睡了 ' + h + ' 小时') : '昨晚睡眠质量差');
+  const idx = (new Date(iso + 'T00:00:00').getDay() + 6) % 7;
+  const plan = (WEEK[P.s.training] || WEEK.novice)[idx];
+  if(plan === 'l') return {from:'低碳日', to:'中碳日', carb:P.carbMid, msg:reason + '，今天<b>别按低碳日吃，改成中碳日</b>（碳水 ' + r0(P.carbMid) + ' g）。缺觉时再压碳水，训练状态和情绪都顶不住。'};
+  if(plan === 'm') return {from:'中碳日', to:'高碳日', carb:P.carbHigh, msg:reason + '，今天建议<b>按高碳日吃</b>（碳水 ' + r0(P.carbHigh) + ' g），先把状态补回来。'};
+  return {from:'高碳日', to:'高碳日', carb:P.carbHigh, msg:reason + '，今天本来就是高碳日，照常吃；但训练强度可以降一档，别硬冲。'};
+}
+
 /* ---------- 状态 ---------- */
 let S = {
   sex:'m', age:28, height:172, weight:72, bodyfat:null, bfSource:'measured', waist:null,
@@ -489,7 +772,7 @@ let S = {
   goal:'cut', cutMode:'weight',
   cutWeight:12, cutWeeks:12, cutFat:20, cutFatWeeks:12,
   bulkWeight:8, bulkMonths:6,
-  cycleLevel:'auto', cycleOn:null, logs:[]
+  cycleLevel:'auto', cycleOn:null, logs:[], days:{}, calibAdj:0
 };
 
 const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
@@ -700,6 +983,8 @@ function buildPlan(s){
   const cs = carbScale(s);
   const wj = waistJudge(s);
   let carb = carbRaw * cs.k;
+  const calibAdj = num(s.calibAdj) || 0;
+  if(calibAdj) carb = Math.max(60, carb + calibAdj);
   let intake2 = protein*4 + fat*9 + carb*4;
 
   if(s.goal === 'cut'){
@@ -729,6 +1014,7 @@ function buildPlan(s){
   }
   if(defCap) notes.push('把碳水降下来之后缺口超过了 TDEE 的 25%，已自动回补一部分碳水，缺口控制在安全上限内。');
   if(floorHit) notes.push('碳水下调后总摄入低于安全下限，已按下限回补碳水。想更快，应该增加运动消耗而不是继续少吃。');
+  if(calibAdj) trace.push({k:'⑨b 本周校准', f:'手动应用了每周校准建议', v:(calibAdj>0?'+':'') + r0(calibAdj) + ' g 碳水', src:[14, 15]});
   trace.push({k:'⑩ 最终每日摄入', f:r0(protein*4) + ' ＋ ' + r0(fat*9) + ' ＋ ' + r0(carb*4) + ' kcal', v:r0(intake) + ' kcal（' + (s.goal==='cut'?'缺口 ':'盈余 ') + r0(Math.abs(deficit)) + ' kcal）', src:[7]});
 
   const kcalPerMin = 0.105 * s.weight;
@@ -1034,6 +1320,7 @@ function renderPlanBody(){
   else if(curPlanTab === 'train') $('#planBody').innerHTML = renderTrain(P);
   else if(curPlanTab === 'faq') $('#planBody').innerHTML = renderFaq(P);
   else if(curPlanTab === 'log') $('#planBody').innerHTML = renderLog(P);
+  else if(curPlanTab === 'today') $('#planBody').innerHTML = renderToday(P);
   else $('#planBody').innerHTML = renderWhy(P);
 }
 
@@ -1360,6 +1647,165 @@ function renderWhy(P){
   return h;
 }
 
+/* ==========================================================
+   今日：吃了什么 + 状态 + 反馈
+   ========================================================== */
+let curDay = todayISO();
+let pick = {meal:null, food:null, mult:1, mods:[]};
+
+function pbar(v, g, color){
+  const p = g > 0 ? Math.min(100, v/g*100) : 0;
+  return '<div class="pbar"><i style="width:' + p.toFixed(0) + '%;background:' + color + '"></i></div>';
+}
+function renderToday(P){
+  const iso = curDay, day = getDay(iso, false), t = dayTotals(day), fb = dayFeedback(day, P);
+  const cy = cycleDayAdvice(P, iso);
+  const isToday = iso === todayISO();
+  let h = '';
+
+  h += '<div class="card"><h2 class="sec">' + (isToday ? '今天吃了什么' : iso) + '</h2>' +
+    '<div class="row" style="align-items:center;margin-top:6px">' +
+      '<button class="btn ghost sm" style="flex:0 0 auto" onclick="goDay(-1)">← 前一天</button>' +
+      '<div style="text-align:center;font-weight:700;color:var(--ink)">' + iso + (isToday ? '（今天）' : '') + '</div>' +
+      '<button class="btn ghost sm" style="flex:0 0 auto" onclick="goDay(1)">后一天 →</button>' +
+    '</div>';
+
+  const cell = (label, v, g, unit, color) => {
+    const d = Math.round(v - g);
+    const cls = Math.abs(d) < (g*0.05) ? 'muted' : (d > 0 ? 'over' : 'under');
+    return '<div class="stat"><div class="k">' + label + '</div><div class="v">' + Math.round(v) +
+      ' <span class="u">/ ' + Math.round(g) + ' ' + unit + '</span></div>' + pbar(v, g, color) +
+      '<div class="' + cls + '" style="font-size:12px;margin-top:3px">' + (d === 0 ? '刚好达标' : (d > 0 ? '超 ' : '差 ') + Math.abs(d) + ' ' + unit) + '</div></div>';
+  };
+  h += '<div class="grid4" style="margin-top:10px">' +
+      cell('热量', t.k, P.intake, 'kcal', 'var(--teal)') +
+      cell('蛋白质', t.p, P.protein, 'g', '#1F7A4D') +
+      cell('碳水', t.c, P.carb, 'g', '#A84E08') +
+      cell('脂肪', t.f, P.fat, 'g', '#6B7280') +
+    '</div>';
+
+  h += '<div class="note ' + (fb.tone === 'info' ? '' : fb.tone) + '" style="margin-top:12px"><b>' + esc(fb.title) + '</b><br>' +
+    fb.lines.map(x => '<div style="margin-top:4px">' + x + '</div>').join('') + '</div>';
+  if(cy) h += '<div class="note warn"><b>碳循环智能调度</b><br>' + cy.msg + '</div>';
+  h += '</div>';
+
+  /* 餐次 */
+  h += '<div class="card"><h2 class="sec">按餐次记录</h2><p class="lead">不用称重，点选就行。份量按感觉选，系统自动换算成热量和营养素。</p>';
+  MEALS.forEach(m => {
+    const mc = mealCal(day, m.id), list = ((day && day.meals && day.meals[m.id]) || []);
+    h += '<div class="mealhead"><span>' + m.emoji + '</span><span class="ttl">' + m.n + '</span>' +
+      '<span class="k">' + (mc.k > 0 ? (Math.round(mc.k) + ' kcal · 蛋白 ' + Math.round(mc.p) + ' g') : '还没记') + '</span>' +
+      '<button class="addbtn" onclick="openPicker(\'' + m.id + '\')">+ 添加</button></div>';
+    if(!list.length) h += '<div class="muted" style="padding:4px 0 8px">—</div>';
+    else h += list.map((e, i) => {
+      const x = mealTotals(e), f = FOODS.find(z => z.id === e.id) || {n:'?', base:''};
+      const modTxt = (e.mods || []).map(j => (f.mods[j] || {}).n).filter(Boolean).join(' · ');
+      return '<div class="fooditem"><div style="flex:1"><b>' + esc(f.n) + '</b> ' +
+        '<span class="muted">' + esc(MULT.find(mx => mx.v === e.mult) ? MULT.find(mx => mx.v === e.mult).n : '') + (modTxt ? ' · ' + esc(modTxt) : '') + '</span>' +
+        '<div class="muted">' + Math.round(x.k) + ' kcal · 蛋白 ' + r1(x.p) + ' g · 碳水 ' + r1(x.c) + ' g · 脂肪 ' + r1(x.f) + ' g</div></div>' +
+        '<span class="x" onclick="delItem(\'' + m.id + '\',' + i + ')">删除</span></div>';
+    }).join('');
+  });
+  h += '<div id="pickerBox"></div></div>';
+
+  /* 状态 */
+  h += '<div id="statusCard">' + renderStatusCard(P) + '</div>';
+  return h;
+}
+
+function renderStatusCard(P){
+  const d = getDay(curDay, false); const st = (d && d.status) || {};
+  const chip = (k, v, label) => '<span class="chip' + (st[k] === v ? ' on' : '') + '" onclick="setStatus(\'' + k + '\',\'' + v + '\')">' + label + '</span>';
+  let h = '<div class="card"><h2 class="sec">今天的身体状态</h2><p class="lead">30 秒点完，用来判断方案要不要调整。</p>';
+  h += '<h4 class="subsub">运动</h4><div class="chips">' +
+    chip('exercise','strength','力量训练') + chip('exercise','cardio','有氧') + chip('exercise','both','力量＋有氧') + chip('exercise','none','没练') + '</div>';
+  if(st.exercise && st.exercise !== 'none'){
+    h += '<div class="row" style="margin-top:10px"><div class="field"><label>大概多久（分钟）</label><input id="st_min" type="number" inputmode="numeric" value="' + (st.exMin || 45) + '" onchange="setStatus(\'exMin\', this.value)"></div>' +
+      '<div class="field"><label>主观强度</label><div class="chips">' + chip('intensity','easy','轻松') + chip('intensity','normal','正常') + chip('intensity','hard','吃力') + '</div></div></div>';
+  }
+  h += '<h4 class="subsub">睡眠（昨晚）</h4><div class="row"><div class="field"><label>睡了几小时</label>' +
+    '<input id="st_sleep" type="number" inputmode="decimal" step="0.5" value="' + (st.sleepH || '') + '" placeholder="例如 7" onchange="setStatus(\'sleepH\', this.value)"></div>' +
+    '<div class="field"><label>睡眠质量</label><div class="chips">' + chip('sleepQ','good','好') + chip('sleepQ','ok','一般') + chip('sleepQ','bad','差') + chip('sleepQ','late','熬夜') + '</div></div></div>';
+  h += '<h4 class="subsub">体感</h4><div class="field"><label>饥饿感</label><div class="chips">' +
+    chip('hunger','hungry','很饿') + chip('hunger','ok','微微饿') + chip('hunger','full','不饿 / 撑') + '</div></div>';
+  h += '<div class="field"><label>精力水平</label><div class="chips">' +
+    chip('energy','high','精神好') + chip('energy','mid','一般') + chip('energy','low','很累、不想动') + '</div></div>';
+  h += '<div class="field"><label>今天特别馋碳水吗</label><div class="chips">' +
+    chip('craving','yes','特别馋') + chip('craving','no','还好') + '</div></div>';
+  h += '<div class="field"><label>备注（可不填）</label><textarea rows="2" onchange="setStatus(\'note\', this.value)" placeholder="加班、应酬、生病、生理期……">' + esc(st.note || '') + '</textarea></div>';
+  h += '<div class="note">这些是主观感受，比纯数字更能反映身体状态。连续睡不好或持续很累时，方案会自动放宽碳水，而不是硬压' + R(15) + '。</div></div>';
+  return h;
+}
+
+/* ---------- 食物选择器 ---------- */
+function renderPicker(P){
+  if(!pick.meal) return '';
+  const scenes = ['外卖','食堂','便利店','家常','其他'];
+  const list = pick.scene ? FOODS.filter(f => f.s === pick.scene) : [];
+  const f = pick.food ? FOODS.find(x => x.id === pick.food) : null;
+  let h = '<div class="card" style="background:#FAFCFB;box-shadow:none;border:1px solid var(--teal-b)">' +
+    '<div class="row" style="align-items:center"><div><b style="color:var(--ink)">添加到「' + (MEALS.find(m => m.id === pick.meal) || {}).n + '」</b></div>' +
+    '<button class="btn ghost sm" style="flex:0 0 auto" onclick="closePicker()">关闭</button></div>';
+  h += '<div class="chips" style="margin-top:10px">' + scenes.map(s =>
+    '<span class="chip' + (pick.scene === s ? ' on' : '') + '" onclick="pickScene(\'' + s + '\')">' + s + '</span>').join('') + '</div>';
+  if(pick.scene && !f){
+    h += '<div class="scenegrid">' + list.map(x =>
+      '<div class="fcard" onclick="pickFood(\'' + x.id + '\')"><div class="n">' + esc(x.n) + '</div>' +
+      '<div class="m">' + esc(x.base) + '</div><div class="k">' + x.k + ' kcal</div></div>').join('') + '</div>';
+  }
+  if(f){
+    h += '<h4 class="subsub">' + esc(f.n) + '　<span class="muted">' + esc(f.base) + '　基准 ' + f.k + ' kcal</span></h4>' +
+      '<div class="field"><label>份量（按感觉选）</label><div class="chips">' + MULT.map(m =>
+        '<span class="chip' + (pick.mult === m.v ? ' on' : '') + '" onclick="setMult(' + m.v + ')">' + m.n + '</span>').join('') + '</div></div>';
+    if(f.mods.length){
+      h += '<div class="field"><label>有没有这些情况（可多选）</label><div class="chips">' + f.mods.map((m, i) =>
+        '<span class="chip' + (pick.mods.indexOf(i) >= 0 ? ' on' : '') + '" onclick="toggleMod(' + i + ')">' +
+        (m.k > 0 ? '+ ' : '') + esc(m.n) + '</span>').join('') + '</div></div>';
+    }
+    const tmp = mealTotals({id:f.id, mult:pick.mult, mods:pick.mods});
+    h += '<div class="note"><b>这一份约：</b>' + Math.round(tmp.k) + ' kcal　蛋白 ' + r1(tmp.p) + ' g　碳水 ' + r1(tmp.c) + ' g　脂肪 ' + r1(tmp.f) + ' g' +
+      '<div class="muted" style="margin-top:4px">估算误差约 ±10%，来自《中国食物成分表》' + R(12) + ' 与常见外食份量。</div></div>' +
+      '<div class="actions"><button class="btn" onclick="confirmAdd()">加入 ' + (MEALS.find(m => m.id === pick.meal) || {}).n + '</button>' +
+      '<button class="btn ghost" onclick="pickFood(null)">← 换一个</button></div>';
+  }
+  h += '</div>';
+  return h;
+}
+function refreshPicker(){ const b = document.getElementById('pickerBox'); if(b) b.innerHTML = renderPicker(buildPlan(S)); }
+function pickScene(s){ pick.scene = s; pick.food = null; refreshPicker(); }
+function pickFood(id){ pick.food = id; pick.mult = 1; pick.mods = []; refreshPicker(); }
+function setMult(v){ pick.mult = v; refreshPicker(); }
+function toggleMod(i){
+  const k = pick.mods.indexOf(i);
+  if(k >= 0) pick.mods.splice(k,1); else pick.mods.push(i);
+  refreshPicker();
+}
+function openPicker(meal){ pick = {meal, scene:pick.scene || '外卖', food:null, mult:1, mods:[]}; curPlanTab='today'; refreshPicker();
+  const el = document.getElementById('pickerBox'); if(el) el.scrollIntoView({behavior:'smooth', block:'center'}); }
+function closePicker(){ pick = {meal:null, scene:null, food:null, mult:1, mods:[]}; refreshPicker(); }
+function confirmAdd(){
+  if(!pick.food || !pick.meal) return;
+  const d = getDay(curDay, true);
+  d.meals[pick.meal] = d.meals[pick.meal] || [];
+  d.meals[pick.meal].push({id:pick.food, mult:pick.mult, mods:pick.mods.slice()});
+  saveS(); closePicker(); renderPlanBody();
+}
+function delItem(meal, idx){
+  const d = getDay(curDay, false); if(!d || !d.meals[meal] || !d.meals[meal][idx]) return;
+  const f = FOODS.find(z => z.id === d.meals[meal][idx].id) || {n:''};
+  if(!confirm('删除这条记录：' + f.n + '？')) return;
+  d.meals[meal].splice(idx,1); saveS(); renderPlanBody();
+}
+function goDay(n){ curDay = shiftDate(curDay, n); pick = {meal:null,scene:null,food:null,mult:1,mods:[]}; renderPlanBody(); }
+function setStatus(k, v){
+  const d = getDay(curDay, true);
+  d.status = d.status || {};
+  d.status[k] = (k === 'exMin' || k === 'sleepH') ? num(v) : v;
+  saveS();
+  const box = document.getElementById('statusCard');
+  if(box) box.innerHTML = renderStatusCard(buildPlan(S));
+}
+
 /* ---------- 每周记录与自动调整 ---------- */
 function logAdvice(P){
   const logs = (S.logs || []).slice().sort((a,b) => a.date < b.date ? -1 : 1);
@@ -1389,7 +1835,20 @@ function renderLog(P){
   const moodTxt = {hungry:'很饿', ok:'微微饿', full:'不饿/撑', '':''};
   const today = new Date();
   const t = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
-  let h = '<div class="card"><h2 class="sec">下一周该怎么调</h2>' +
+  const cal = weeklyCalibration(P);
+  let h = '<div class="card"><h2 class="sec">本周校准</h2>' +
+    '<p class="lead">根据最近 7 天的饮食记录、睡眠和体重变化，判断方案要不要动。</p>' +
+    cal.items.map(it => '<div class="calib"><div class="lab">' + it.k + '</div><div><b>' + esc(it.v) + '</b>' +
+      (it.hit ? ' <span class="pill warn">已建议调整</span>' : '') + '<div class="muted" style="margin-top:2px">' + it.a +
+      (it.src && it.src.length ? ' ' + it.src.map(x => R(x)).join(' ') : '') + '</div></div></div>').join('') +
+    (cal.carbAdj ? '<div class="note warn" style="margin-top:10px"><b>本周建议调整：碳水 ' + (cal.carbAdj>0?'+':'') + r1(cal.carbAdj) + ' g/kg（约 ' +
+        (cal.carbAdj>0?'+':'') + Math.round(cal.carbAdj*P.s.weight) + ' g/天）</b><br>' +
+        '应用后，方案里所有碳水量（含高/中/低碳日）会跟着变，计算过程里也会标出这一条。' +
+        '<div class="actions"><button class="btn sm" onclick="applyCalib(' + Math.round(cal.carbAdj*P.s.weight) + ')">应用到方案</button>' +
+        (S.calibAdj ? '<button class="btn ghost sm" onclick="applyCalib(0)">清除校准</button>' : '') + '</div></div>'
+      : (S.calibAdj ? '<div class="note" style="margin-top:10px">当前已应用手动校准：' + (S.calibAdj>0?'+':'') + Math.round(S.calibAdj) + ' g 碳水。<div class="actions"><button class="btn ghost sm" onclick="applyCalib(0)">清除校准</button></div></div>' : '')) +
+    '</div>';
+  h += '<div class="card"><h2 class="sec">下一周该怎么调</h2>' +
     '<div class="row" style="align-items:center"><div style="flex:1"><b style="font-size:15px;color:var(--ink)">' + esc(a.title) + '</b></div>' +
     '<span class="pill ' + (a.tone === 'ok' ? 'ok' : (a.tone === 'bad' ? 'bad' : (a.tone === 'warn' ? 'warn' : 'info'))) + '">' + esc(a.adj) + '</span></div>' +
     '<div style="margin-top:8px;font-size:13.5px">' + a.lines.map(x => '<p style="margin:5px 0">' + x + '</p>').join('') + '</div></div>';
@@ -1436,6 +1895,7 @@ function saveLog(){
   alert('已记录 ' + d + (item.weight ? '，体重 ' + item.weight + ' kg' : '') + '。最新数据已回写到基础信息。');
   renderPlanBody();
 }
+function applyCalib(g){ S.calibAdj = num(g) || 0; saveS(); renderPlanBody(); }
 function delLog(i){
   if(i < 0 || !S.logs || !S.logs[i]) return;
   if(!confirm('删除 ' + S.logs[i].date + ' 的记录？')) return;
@@ -1522,10 +1982,21 @@ function boot(){
   bindChips();
   renderBMI();
   renderRefs();
-  goStep(1);
+  const returning = !!(S.bodyfat && S.height && S.weight);
+  if(returning){
+    curPlanTab = 'today';
+    $$('#planTabs .tab').forEach(x => x.classList.toggle('on', x.dataset.p === 'today'));
+    navFrom = 1;
+    goStep(3);
+  }else{
+    goStep(1);
+  }
 }
 document.addEventListener('DOMContentLoaded', boot);
-window.goStep = goStep; window.setCycleLevel = setCycleLevel; window.saveLog = saveLog; window.delLog = delLog; window.setCycleOn = setCycleOn; window.toggleEstimator = toggleEstimator; window.applyEstimate = applyEstimate; window.pickBF = pickBF;
+window.goStep = goStep; window.setCycleLevel = setCycleLevel; window.saveLog = saveLog; window.delLog = delLog; window.applyCalib = applyCalib;
+window.openPicker = openPicker; window.closePicker = closePicker; window.pickScene = pickScene;
+window.pickFood = pickFood; window.setMult = setMult; window.toggleMod = toggleMod;
+window.confirmAdd = confirmAdd; window.delItem = delItem; window.goDay = goDay; window.setStatus = setStatus; window.setCycleOn = setCycleOn; window.toggleEstimator = toggleEstimator; window.applyEstimate = applyEstimate; window.pickBF = pickBF;
 window.copyPlan = copyPlan;
 </script>
 </body>
