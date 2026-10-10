@@ -593,8 +593,8 @@ details.src li{margin:5px 0}
       </div>
     </div>
     <div class="footer">
-      所有数据只保存在你自己的浏览器里，不上传任何服务器<br>
-      换设备或清缓存前，请用「复制方案文字」或「打印 / 存 PDF」保存一份
+      所有数据仅保存在你当前的浏览器中，清理浏览器缓存、更换设备或浏览器会丢失数据。<br>
+      换设备或清理缓存前，建议先到「每周记录 → 数据与备份」导出一次。
     </div>
   </section>
 
@@ -1114,8 +1114,76 @@ function carbScale(s){
   return {k, why, life:lc};
 }
 
-function saveS(){ try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} }
+let noSave = false;   // 清空数据时置位，避免 pagehide 兜底保存把旧数据写回去
+function saveS(){ if(noSave) return; try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} }
 function loadS(){ try{ const r = localStorage.getItem(STORE); if(r) S = Object.assign(S, JSON.parse(r)); }catch(e){} }
+/* 兜底：页面切到后台或被关闭时再存一次，避免边填边走丢数据 */
+window.addEventListener('pagehide', () => { try{ saveS(); }catch(e){} });
+document.addEventListener('visibilitychange', () => { if(document.visibilityState === 'hidden'){ try{ saveS(); }catch(e){} } });
+
+/* ---------- 数据统计与备份 ---------- */
+function dataStats(){
+  const days = S.days ? Object.keys(S.days).length : 0;
+  let meals = 0;
+  MEALKEYS.forEach(k => {
+    if(!S.days) return;
+    Object.keys(S.days).forEach(d => { meals += (((S.days[d]||{}).meals||{})[k]||[]).length; });
+  });
+  const size = (() => { try{ return Math.max(1, Math.round(new Blob([JSON.stringify(S)]).size/1024*10)/10); }catch(e){ return 0; } })();
+  return {days, meals, logs:(S.logs||[]).length, size};
+}
+function exportData(){
+  try{
+    const payload = {app:'增肌减脂助手', ver:2, savedAt:new Date().toISOString(), data:S};
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = '增肌减脂助手-备份-' + todayISO() + '.json';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => { try{ URL.revokeObjectURL(a.href); }catch(e){} }, 4000);
+    const st = dataStats();
+    alert('已导出备份文件。\n\n包含：每日记录 ' + st.days + ' 天 / 每周记录 ' + st.logs + ' 条 / 约 ' + st.size + ' KB\n\n换设备时，在新设备上打开本页，用「导入数据」把这个文件导回来即可。');
+  }catch(e){ alert('导出失败：' + e.message); }
+}
+function importData(){
+  const inp = document.createElement('input');
+  inp.type = 'file'; inp.accept = '.json,application/json,text/plain';
+  inp.onchange = () => {
+    const f = inp.files && inp.files[0]; if(!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try{
+        const obj = JSON.parse(rd.result);
+        const data = (obj && obj.data) ? obj.data : obj;
+        if(!data || typeof data !== 'object') throw new Error('文件内容不是有效的数据');
+        const dd = data.days ? Object.keys(data.days).length : 0;
+        const ll = data.logs ? data.logs.length : 0;
+        if(!(data.bodyfat || data.weight || dd || ll)) throw new Error('这不像是本工具的备份文件');
+        const ok = confirm('即将导入备份：\n' +
+          '· 基础信息：' + (data.weight ? (data.weight + ' kg / 体脂 ' + (data.bodyfat || '—') + '%') : '无') + '\n' +
+          '· 每日饮食与状态：' + dd + ' 天\n' +
+          '· 每周记录：' + ll + ' 条\n' +
+          (obj.savedAt ? ('· 备份时间：' + String(obj.savedAt).slice(0,10) + '\n') : '') +
+          '\n导入会覆盖当前设备上的全部数据，确定继续吗？');
+        if(!ok) return;
+        S = Object.assign({}, S, data);
+        saveS();
+        try{ fillForm(); renderBMI(); renderRefs(); }catch(e){}
+        goStep(3);
+        alert('导入成功：已恢复 ' + dd + ' 天每日记录、' + ll + ' 条每周记录。');
+      }catch(e){ alert('导入失败：' + e.message); }
+    };
+    rd.readAsText(f);
+  };
+  inp.click();
+}
+function clearAllData(){
+  if(!confirm('这一步会清空本机保存的全部数据：\n· 基础信息与方案\n· 每日饮食 / 运动 / 睡眠记录\n· 每周记录\n\n且无法恢复。\n\n如果只是要重新填，建议先「导出数据」备份。确定继续吗？')) return;
+  if(!confirm('再确认一次：真的要清空吗？')) return;
+  noSave = true;
+  try{ localStorage.removeItem(STORE); }catch(e){}
+  location.reload();
+}
 
 /* ==========================================================
    核心计算
@@ -2240,7 +2308,23 @@ function renderLog(P){
           '</td><td><a href="javascript:void(0)" onclick="delLog(' + idx + ')" style="color:var(--red);font-size:12px">删除</a></td></tr>';
       }).join('') + '</table></div>';
   }
-  h += '<div class="note warn" style="margin-top:10px">记录只存在你这台设备上。换设备前记得用上面的「复制方案文字」保存一份。</div></div>';
+  h += '</div>';
+  const st = dataStats();
+  h += '<div class="card"><h2 class="sec">数据与备份</h2>' +
+    '<p class="lead">所有数据仅保存在你当前的浏览器中，清理浏览器缓存、更换设备或浏览器会丢失数据。</p>' +
+    '<div class="grid3">' +
+      '<div class="stat tint1"><div class="k">每日记录</div><div class="v">' + st.days + ' <span class="u">天</span></div><div class="muted" style="font-size:11.5px">共 ' + st.meals + ' 条饮食记录</div></div>' +
+      '<div class="stat tint2"><div class="k">每周记录</div><div class="v">' + st.logs + ' <span class="u">条</span></div><div class="muted" style="font-size:11.5px">体重 / 腰围 / 状态</div></div>' +
+      '<div class="stat tint3"><div class="k">占用空间</div><div class="v">' + st.size + ' <span class="u">KB</span></div><div class="muted" style="font-size:11.5px">浏览器本地</div></div>' +
+    '</div>' +
+    '<div class="actions" style="margin-top:12px">' +
+      '<button class="btn" onclick="exportData()">导出数据</button>' +
+      '<button class="btn ghost" onclick="importData()">导入数据</button>' +
+      '<button class="btn danger" onclick="clearAllData()">清空本机数据</button>' +
+    '</div>' +
+    '<div class="note" style="margin-top:12px">导出的是一份文本文件（JSON），里面就是你的全部记录。' +
+    '<b>换手机、换浏览器、清理缓存之前，先导出一次</b>，到新设备上用「导入数据」导回来即可。</div>' +
+  '</div>';
   return h;
 }
 function saveLog(){
@@ -2355,7 +2439,7 @@ function boot(){
   }
 }
 document.addEventListener('DOMContentLoaded', boot);
-window.goStep = goStep; window.setCycleLevel = setCycleLevel; window.saveLog = saveLog; window.delLog = delLog; window.applyAllCalib = applyAllCalib; window.clearCalib = clearCalib;
+window.goStep = goStep; window.exportData = exportData; window.importData = importData; window.clearAllData = clearAllData; window.setCycleLevel = setCycleLevel; window.saveLog = saveLog; window.delLog = delLog; window.applyAllCalib = applyAllCalib; window.clearCalib = clearCalib;
 window.openPicker = openPicker; window.closePicker = closePicker; window.pickScene = pickScene;
 window.pickFood = pickFood; window.setMult = setMult; window.toggleMod = toggleMod;
 window.confirmAdd = confirmAdd; window.confirmCustom = confirmCustom; window.cuMode = cuMode; window.cuCat = cuCat; window.cuPortion = cuPortion; window.cuInput = cuInput; window.delItem = delItem; window.goDay = goDay; window.setStatus = setStatus; window.setCycleOn = setCycleOn; window.toggleEstimator = toggleEstimator; window.applyEstimate = applyEstimate; window.pickBF = pickBF;
