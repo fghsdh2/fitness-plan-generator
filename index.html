@@ -1,0 +1,1532 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#145A54">
+<meta name="description" content="面向上班族的增肌减脂方案生成器，输入基础信息即可生成个性化饮食与运动方案，所有建议标注可追溯的来源。">
+<title>增肌减脂方案生成器 · 上班族版</title>
+<style>
+:root{
+  --teal:#145A54; --teal-d:#0E403C; --teal-l:#EDF4F2; --teal-b:#D2DEDB;
+  --amber:#A84E08; --amber-l:#FBF1E4; --ink:#22282B; --body:#333A3E;
+  --gray:#6B7280; --line:#E5EAE9; --bg:#F4F6F5; --card:#FFF;
+  --red:#B4232A; --red-l:#FBE9EA; --green:#1F7A4D; --green-l:#E4F3EA;
+  --r:14px; --sh:0 1px 2px rgba(16,32,30,.06),0 6px 18px rgba(16,32,30,.06);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC","Helvetica Neue",Arial,sans-serif;
+  background:var(--bg);color:var(--body);font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+header.top{position:sticky;top:0;z-index:30;background:linear-gradient(135deg,var(--teal-d),var(--teal));
+  color:#fff;padding:13px 16px 11px;box-shadow:0 2px 12px rgba(14,64,60,.22)}
+.hin{max-width:1080px;margin:0 auto;display:flex;align-items:center;gap:11px}
+.logo{width:36px;height:36px;border-radius:11px;background:rgba(255,255,255,.16);display:grid;place-items:center;font-size:18px;flex:0 0 auto}
+header.top h1{font-size:16.5px;margin:0;font-weight:700;letter-spacing:.3px}
+header.top .sub{font-size:11.5px;opacity:.84;margin-top:1px}
+.steps{max-width:1080px;margin:12px auto 0;padding:0 16px;display:flex;gap:8px;align-items:center}
+.stepbox{display:flex;align-items:center;gap:7px;flex:1;min-width:0}
+.stepnum{width:24px;height:24px;border-radius:50%;background:rgba(255,255,255,.2);color:#fff;
+  display:grid;place-items:center;font-size:12.5px;font-weight:700;flex:0 0 auto}
+.stepbox.on .stepnum{background:#fff;color:var(--teal)}
+.stepbox.done .stepnum{background:#8FD3C6;color:var(--teal-d)}
+.steplbl{font-size:12.5px;color:rgba(255,255,255,.75);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stepbox.on .steplbl{color:#fff;font-weight:700}
+.stepbar{flex:0 0 14px;height:2px;background:rgba(255,255,255,.25);border-radius:2px}
+.wrap{max-width:1080px;margin:0 auto;padding:14px 16px 80px}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:18px;margin-bottom:14px}
+.card.tight{padding:13px}
+h2.sec{font-size:15.5px;color:var(--teal-d);margin:0 0 4px;font-weight:700;display:flex;align-items:center;gap:8px}
+h2.sec::before{content:"";width:4px;height:15px;border-radius:2px;background:var(--teal);flex:0 0 auto}
+h3.sub{font-size:13.5px;color:var(--teal);margin:16px 0 7px;font-weight:700}
+h4.subsub{font-size:13px;color:var(--ink);margin:12px 0 5px;font-weight:700}
+.lead{color:var(--gray);font-size:12.5px;margin:3px 0 12px}
+p{margin:7px 0}
+.muted{color:var(--gray);font-size:12.5px}
+.small{font-size:12.5px}
+.row{display:flex;gap:11px;flex-wrap:wrap}
+.row>*{flex:1;min-width:135px}
+.field{margin-bottom:12px}
+.field>label{display:block;font-size:12.5px;color:var(--gray);margin-bottom:5px;font-weight:600}
+input,select,textarea{width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:10px;
+  font-size:15px;font-family:inherit;color:var(--ink);background:#fff;outline:none}
+input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(20,90,84,.1)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;background:var(--teal);color:#fff;
+  border:0;border-radius:10px;padding:12px 20px;font-size:15px;font-weight:600;cursor:pointer;font-family:inherit}
+.btn:active{transform:translateY(1px)}
+.btn.block{width:100%}
+.btn.ghost{background:#fff;color:var(--teal);border:1px solid var(--teal-b)}
+.btn.danger{background:#fff;color:var(--red);border:1px solid #EBD5D6}
+.btn.sm{padding:7px 13px;font-size:13px;border-radius:9px}
+.btn.lg{padding:14px 22px;font-size:16px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:11px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:11px}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:11px}
+@media(max-width:700px){.grid4{grid-template-columns:1fr 1fr}.grid3{grid-template-columns:1fr 1fr}}
+.stat{background:var(--teal-l);border-radius:12px;padding:11px 13px}
+.stat .k{font-size:11.5px;color:var(--gray);font-weight:600}
+.stat .v{font-size:20px;color:var(--teal-d);font-weight:700;line-height:1.25;word-break:break-all}
+.stat .u{font-size:12px;color:var(--gray);font-weight:600}
+.stat.amber{background:var(--amber-l)}.stat.amber .v{color:var(--amber)}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:700;white-space:nowrap}
+.pill.ok{background:var(--green-l);color:var(--green)}
+.pill.warn{background:var(--amber-l);color:var(--amber)}
+.pill.bad{background:var(--red-l);color:var(--red)}
+.pill.info{background:var(--teal-l);color:var(--teal)}
+.note{border-left:3px solid var(--teal);background:var(--teal-l);border-radius:0 10px 10px 0;padding:11px 13px;margin:11px 0;font-size:13px}
+.note.warn{border-left-color:var(--amber);background:var(--amber-l)}
+.note.bad{border-left-color:var(--red);background:var(--red-l)}
+.note.ok{border-left-color:var(--green);background:var(--green-l)}
+.note b{color:var(--teal-d)}.note.warn b{color:var(--amber)}.note.bad b{color:var(--red)}.note.ok b{color:var(--green)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+th{background:var(--teal);color:#fff;font-weight:600;padding:9px 8px;text-align:left;font-size:12.5px}
+th:first-child{border-radius:8px 0 0 0}th:last-child{border-radius:0 8px 0 0}
+td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#FAFCFB}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.chips{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px}
+.chip{border:1px solid var(--teal-b);border-radius:999px;padding:7px 14px;font-size:13.5px;background:#fff;
+  color:var(--teal);cursor:pointer;font-weight:600;user-select:none}
+.chip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.chip.opt.on{background:#fff;color:var(--teal);border-color:var(--teal);box-shadow:inset 0 0 0 1px var(--teal)}
+.tabs{display:flex;gap:7px;overflow-x:auto;padding-bottom:3px;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{flex:0 0 auto;border:1px solid var(--teal-b);background:#fff;color:var(--teal);padding:9px 16px;
+  border-radius:999px;font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.tab.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.ref{font-size:9.5px;color:var(--teal);font-weight:700;vertical-align:super;text-decoration:none;
+  background:var(--teal-l);border-radius:4px;padding:1px 4px;margin:0 3px 0 2px;cursor:pointer}
+.ref:hover{background:var(--teal);color:#fff}
+details.src{border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-top:9px;background:#FBFCFC}
+details.src summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--teal)}
+details.src ul{margin:8px 0 2px;padding-left:18px;font-size:12.5px;color:var(--gray)}
+details.src li{margin:4px 0}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:8px}
+.day{border-radius:10px;padding:9px 5px;text-align:center;font-size:11.5px;border:1px solid var(--line);background:#fff}
+.day .d{font-weight:700;color:var(--ink);font-size:12px}
+.day .t{font-size:10.5px;color:var(--gray);margin-top:2px}
+.day .c{font-weight:700;margin-top:3px;font-size:12.5px}
+.day.high{background:#E4F3EA;border-color:#B9DFC9}.day.high .c{color:var(--green)}
+.day.mid{background:#EDF4F2;border-color:var(--teal-b)}.day.mid .c{color:var(--teal)}
+.day.low{background:#FBF1E4;border-color:#EFD9BE}.day.low .c{color:var(--amber)}
+@media(max-width:700px){.week{grid-template-columns:repeat(4,1fr)}}
+.refs{font-size:12.5px;color:var(--gray);line-height:1.75}
+.refs li{margin-bottom:7px}
+.refs li:target{background:var(--amber-l);border-radius:6px}
+.bfgrid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-top:8px}
+@media(max-width:700px){.bfgrid{grid-template-columns:repeat(3,1fr)}}
+.bfcard{border:2px solid var(--line);border-radius:12px;padding:8px 4px;text-align:center;cursor:pointer;background:#fff}
+.bfcard.on{border-color:var(--teal);background:var(--teal-l)}
+.bfcard svg{display:block;width:100%;height:74px;color:#9CC0BB}
+.bfcard.on svg{color:var(--teal)}
+.bfcard .t{font-size:11.5px;font-weight:700;color:var(--ink);margin-top:4px}
+.bfcard .r{font-size:10.5px;color:var(--gray)}
+.trace{width:100%;border-collapse:collapse;font-size:12.5px;margin-top:8px}
+.trace td{border-bottom:1px solid var(--line);padding:7px 6px;vertical-align:top}
+.trace .k{font-weight:700;color:var(--teal-d);white-space:nowrap}
+.trace .v{font-weight:700;color:var(--ink);white-space:nowrap}
+.trace .f{color:var(--gray);font-size:12px}
+.hidden{display:none!important}
+.footer{text-align:center;color:var(--gray);font-size:11.5px;padding:18px 6px 6px;line-height:1.7}
+.bar{height:8px;border-radius:99px;background:var(--teal-l);overflow:hidden;margin-top:7px}
+.bar>i{display:block;height:100%;background:var(--teal)}
+@media print{header.top,.no-print{display:none!important}.wrap{max-width:none;padding:0}.card{box-shadow:none;border:1px solid var(--line)}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="hin">
+    <div class="logo">🔥</div>
+    <div style="min-width:0">
+      <h1>增肌减脂方案生成器</h1>
+      <div class="sub">上班族版 · 3 步生成 · 每条建议都可追溯来源</div>
+    </div>
+  </div>
+  <div class="steps" id="steps">
+    <div class="stepbox on" data-s="1"><div class="stepnum">1</div><div class="steplbl">基础信息</div></div>
+    <div class="stepbar"></div>
+    <div class="stepbox" data-s="2"><div class="stepnum">2</div><div class="steplbl">目标设定</div></div>
+    <div class="stepbar"></div>
+    <div class="stepbox" data-s="3"><div class="stepnum">3</div><div class="steplbl">我的方案</div></div>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <!-- ================= 第 1 步 ================= -->
+  <section id="view-s1">
+    <div class="card">
+      <h2 class="sec">第一步 · 基础信息</h2>
+      <p class="lead">体脂率和腰围直接决定方案准不准，建议先量一下。不知道体脂率的，用下面的估算助手。</p>
+
+      <div class="row">
+        <div class="field"><label>性别</label>
+          <select id="f_sex"><option value="m">男</option><option value="f">女</option></select></div>
+        <div class="field"><label>年龄（岁）</label>
+          <input id="f_age" type="number" inputmode="numeric" value="28" min="14" max="80"></div>
+      </div>
+      <div class="row">
+        <div class="field"><label>身高（cm）</label>
+          <input id="f_height" type="number" inputmode="decimal" value="172" min="130" max="220"></div>
+        <div class="field"><label>体重（kg）</label>
+          <input id="f_weight" type="number" inputmode="decimal" step="0.1" value="72" min="30" max="250"></div>
+      </div>
+
+      <div class="row">
+        <div class="field">
+          <label>体脂率 %（核心数据，必填）</label>
+          <input id="f_bodyfat" type="number" inputmode="decimal" step="0.1" placeholder="例如 24">
+          <div class="muted" style="margin-top:5px">
+            <a href="javascript:void(0)" onclick="toggleEstimator()" style="color:var(--teal);font-weight:700">不知道？点这里估算 →</a>
+          </div>
+        </div>
+        <div class="field">
+          <label>腰围（cm，肚脐水平绕一圈）</label>
+          <input id="f_waist" type="number" inputmode="decimal" step="0.5" placeholder="例如 86">
+        </div>
+      </div>
+
+      <div id="estimator" class="hidden">
+        <div class="note">
+          <b>体脂率估算助手</b><br>
+          两种方式任选：先用公式粗算，再对照外观图微调。估算值和真实值通常有 ±3~5% 的误差<span class="ref">13</span>。
+        </div>
+        <div class="grid2">
+          <div class="stat"><div class="k">公式估算（Deurenberg）</div>
+            <div class="v" id="estVal">—</div>
+            <div class="muted">体脂% = 1.20×BMI + 0.23×年龄 − 10.8×性别 − 5.4<span class="ref">13</span></div>
+          </div>
+          <div>
+            <button class="btn ghost sm" onclick="applyEstimate()">用公式结果填入</button>
+            <p class="muted" style="margin-top:6px">公式只用了身高体重年龄，对肌肉量大或水肿的人偏差会大一些。</p>
+          </div>
+        </div>
+        <h4 class="subsub">外观参照（选最接近你的一档）</h4>
+        <div class="bfgrid" id="bfGrid"></div>
+        <p class="muted">看图判断比较主观，两次估算差 3% 以内就算够用了。</p>
+      </div>
+
+      <h3 class="sub">日常活动水平（按你的工作状态选）</h3>
+      <div class="chips" id="c_activity">
+        <span class="chip" data-v="sedentary">久坐办公（一天基本不动）</span>
+        <span class="chip" data-v="light">轻度走动（偶尔起身、通勤）</span>
+        <span class="chip" data-v="moderate">中度活动（经常走动 / 体力活一半）</span>
+        <span class="chip" data-v="heavy">重体力工作</span>
+      </div>
+
+      <h3 class="sub">运动基础</h3>
+      <div class="chips" id="c_training">
+        <span class="chip" data-v="none">零基础（基本不运动）</span>
+        <span class="chip" data-v="novice">新手（每周 1~2 次）</span>
+        <span class="chip" data-v="inter">有基础（每周 3~4 次）</span>
+        <span class="chip" data-v="adv">进阶（每周 5 次以上）</span>
+      </div>
+
+      <h3 class="sub">作息与压力（决定碳水能压多狠）</h3>
+      <div class="row">
+        <div class="field"><label>平均睡眠时长</label>
+          <select id="f_sleep">
+            <option value="lt6">不足 6 小时</option>
+            <option value="6to7">6~7 小时</option>
+            <option value="7to8" selected>7~8 小时</option>
+            <option value="gt8">8 小时以上</option>
+          </select></div>
+        <div class="field"><label>作息是否规律</label>
+          <select id="f_regular">
+            <option value="yes" selected>规律（基本固定时间睡、固定时间吃）</option>
+            <option value="no">不规律（熬夜、轮班、吃饭时间飘）</option>
+          </select></div>
+      </div>
+      <div class="field"><label>近一个月的压力水平</label>
+        <div class="chips" id="c_stress">
+          <span class="chip" data-v="low">比较轻松</span>
+          <span class="chip" data-v="mid">一般</span>
+          <span class="chip" data-v="high">压力很大</span>
+        </div></div>
+      <div class="field"><label>有无运动损伤 / 不适（可多选）</label>
+        <div class="chips" id="c_injury">
+          <span class="chip opt" data-v="无">没有</span>
+          <span class="chip opt" data-v="膝">膝盖</span>
+          <span class="chip opt" data-v="腰">腰</span>
+          <span class="chip opt" data-v="肩">肩</span>
+          <span class="chip opt" data-v="腕">手腕</span>
+        </div></div>
+
+      <h3 class="sub">现在的饮食习惯（方案顺着你的习惯改，不硬掰）</h3>
+      <div class="row">
+        <div class="field"><label>每天吃几餐</label>
+          <select id="f_meals">
+            <option value="2">2 餐</option>
+            <option value="3" selected>3 餐</option>
+            <option value="4">3 餐 + 1 次加餐</option>
+            <option value="5">5 餐以上（少量多餐）</option>
+          </select></div>
+        <div class="field"><label>外卖频率</label>
+          <select id="f_takeout">
+            <option value="rare">几乎不吃</option>
+            <option value="1to3" selected>每周 1~3 次</option>
+            <option value="4to6">每周 4~6 次</option>
+            <option value="daily">基本每天</option>
+          </select></div>
+      </div>
+      <div class="row">
+        <div class="field"><label>主食偏好</label>
+          <select id="f_staple">
+            <option value="米饭" selected>米饭为主</option>
+            <option value="面食">面食为主</option>
+            <option value="杂粮">杂粮 / 粗粮为主</option>
+            <option value="混合">混着吃，不固定</option>
+          </select></div>
+        <div class="field"><label>夜宵频率</label>
+          <select id="f_late">
+            <option value="no" selected>基本不吃</option>
+            <option value="1to2">每周 1~2 次</option>
+            <option value="3plus">每周 3 次以上</option>
+          </select></div>
+      </div>
+
+      <h3 class="sub">饮食偏好 / 忌口（选填，可多选）</h3>
+      <div class="chips" id="c_diet">
+        <span class="chip opt" data-v="外卖为主">外卖为主</span>
+        <span class="chip opt" data-v="食堂为主">食堂为主</span>
+        <span class="chip opt" data-v="自己做饭">自己做饭</span>
+        <span class="chip opt" data-v="素食">素食</span>
+        <span class="chip opt" data-v="不吃牛羊">不吃牛羊</span>
+        <span class="chip opt" data-v="不吃海鲜">不吃海鲜</span>
+        <span class="chip opt" data-v="乳糖不耐">乳糖不耐</span>
+        <span class="chip opt" data-v="不吃辣">不吃辣</span>
+      </div>
+
+      <div class="note" id="bmiBox"></div>
+
+      <div style="margin-top:16px">
+        <button class="btn block lg" onclick="goStep(2)">下一步：设定目标 →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 第 2 步 ================= -->
+  <section id="view-s2" class="hidden">
+    <div class="card">
+      <h2 class="sec">第二步 · 目标设定</h2>
+      <p class="lead">先选一个主目标。一次只追一个，效率最高。</p>
+
+      <div class="tabs" id="goalTabs" style="margin-bottom:14px">
+        <button class="tab on" data-g="cut">我要减脂（掉秤 / 降体脂）</button>
+        <button class="tab" data-g="bulk">我要增肌（长肌肉 / 涨体重）</button>
+      </div>
+
+      <div id="goalCut">
+        <div class="field"><label>想减掉多少</label>
+          <div class="chips" id="cutMode">
+            <span class="chip" data-v="weight">按体重（斤）</span>
+            <span class="chip" data-v="fat">按体脂率（%）</span>
+          </div>
+        </div>
+        <div class="row" id="cutWeightRow">
+          <div class="field"><label>目标减重（斤，1 斤 = 0.5 kg）</label>
+            <input id="f_cutWeight" type="number" inputmode="decimal" step="1" value="12"></div>
+          <div class="field"><label>期望用时（周）</label>
+            <input id="f_cutWeeks" type="number" inputmode="numeric" step="1" value="12"></div>
+        </div>
+        <div class="row hidden" id="cutFatRow">
+          <div class="field"><label>目标体脂率（%）</label>
+            <input id="f_cutFat" type="number" inputmode="decimal" step="0.5" value="20"></div>
+          <div class="field"><label>期望用时（周）</label>
+            <input id="f_cutFatWeeks" type="number" inputmode="numeric" step="1" value="12"></div>
+        </div>
+      </div>
+
+      <div id="goalBulk" class="hidden">
+        <div class="row">
+          <div class="field"><label>目标增重（斤，含肌肉与水）</label>
+            <input id="f_bulkWeight" type="number" inputmode="decimal" step="1" value="8"></div>
+          <div class="field"><label>期望用时（月）</label>
+            <input id="f_bulkMonths" type="number" inputmode="numeric" step="1" value="6"></div>
+        </div>
+      </div>
+
+      <div id="validBox"></div>
+
+      <div class="row" style="margin-top:16px">
+        <div style="flex:0 0 auto"><button class="btn ghost" onclick="goStep(1)">← 返回</button></div>
+        <div><button class="btn block lg" onclick="goStep(3)">生成我的方案 →</button></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 第 3 步 ================= -->
+  <section id="view-s3" class="hidden">
+    <div class="card">
+      <h2 class="sec">第三步 · 我的方案</h2>
+      <p class="lead" id="planHead"></p>
+      <div class="tabs" id="planTabs">
+        <button class="tab on" data-p="diet">🍚 饮食方案</button>
+        <button class="tab" data-p="train">🏋️ 运动方案</button>
+        <button class="tab" data-p="why">💡 原理说明</button>
+        <button class="tab" data-p="faq">❓ 常见问题</button>
+        <button class="tab" data-p="log">📈 每周记录</button>
+      </div>
+    </div>
+    <div id="planBody"></div>
+
+    <div class="no-print" style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:14px">
+      <button class="btn ghost sm" onclick="copyPlan()">📋 复制方案文字</button>
+      <button class="btn ghost sm" onclick="window.print()">🖨️ 打印 / 存 PDF</button>
+      <button class="btn ghost sm" onclick="goStep(2)">✏️ 改目标</button>
+      <button class="btn ghost sm" onclick="goStep(1)">🔄 重新填写</button>
+    </div>
+
+    <div class="card">
+      <h2 class="sec">参考来源</h2>
+      <p class="lead">点上面的 <span class="ref">1</span> 小标记可以跳到对应来源。所有公式与建议均可追溯。</p>
+      <ol class="refs" id="refList"></ol>
+      <div class="note bad" style="margin-top:12px">
+        <b>免责声明（请务必阅读）</b><br>
+        本方案为<b>一般性健康建议，不构成医疗处方、诊断或治疗意见</b>，也不能替代医生、注册营养师或教练的面对面评估。
+        所有热量与营养素数值都是基于公式和公开指南的<b>估算值</b>，个体差异可能导致实际效果不同。<br><br>
+        <b>以下情况请先咨询医生或注册营养师，不要自行套用本方案：</b><br>
+        · 患有或疑似患有糖尿病、高血压、高血脂、痛风、肾病、肝病、甲状腺疾病、多囊卵巢综合征等慢性病<br>
+        · 处于孕期、哺乳期，或产后一年内<br>
+        · 有进食障碍史（厌食、暴食、催吐），或正在服用影响食欲/代谢的药物（含激素类）<br>
+        · 未成年人（18 岁以下）、65 岁以上老年人<br>
+        · 有明确运动损伤、心血管不适或运动禁忌<br><br>
+        <b>执行中如出现以下情况，请立即停止并就医：</b>持续头晕、心悸、胸闷、明显脱发、月经紊乱或停经、持续疲劳、情绪显著低落、
+        或体重在短时间内快速下降（超过每周 1% 体重）。<br><br>
+        使用本工具即表示你理解：<b>你需要为自己的健康决策负责</b>。
+      </div>
+    </div>
+    <div class="footer">
+      所有数据只保存在你自己的浏览器里，不上传任何服务器<br>
+      换设备或清缓存前，请用「复制方案文字」或「打印 / 存 PDF」保存一份
+    </div>
+  </section>
+
+</div>
+<script>
+
+/* ==========================================================
+   增肌减脂方案生成器 · 逻辑层
+   数据全部保存在本地浏览器，不上传
+   ========================================================== */
+const STORE = 'plan_generator_v1';
+
+/* ---------- 参考来源（可追溯） ---------- */
+const SRC = [
+ {n:1, t:'《中国居民膳食指南（2022）》准则二 · 吃动平衡，健康体重', u:'http://dg.cnsoc.org/article/04/k9W2iu8FT6K5oWaQKArU9g.html',
+  d:'中国营养学会。成年人体重分类（BMI 18.5~23.9）；每周至少 5 天中等强度身体活动、累计 150 分钟以上；抗阻运动每周 2~3 天；减重建议每天减少 1256~2093 kJ（300~500 kcal）；超重/肥胖者每天 60~90 分钟中等强度有氧、每周 5~7 天；减重速度以每月 2~4 kg 为宜。'},
+ {n:2, t:'《中国居民膳食指南（2022）》准则一 · 食物多样，合理搭配', u:'http://dg.cnsoc.org/article/04/K7tlcs-UQh67DBC5XY1Jqw.html',
+  d:'中国营养学会。平均每天摄入 12 种以上食物、每周 25 种以上；每天谷类 200~300 g（其中全谷物和杂豆 50~150 g）、薯类 50~100 g。'},
+ {n:3, t:'《中国居民膳食指南（2022）》准则三 · 多吃蔬果、奶类、全谷、大豆', u:'http://dg.cnsoc.org/article/04/70JvPbFmTlyZbjoO67LeRg.html',
+  d:'中国营养学会。每天新鲜蔬菜不少于 300 g（深色占 1/2）；每天水果 200~350 g；每天相当于 300 ml 以上液态奶的奶制品。'},
+ {n:4, t:'《中国居民膳食指南（2022）》准则四 · 适量吃鱼、禽、蛋、瘦肉', u:'http://dg.cnsoc.org/article/04/3tyM8WoTTUmc_oFHMymk3Q.html',
+  d:'中国营养学会。鱼、禽、蛋、瘦肉平均每天 120~200 g；每周鱼 2 次或 300~500 g；每周蛋类 300~350 g；少吃深加工肉制品，优先选鱼。'},
+ {n:5, t:'《中国居民膳食指南（2022）》准则五 · 少盐少油，控糖限酒', u:'http://dg.cnsoc.org/article/04/ApX3_ozGTmSoqQaFFh5z_Q.html',
+  d:'中国营养学会。成人每天食盐不超过 5 g、烹调油 25~30 g；添加糖每天不超过 50 g，最好控制在 25 g 以下；反式脂肪酸不超过 2 g。'},
+ {n:6, t:'ISSN 蛋白质立场声明（Jäger et al., 2017）', u:'https://pubmed.ncbi.nlm.nih.gov/28642676/',
+  d:'国际运动营养学会。大多数训练人群每日蛋白质 1.4~2.0 g/kg 已足够；热量缺口下为最大化保肌，可能需要 2.3~3.1 g/kg 去脂体重；每餐建议 0.25 g/kg 或 20~40 g 优质蛋白，并均匀分配。'},
+ {n:7, t:'ISSN 体成分立场声明（Aragon et al., 2017）', u:'https://pubmed.ncbi.nlm.nih.gov/28630601/',
+  d:'国际运动营养学会。减脂由持续的热量缺口驱动；体脂基数越高，缺口可以越激进；越瘦的人减得越慢越能保住肌肉。间歇性节食与每日热量限制无显著差异，长期成功取决于依从性。'},
+ {n:8, t:'Helms et al., 2014 · 自然健美备赛营养建议', u:'https://pubmed.ncbi.nlm.nih.gov/24864135/',
+  d:'建议减重速度约每周 0.5%~1% 体重；脂肪供能比 15%~30%；蛋白质按去脂体重 2.3~3.1 g/kg 区间摄入。'},
+ {n:9, t:'Mifflin-St Jeor 基础代谢公式（1990）', u:'https://pubmed.ncbi.nlm.nih.gov/2305711/',
+  d:'男：BMR = 10×体重 + 6.25×身高 − 5×年龄 + 5；女：BMR = 10×体重 + 6.25×身高 − 5×年龄 − 161。目前公认精度较好的静息代谢估算公式。'},
+ {n:10, t:'ACSM 代谢方程（运动能量消耗估算）', u:'https://www.acsm.org/',
+  d:'运动净消耗 ≈ METs × 3.5 × 体重(kg) ÷ 200 kcal/分钟。中等强度有氧按 6 METs 估算，即约 0.105 × 体重(kg) kcal/分钟。'},
+ {n:11, t:'用户提供的原始素材（博主视频要点）', u:'',
+  d:'碳循环/碳水波形调整法、微微饥饿感、训练强度优先于热量盈余等观点。属个人经验总结，本工具将其作为「可记录的状态信号」保留，并在表格中明确标注为经验性内容。'},
+ {n:12, t:'《中国食物成分表 标准版（第 6 版）》', u:'',
+  d:'中国疾病预防控制中心营养与健康所。食物交换份与常见食物营养素换算的数据来源。'},
+ {n:13, t:'Deurenberg et al., 1991 · 用 BMI 估算体脂率', u:'https://pubmed.ncbi.nlm.nih.gov/2043597/',
+  d:'Deurenberg P, Weststrate JA, Seidell JC. Body mass index as a measure of body fatness: age- and sex-specific prediction formulas. Br J Nutr. 1991. 体脂率(%) = 1.20×BMI + 0.23×年龄 − 10.8×性别（男=1，女=0）− 5.4。属人群估算公式，个体误差约 ±3~5%。'},
+ {n:14, t:'《成人体重判定》WS/T 428-2013', u:'',
+  d:'国家卫生和计划生育委员会发布。中心型肥胖判定标准：男性腰围 ≥90 cm、女性腰围 ≥85 cm（中心型肥胖前期：男 85~90 cm，女 80~85 cm）。腰围比 BMI 更能反映内脏脂肪堆积。'},
+ {n:15, t:'Nedeltcheva et al., 2010 · 睡眠不足削弱减脂效果', u:'https://pubmed.ncbi.nlm.nih.gov/20921542/',
+  d:'Annals of Internal Medicine。同样的热量缺口下，睡眠被限制到 5.5 小时的受试者，脂肪减少量比睡 8.5 小时组低约 55%，肌肉流失更多、饥饿感更强。说明睡眠是减脂的独立变量。'}
+];
+
+/* ---------- 活动系数 ---------- */
+const ACT = {
+  sedentary:{k:1.25, t:'久坐办公'},
+  light:{k:1.375, t:'轻度走动'},
+  moderate:{k:1.55, t:'中度活动'},
+  heavy:{k:1.725, t:'重体力工作'}
+};
+
+/* ---------- 运动基础 → 训练与碳循环结构 ---------- */
+const TRAIN_PROFILE = {
+  none:  {t:'零基础', days:2, cycle:{h:2,m:2,l:3}, min:40, cardio:2},
+  novice:{t:'新手（每周1~2次）', days:3, cycle:{h:3,m:2,l:2}, min:45, cardio:2},
+  inter: {t:'有基础（每周3~4次）', days:4, cycle:{h:4,m:2,l:1}, min:60, cardio:2},
+  adv:   {t:'进阶（每周5次以上）', days:5, cycle:{h:5,m:1,l:1}, min:75, cardio:1}
+};
+
+/* ---------- 常见食物（每 100 g 可食部）[来源 12] ---------- */
+const FOOD = [
+  {n:'米饭（熟）',    c:25.9, p:2.6,  f:0.3,  unit:'100 g', kcal:116},
+  {n:'馒头',          c:47.0, p:7.0,  f:1.1,  unit:'100 g', kcal:223},
+  {n:'面条（煮熟）',  c:24.3, p:4.5,  f:0.5,  unit:'100 g', kcal:110},
+  {n:'全麦面包',      c:41.0, p:9.0,  f:4.0,  unit:'100 g', kcal:246},
+  {n:'红薯（蒸）',    c:20.7, p:1.1,  f:0.2,  unit:'100 g', kcal:90},
+  {n:'鸡胸肉（生）',  c:0.6,  p:24.6, f:1.9,  unit:'100 g', kcal:118},
+  {n:'鸡蛋',          c:0.7,  p:6.5,  f:4.5,  unit:'1 个(50g)', kcal:72},
+  {n:'牛奶',          c:12.0, p:7.5,  f:8.0,  unit:'250 ml', kcal:135},
+  {n:'北豆腐',        c:4.2,  p:12.2, f:4.8,  unit:'100 g', kcal:116},
+  {n:'瘦牛肉',        c:0,    p:20.2, f:2.3,  unit:'100 g', kcal:106},
+  {n:'三文鱼',        c:0,    p:17.2, f:7.8,  unit:'100 g', kcal:139},
+  {n:'虾',            c:0,    p:18.6, f:0.8,  unit:'100 g', kcal:93},
+  {n:'大豆油',        c:0,    p:0,    f:100,  unit:'100 g', kcal:900}
+];
+
+/* ---------- 状态 ---------- */
+let S = {
+  sex:'m', age:28, height:172, weight:72, bodyfat:null, bfSource:'measured', waist:null,
+  activity:'light', training:'novice', diet:[],
+  sleep:'7to8', regular:'yes', stress:'mid', injury:[],
+  meals:'3', takeout:'1to3', staple:'米饭', late:'no',
+  goal:'cut', cutMode:'weight',
+  cutWeight:12, cutWeeks:12, cutFat:20, cutFatWeeks:12,
+  bulkWeight:8, bulkMonths:6,
+  cycleLevel:'auto', cycleOn:null, logs:[]
+};
+
+const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
+const r1 = v => Math.round(v*10)/10;
+const r0 = v => Math.round(v);
+const clamp = (v,a,b) => Math.min(b, Math.max(a, v));
+
+/* ---------- 体脂率估算：Deurenberg 公式 [来源 13] ---------- */
+function estBF(s){
+  const m = s.height/100;
+  if(!(m > 0) || !(s.weight > 0)) return null;
+  const bmi = s.weight/(m*m);
+  return clamp(1.20*bmi + 0.23*s.age - 10.8*(s.sex === 'f' ? 0 : 1) - 5.4, 3, 60);
+}
+
+/* ---------- 腰围判定：中心性肥胖 [来源 14] ---------- */
+function waistJudge(s){
+  const w = num(s.waist);
+  if(!w) return {has:false, level:'unknown'};
+  const cut = s.sex === 'f' ? 85 : 90, pre = s.sex === 'f' ? 80 : 85;
+  const level = w >= cut ? 'central' : (w >= pre ? 'pre' : 'ok');
+  return {has:true, level, cut, pre, w};
+}
+
+/* ---------- 作息 / 压力：决定碳水能压多狠 [来源 15] ---------- */
+function lifeCheck(s){
+  const out = {ok:true, notes:[], carbScale:1};
+  if(s.sleep === 'lt6'){ out.ok = false; out.notes.push('睡眠不足 6 小时。研究显示同等热量缺口下，睡不够会让脂肪减少量下降约一半、肌肉掉得更多<span class="ref">15</span>，所以碳水不建议压低。'); }
+  else if(s.sleep === '6to7'){ out.notes.push('睡眠 6~7 小时，略偏少，碳水保持中等强度就可以，别再往下压。'); }
+  if(s.regular !== 'yes'){ out.ok = false; out.notes.push('作息不规律，食欲和血糖节律会飘，需要固定节律的碳循环并不好执行。'); }
+  if(s.stress === 'high'){ out.ok = false; out.carbScale = 0.97; out.notes.push('压力大时皮质醇偏高，热量压太狠容易失眠和报复性进食，碳水基线自动放宽约 3%。'); }
+  return out;
+}
+
+/* ---------- 碳循环适配性 ---------- */
+function cycleFit(s){
+  const reasons = [];
+  if(s.training === 'none') reasons.push('运动基础还没到「每周 1~2 次」');
+  const bf = num(s.bodyfat);
+  const cap = s.sex === 'f' ? 32 : 25;
+  if(bf && bf >= cap) reasons.push('体脂率 ' + r1(bf) + '% 已达到 ' + cap + '% 以上');
+  if(s.regular !== 'yes') reasons.push('作息不规律');
+  return {fit: reasons.length === 0, reasons, cap};
+}
+
+/* ---------- 碳循环强度三档 ---------- */
+function cycleIntensity(s, fit){
+  const auto = fit ? (s.training === 'adv' ? 'aggressive' : (s.training === 'inter' ? 'standard' : 'gentle')) : 'gentle';
+  const lvl = (s.cycleLevel && s.cycleLevel !== 'auto') ? s.cycleLevel : auto;
+  const table = {
+    gentle:    {name:'温和', ch:1.15, cm:1.00, cl:0.80, note:'高低碳差距小，适应期用，几乎不影响训练状态。'},
+    standard:  {name:'标准', ch:1.30, cm:1.00, cl:0.65, note:'最常见的做法：训练日有劲，休息日控量。'},
+    aggressive:{name:'激进', ch:1.45, cm:1.00, cl:0.50, note:'差距最大，只适合体脂低、恢复好、作息规律的人，新手不建议。'}
+  };
+  return Object.assign({level:lvl, auto}, table[lvl]);
+}
+
+/* ---------- 饮食习惯适配说明 ---------- */
+function habitNotes(s){
+  const n = [];
+  if(s.meals === '2') n.push('<b>每天只吃 2 餐</b>：很容易一餐吃太多、蛋白质也补不匀。建议至少加到 3 餐，把蛋白质按每餐 20~40 g 分下去<span class="ref">6</span>。');
+  if(s.meals === '5') n.push('<b>少量多餐</b>：保持现在的节奏就行，把总热量按 5 份分，别让加餐变成额外热量。');
+  if(s.takeout === 'daily') n.push('<b>基本每天外卖</b>：外卖的隐形热量主要来自油和酱汁。备注「少油少酱、酱汁另放」，一顿能省 100~200 kcal，这是最省力的改动。');
+  else if(s.takeout === '4to6') n.push('<b>外卖每周 4~6 次</b>：不用戒掉，只要每次都加一份蛋白、米饭要半份，结构就对了。');
+  if(s.late === '3plus') n.push('<b>夜宵每周 3 次以上</b>：不要求你戒，先把夜宵内容换掉——从烧烤/泡面换成无糖酸奶、鸡蛋、一小把坚果，并把时间提前到睡前 2 小时。');
+  else if(s.late === '1to2') n.push('<b>夜宵每周 1~2 次</b>：可以保留当作心理缓冲，只要当天总量没超就行。');
+  if(s.staple === '面食') n.push('<b>主食以面食为主</b>：外食面食的油和盐通常比米饭高，下面的换算按馒头/面条给你。');
+  else if(s.staple === '杂粮') n.push('<b>主食以杂粮为主</b>：很好，膳食纤维多、饱腹感强，指南也建议全谷物和杂豆每天 50~150 g<span class="ref">2</span>。');
+  return n;
+}
+
+/* ---------- 惯性：影响碳水基数 ---------- */
+function carbScale(s){
+  let k = 1, why = [];
+  const wj = waistJudge(s);
+  if(wj.level === 'central'){ k *= 0.9; why.push('腰围 ' + wj.w + ' cm 达到中心型肥胖标准，碳水基线先下调 10%<span class="ref">14</span>，把主食的量往下降。'); }
+  else if(wj.level === 'pre'){ k *= 0.95; why.push('腰围 ' + wj.w + ' cm 处于中心型肥胖前期，碳水基线小幅下调 5%。'); }
+  const lc = lifeCheck(s);
+  k *= lc.carbScale;
+  return {k, why, life:lc};
+}
+
+function saveS(){ try{ localStorage.setItem(STORE, JSON.stringify(S)); }catch(e){} }
+function loadS(){ try{ const r = localStorage.getItem(STORE); if(r) S = Object.assign(S, JSON.parse(r)); }catch(e){} }
+
+/* ==========================================================
+   核心计算
+   ========================================================== */
+function bmrOf(s){
+  const b = 10*s.weight + 6.25*s.height - 5*s.age;
+  return s.sex === 'f' ? b - 161 : b + 5;
+}
+
+function targetRate(s){
+  // 返回 {rate, unit} —— 单位：kg/周（减脂）或 kg/月（增肌）
+  if(s.goal === 'cut'){
+    if(s.cutMode === 'fat' && s.bodyfat > 0){
+      const ffm = s.weight * (1 - s.bodyfat/100);
+      const tgt = num(s.cutFat);
+      if(tgt <= 0 || tgt >= s.bodyfat) return {rate:0, kg:0, kind:'fat'};
+      const w2 = ffm / (1 - tgt/100);
+      const kg = s.weight - w2;
+      return {rate: kg / Math.max(1, num(s.cutFatWeeks)), kg, kind:'fat', targetW:w2};
+    }
+    const kg = num(s.cutWeight) / 2;                 // 斤 → kg
+    return {rate: kg / Math.max(1, num(s.cutWeeks)), kg, kind:'weight'};
+  }
+  const kg = num(s.bulkWeight) / 2;
+  return {rate: kg / Math.max(1, num(s.bulkMonths)), kg, kind:'weight'};
+}
+
+function safeRange(s){
+  if(s.goal === 'cut'){
+    const byPct = s.weight * 0.01;                  // Helms：每周不超过体重 1% [来源 8]
+    const max = clamp(Math.min(byPct, 1.0), 0.4, 1.0);
+    return {min:0.25, max, recMin:0.5, recMax:max, unit:'kg/周'};
+  }
+  const t = (s.training === 'none' || s.training === 'novice');
+  return {min:t?0.5:0.25, max:t?1.0:0.5, recMin:t?0.5:0.25, recMax:t?1.0:0.5, unit:'kg/月'};
+}
+
+function validate(s){
+  const tr = targetRate(s), sr = safeRange(s);
+  const rate = tr.rate;
+  const out = {rate, sr, tr, tone:'ok', msgs:[]};
+  if(rate <= 0){ out.tone='bad'; out.msgs.push('请填写有效的目标数值。'); return out; }
+  if(rate > sr.max){
+    const minWeeks = Math.ceil(tr.kg / sr.max);
+    out.tone = 'bad';
+    out.msgs.push('按你的填法，需要 <b>' + r1(rate) + ' ' + sr.unit + '</b>，超过了安全上限 <b>' + r1(sr.max) + ' ' + sr.unit + '</b>。');
+    out.msgs.push('这样减/增，掉的多半是水分和肌肉，容易反弹。建议把时间放宽到 <b>' + minWeeks + (s.goal==='cut'?' 周':' 个月') + '</b> 以上，也就是速率控制在 ' + r1(sr.recMin) + '~' + r1(sr.recMax) + ' ' + sr.unit + '。');
+  }else if(rate < sr.min){
+    const w = Math.ceil(tr.kg / sr.recMax);
+    out.tone = 'warn';
+    out.msgs.push('当前速率 <b>' + r1(rate) + ' ' + sr.unit + '</b> 偏慢，效果会不明显。');
+    out.msgs.push('如果想更有进展，可以压缩到 <b>' + w + (s.goal==='cut'?' 周':' 个月') + '</b> 左右（对应 ' + r1(sr.recMax) + ' ' + sr.unit + '）。');
+  }else{
+    out.msgs.push('目标速率 <b>' + r1(rate) + ' ' + sr.unit + '</b>，在安全区间 ' + r1(sr.recMin) + '~' + r1(sr.recMax) + ' ' + sr.unit + ' 之内。');
+    if(s.goal === 'cut' && rate > 0.75) out.msgs.push('注意：这个速度偏快，训练强度可能会掉，蛋白质一定要吃够。');
+  }
+  return out;
+}
+
+function buildPlan(s){
+  const bmr = bmrOf(s);
+  const act = ACT[s.activity] || ACT.light;
+  const tdee = bmr * act.k;
+  const tr = targetRate(s);
+  const val = validate(s);
+  const tp = TRAIN_PROFILE[s.training] || TRAIN_PROFILE.novice;
+  const notes = [];
+  const trace = [];
+
+  trace.push({k:'① 基础代谢 BMR', f:'10×' + s.weight + ' + 6.25×' + s.height + ' − 5×' + s.age +
+    (s.sex === 'f' ? ' − 161' : ' + 5'), v:r0(bmr) + ' kcal', src:[9]});
+  trace.push({k:'② 活动系数', f:'日常活动水平「' + act.t + '」对应系数 ' + act.k, v:'× ' + act.k, src:[9]});
+  trace.push({k:'③ 每日总消耗 TDEE', f:r0(bmr) + ' × ' + act.k, v:r0(tdee) + ' kcal', src:[9]});
+
+  /* ---------- 目标速率 → 热量 ---------- */
+  let intake, deficit, surplus = 0, dietDeficit = 0, exDeficit = 0, floorHit = false, defCap = false;
+  const trRate = tr.rate;
+  if(s.goal === 'cut'){
+    const total = trRate * 7700 / 7;
+    dietDeficit = clamp(total * 0.65, 250, 700);
+    exDeficit = Math.max(0, total - dietDeficit);
+    if(total <= dietDeficit){ exDeficit = 0; dietDeficit = Math.max(180, total); }
+    deficit = total;
+    intake = tdee - dietDeficit;
+    trace.push({k:'④ 目标速率', f:r1(trRate) + ' kg/周 × 7700 kcal ÷ 7 天', v:'缺口 ' + r0(total) + ' kcal/天', src:[1, 8]});
+    trace.push({k:'⑤ 缺口拆分', f:'少吃 ' + r0(dietDeficit) + ' kcal（指南建议 300~500）＋ 运动 ' + r0(exDeficit) + ' kcal', v:'摄入 ' + r0(intake) + ' kcal', src:[1, 7, 10]});
+  }else{
+    surplus = clamp(trRate * 7700 / 30, 150, tdee * 0.15);
+    intake = tdee + surplus;
+    deficit = -surplus;
+    trace.push({k:'④ 目标速率', f:r1(trRate) + ' kg/月 × 7700 kcal ÷ 30 天', v:'盈余 ' + r0(surplus) + ' kcal/天', src:[6]});
+    trace.push({k:'⑤ 每日摄入', f:r0(tdee) + ' ＋ ' + r0(surplus), v:r0(intake) + ' kcal', src:[6]});
+  }
+
+  /* ---------- 三大营养素 ---------- */
+  const bf = num(s.bodyfat) || null;
+  const ffm = bf ? s.weight * (1 - bf/100) : null;
+  let proPerKg;
+  if(s.goal === 'cut'){
+    proPerKg = 1.8;
+    if(bf){ proPerKg = bf > (s.sex==='f'?32:25) ? 1.6 : (bf < (s.sex==='f'?23:15) ? 2.2 : 1.8); }
+  }else{
+    proPerKg = 1.7;
+  }
+  if(ffm){ const byFfm = ffm * (s.goal==='cut' ? 2.6 : 2.2) / s.weight; proPerKg = clamp(Math.max(proPerKg, byFfm), 1.4, 2.6); }
+  let protein = s.weight * proPerKg;
+  const rni = s.sex === 'f' ? 55 : 65;
+  if(protein < rni){ protein = rni; notes.push('蛋白质已按中国居民膳食指南的推荐摄入量下限（' + rni + ' g）兜底。'); }
+  trace.push({k:'⑥ 蛋白质', f:r1(proPerKg) + ' g/kg × ' + s.weight + ' kg' + (ffm ? '（已按去脂体重 ' + r1(ffm) + ' kg 校准）' : ''), v:r0(protein) + ' g（' + r0(protein*4) + ' kcal）', src:[6, 1]});
+
+  let fat = s.weight * (s.goal === 'cut' ? 0.8 : 0.9);
+  const fMin = intake*0.20/9, fMax = intake*0.30/9;
+  if(fat < fMin) fat = fMin;
+  if(fat > fMax) fat = fMax;
+  trace.push({k:'⑦ 脂肪', f:'0.8~0.9 g/kg，并限制在供能比 20%~30%', v:r0(fat) + ' g（' + r0(fat*9) + ' kcal）', src:[8]});
+
+  let carbKcal = intake - protein*4 - fat*9;
+  let carbGuard = false;
+  if(carbKcal < 100*4){ carbKcal = 400; carbGuard = true; }
+  const carbRaw = carbKcal/4;
+  trace.push({k:'⑧ 碳水（修正前）', f:'剩余热量 ' + r0(carbKcal) + ' kcal ÷ 4', v:r0(carbRaw) + ' g', src:[11]});
+
+  /* ---------- 腰围 / 压力 → 碳水基线修正 ---------- */
+  const cs = carbScale(s);
+  const wj = waistJudge(s);
+  let carb = carbRaw * cs.k;
+  let intake2 = protein*4 + fat*9 + carb*4;
+
+  if(s.goal === 'cut'){
+    const maxDef = tdee * 0.25;
+    let def2 = tdee - intake2;
+    if(def2 > maxDef){
+      const carbKcalMax = (tdee - maxDef) - protein*4 - fat*9;
+      if(carbKcalMax/4 > carb){ carb = carbKcalMax/4; intake2 = tdee - maxDef; defCap = true; }
+    }
+    const floor2 = s.sex === 'f' ? 1200 : 1500;
+    if(intake2 < floor2){
+      const carbKcalF = floor2 - protein*4 - fat*9;
+      carb = Math.max(60, carbKcalF/4);
+      intake2 = protein*4 + fat*9 + carb*4;
+      floorHit = true;
+    }
+    deficit = Math.max(0, tdee - intake2);
+    dietDeficit = Math.min(clamp(deficit * 0.65, 180, 700), deficit);
+    exDeficit = Math.max(0, deficit - dietDeficit);
+  }else{
+    deficit = -(intake2 - tdee);
+  }
+  intake = intake2;
+
+  if(Math.abs(cs.k - 1) > 0.001){
+    trace.push({k:'⑨ 碳水基线修正', f:'按腰围 / 压力 / 睡眠调整，系数 ×' + r1(cs.k*100)/100, v:r0(carbRaw) + ' g → ' + r0(carb) + ' g', src:[14, 15]});
+  }
+  if(defCap) notes.push('把碳水降下来之后缺口超过了 TDEE 的 25%，已自动回补一部分碳水，缺口控制在安全上限内。');
+  if(floorHit) notes.push('碳水下调后总摄入低于安全下限，已按下限回补碳水。想更快，应该增加运动消耗而不是继续少吃。');
+  trace.push({k:'⑩ 最终每日摄入', f:r0(protein*4) + ' ＋ ' + r0(fat*9) + ' ＋ ' + r0(carb*4) + ' kcal', v:r0(intake) + ' kcal（' + (s.goal==='cut'?'缺口 ':'盈余 ') + r0(Math.abs(deficit)) + ' kcal）', src:[7]});
+
+  const kcalPerMin = 0.105 * s.weight;
+  const cardioMin = exDeficit > 0 ? Math.round(exDeficit / kcalPerMin) : 0;
+
+  /* ---------- 碳循环适配 ---------- */
+  const cyFit = cycleFit(s);
+  const useCycle = (s.cycleOn === null) ? cyFit.fit : !!s.cycleOn;
+  const cyi = cycleIntensity(s, cyFit.fit);
+  const cy = tp.cycle;
+  const ch = s.goal === 'cut' ? cyi.ch : Math.min(cyi.ch, 1.15);
+  const cm = 1.00;
+  const cl = s.goal === 'cut' ? cyi.cl : Math.max(cyi.cl, 0.85);
+  const kk = 7 / (cy.h*ch + cy.m*cm + cy.l*cl);
+  const carbHigh = carb*ch*kk, carbMid = carb*cm*kk, carbLow = carb*cl*kk;
+  trace.push({k:'⑪ 碳循环', f: useCycle
+      ? ('强度「' + cyi.name + '」：高 ' + ch + ' / 中 ' + cm + ' / 低 ' + cl + '，按训练日分布')
+      : '未启用（改回每天恒定碳水）',
+    v: useCycle ? (r0(carbHigh) + ' / ' + r0(carbMid) + ' / ' + r0(carbLow) + ' g') : (r0(carb) + ' g × 7 天'), src:[11]});
+
+  const life = cs.life;
+  return {
+    s, bmr, tdee, act, intake, deficit, surplus, dietDeficit, exDeficit, cardioMin,
+    protein, proPerKg, fat, carb, carbRaw, carbGuard, ffm, rni,
+    pKcal: protein*4, fKcal: fat*9, cKcal: carb*4,
+    pPct: protein*4/intake*100, fPct: fat*9/intake*100, cPct: carb*4/intake*100,
+    tp, cy, carbHigh, carbMid, carbLow, hc:ch*kk, mc:cm*kk, lc:cl*kk,
+    rate: tr.rate, rateKg: tr.kg, val, notes, trace,
+    wj, cs, cyFit, useCycle, cyi, life, defCap, floorHit
+  };
+}
+
+/* ==========================================================
+   界面
+   ========================================================== */
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const R = n => '<a class="ref" href="#src' + n + '" title="查看来源 ' + n + '">' + n + '</a>';
+
+let curStep = 1, curPlanTab = 'diet', navFrom = 1;
+
+function goStep(n){
+  if(n === 3){
+    readS();
+    const v = validate(S);
+    if(v.tone === 'bad' && !confirm('你的目标速率超出了安全范围，方案会按更保守的方式计算。\n\n' + v.msgs.join('\n').replace(/<[^>]+>/g,'') + '\n\n仍然继续生成吗？')){
+      renderValidate(); return;
+    }
+  }
+  navFrom = curStep;
+  curStep = n;
+  ['s1','s2','s3'].forEach((v,i) => $('#view-'+v).classList.toggle('hidden', i+1 !== n));
+  $$('#steps .stepbox').forEach(b => {
+    const k = num(b.dataset.s);
+    b.classList.toggle('on', k === n);
+    b.classList.toggle('done', k < n);
+  });
+  if(n === 1) renderBMI();
+  if(n === 2) renderValidate();
+  if(n === 3){
+    if(navFrom === 2){
+      curPlanTab = 'diet';
+      $$('#planTabs .tab').forEach(x => x.classList.toggle('on', x.dataset.p === 'diet'));
+    }
+    renderPlan();
+  }
+  window.scrollTo(0,0);
+}
+
+/* ---------- 表单绑定 ---------- */
+function bindGroup(sel, key, multi){
+  $$(sel + ' .chip').forEach(c => {
+    c.onclick = () => {
+      if(multi){
+        c.classList.toggle('on');
+        S[key] = $$(sel + ' .chip.on').map(x => x.dataset.v);
+      }else{
+        $$(sel + ' .chip').forEach(x => x.classList.remove('on'));
+        c.classList.add('on');
+        S[key] = c.dataset.v;
+        if(key === 'activity' || key === 'training') renderBMI();
+      }
+      saveS();
+      if(curStep === 2) renderValidate();
+    };
+  });
+}
+function bindChips(){
+  bindGroup('#c_activity','activity');
+  bindGroup('#c_training','training');
+  bindGroup('#c_diet','diet', true);
+  bindGroup('#c_stress','stress');
+  bindGroup('#c_injury','injury', true);
+  bindGroup('#cutMode','cutMode');
+  $$('#goalTabs .tab').forEach(t => t.onclick = () => {
+    $$('#goalTabs .tab').forEach(x => x.classList.remove('on'));
+    t.classList.add('on');
+    S.goal = t.dataset.g;
+    $('#goalCut').classList.toggle('hidden', S.goal !== 'cut');
+    $('#goalBulk').classList.toggle('hidden', S.goal !== 'bulk');
+    saveS(); renderValidate();
+  });
+  $$('#planTabs .tab').forEach(t => t.onclick = () => {
+    $$('#planTabs .tab').forEach(x => x.classList.remove('on'));
+    t.classList.add('on');
+    curPlanTab = t.dataset.p;
+    renderPlanBody();
+    window.scrollTo(0, 0);
+  });
+  ['f_sex','f_age','f_height','f_weight','f_bodyfat','f_waist','f_sleep','f_regular','f_meals','f_takeout','f_staple','f_late','f_cutWeight','f_cutWeeks','f_cutFat','f_cutFatWeeks','f_bulkWeight','f_bulkMonths']
+    .forEach(id => { const el = $('#'+id); if(el){
+      el.addEventListener('input', () => {
+        if(curStep === 1){ readS(); renderBMI(); if(id === 'f_bodyfat') S.bfSource = 'measured'; renderEstimator(); }
+        else { readS(); renderValidate(); }
+      });
+      el.addEventListener('change', () => {
+        if(curStep === 1){ readS(); renderBMI(); renderEstimator(); }
+        else { readS(); renderValidate(); }
+      });
+    } });
+  $$('#cutMode .chip').forEach(c => {
+    c.onclick = () => {
+      $$('#cutMode .chip').forEach(x => x.classList.remove('on'));
+      c.classList.add('on');
+      S.cutMode = c.dataset.v;
+      $('#cutWeightRow').classList.toggle('hidden', S.cutMode !== 'weight');
+      $('#cutFatRow').classList.toggle('hidden', S.cutMode !== 'fat');
+      saveS(); renderValidate();
+    };
+  });
+}
+function readS(){
+  S.sex = $('#f_sex').value;
+  S.age = num($('#f_age').value) || 28;
+  S.height = num($('#f_height').value) || 172;
+  S.weight = num($('#f_weight').value) || 72;
+  S.bodyfat = num($('#f_bodyfat').value) || null;
+  S.waist = num($('#f_waist').value) || null;
+  S.sleep = $('#f_sleep').value;
+  S.regular = $('#f_regular').value;
+  S.meals = $('#f_meals').value;
+  S.takeout = $('#f_takeout').value;
+  S.staple = $('#f_staple').value;
+  S.late = $('#f_late').value;
+  S.cutWeight = num($('#f_cutWeight').value) || 0;
+  S.cutWeeks = num($('#f_cutWeeks').value) || 1;
+  S.cutFat = num($('#f_cutFat').value) || 0;
+  S.cutFatWeeks = num($('#f_cutFatWeeks').value) || 1;
+  S.bulkWeight = num($('#f_bulkWeight').value) || 0;
+  S.bulkMonths = num($('#f_bulkMonths').value) || 1;
+  saveS();
+}
+function fillForm(){
+  $('#f_sex').value = S.sex; $('#f_age').value = S.age; $('#f_height').value = S.height;
+  $('#f_weight').value = S.weight; $('#f_bodyfat').value = S.bodyfat || '';
+  $('#f_cutWeight').value = S.cutWeight; $('#f_cutWeeks').value = S.cutWeeks;
+  $('#f_cutFat').value = S.cutFat; $('#f_cutFatWeeks').value = S.cutFatWeeks;
+  $('#f_bulkWeight').value = S.bulkWeight; $('#f_bulkMonths').value = S.bulkMonths;
+  const mark = (sel, val) => $$(sel + ' .chip').forEach(c => c.classList.toggle('on', c.dataset.v === val));
+  $('#f_waist').value = S.waist || '';
+  $('#f_sleep').value = S.sleep; $('#f_regular').value = S.regular;
+  $('#f_meals').value = S.meals; $('#f_takeout').value = S.takeout;
+  $('#f_staple').value = S.staple; $('#f_late').value = S.late;
+  $$('#c_stress .chip').forEach(c => c.classList.toggle('on', c.dataset.v === S.stress));
+  $$('#c_injury .chip').forEach(c => c.classList.toggle('on', (S.injury||[]).includes(c.dataset.v)));
+  mark('#c_activity', S.activity); mark('#c_training', S.training); mark('#cutMode', S.cutMode);
+  $$('#c_diet .chip').forEach(c => c.classList.toggle('on', (S.diet||[]).includes(c.dataset.v)));
+  $$('#goalTabs .tab').forEach(t => t.classList.toggle('on', t.dataset.g === S.goal));
+  $('#goalCut').classList.toggle('hidden', S.goal !== 'cut');
+  $('#goalBulk').classList.toggle('hidden', S.goal !== 'bulk');
+  $('#cutWeightRow').classList.toggle('hidden', S.cutMode !== 'weight');
+  $('#cutFatRow').classList.toggle('hidden', S.cutMode !== 'fat');
+}
+
+/* ---------- 体脂率估算助手 ---------- */
+function toggleEstimator(){
+  const box = $('#estimator');
+  box.classList.toggle('hidden');
+  if(!box.classList.contains('hidden')){ readS(); renderEstimator(); }
+}
+function bfSvg(i){
+  const t = 13 + i*3, a = 4 + i*1.0, l = 5.5 + i*1.0, cx = 30;
+  const n1 = v => Number(v).toFixed(1);
+  return '<svg viewBox="0 0 60 100" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">' +
+    '<circle cx="30" cy="11" r="8.5" fill="currentColor"/>' +
+    '<rect x="' + n1(cx-t) + '" y="21" width="' + n1(2*t) + '" height="32" rx="' + n1(t*0.75) + '" fill="currentColor"/>' +
+    '<rect x="' + n1(cx-t-a-0.5) + '" y="23" width="' + n1(a) + '" height="24" rx="' + n1(a/2) + '" fill="currentColor"/>' +
+    '<rect x="' + n1(cx+t+0.5) + '" y="23" width="' + n1(a) + '" height="24" rx="' + n1(a/2) + '" fill="currentColor"/>' +
+    '<rect x="' + n1(cx-l-0.5) + '" y="52" width="' + n1(l) + '" height="38" rx="' + n1(l/2) + '" fill="currentColor"/>' +
+    '<rect x="' + n1(cx+0.5) + '" y="52" width="' + n1(l) + '" height="38" rx="' + n1(l/2) + '" fill="currentColor"/>' +
+  '</svg>';
+}
+
+function bfRows(){
+  return S.sex === 'f'
+    ? [['很瘦','14~19%',16],['偏瘦','20~24%',22],['标准','25~29%',27],['偏胖','30~34%',32],['肥胖','35%+',38]]
+    : [['很瘦','8~12%',10],['精瘦','13~17%',15],['标准','18~22%',20],['偏胖','23~27%',25],['肥胖','28%+',32]];
+}
+function renderEstimator(){
+  if(!$('#estimator') || $('#estimator').classList.contains('hidden')) return;
+  const v = estBF(S);
+  $('#estVal').textContent = v ? (r1(v) + ' %') : '—';
+  const rows = bfRows();
+  $('#bfGrid').innerHTML = rows.map((r,i) => {
+    const on = (S.bfSource === 'estimated' && S.bfPick === i) ? ' on' : '';
+    return '<div class="bfcard' + on + '" data-i="' + i + '" onclick="pickBF(' + i + ')">' + bfSvg(i) +
+      '<div class="t">' + r[0] + '</div><div class="r">' + r[1] + '</div></div>';
+  }).join('');
+}
+function pickBF(i){
+  const r = bfRows()[i];
+  S.bfPick = i; S.bfSource = 'estimated'; S.bodyfat = r[2];
+  if($('#f_bodyfat')) $('#f_bodyfat').value = r[2];
+  saveS(); renderEstimator(); renderBMI();
+}
+function applyEstimate(){
+  const v = estBF(S);
+  if(!v) return alert('请先填身高体重');
+  S.bfSource = 'estimated';
+  S.bodyfat = r1(v);
+  $('#f_bodyfat').value = r1(v);
+  saveS(); renderBMI(); renderEstimator();
+}
+
+/* ---------- BMI 与基础提示 ---------- */
+function renderBMI(){
+  const h = S.height/100, bmi = h > 0 ? S.weight/(h*h) : 0;
+  let tone = 'ok', msg = '';
+  if(bmi > 0){
+    if(bmi < 18.5){ tone='warn'; msg = 'BMI ' + r1(bmi) + ' 偏瘦。指南建议先评估进食量与健康状况，再考虑增重。<span class="ref">1</span>'; }
+    else if(bmi <= 23.9){ tone='ok'; msg = 'BMI ' + r1(bmi) + '，在 18.5~23.9 的健康范围内。<span class="ref">1</span>'; }
+    else if(bmi <= 27.9){ tone='warn'; msg = 'BMI ' + r1(bmi) + '，属于超重。指南建议在控制总能量基础上做平衡膳食。<span class="ref">1</span>'; }
+    else { tone='bad'; msg = 'BMI ' + r1(bmi) + '，属于肥胖。建议先咨询医生，再开始减重计划。<span class="ref">1</span>'; }
+  }
+  const bmr = bmrOf(S), tdee = bmr * (ACT[S.activity]||ACT.light).k;
+  let bfMsg = '';
+  if(!S.bodyfat){
+    bfMsg = '<div class="note bad" style="margin-top:8px"><b>缺少体脂率，方案精度会下降</b><br>' +
+      '没有体脂率时，蛋白质只能用体重估算、碳循环适配性也判断不了，方案会偏保守。建议点上面的「估算助手」补一个值（误差约 ±3~5%）。</div>';
+  }else if(S.bfSource === 'estimated'){
+    bfMsg = '<div class="note warn" style="margin-top:8px">体脂率 <b>' + r1(S.bodyfat) + '%</b> 是估算值，不是实测。' +
+      '条件允许的话，用体脂秤或体成分仪测一次会更准；评估标准都以实测为准。</div>';
+  }else{
+    bfMsg = '<div style="margin-top:8px" class="muted">体脂率 <b>' + r1(S.bodyfat) + '%</b>：该数据会用于蛋白质校准与碳循环适配判断。</div>';
+  }
+  const wj = waistJudge(S);
+  let waistMsg = '';
+  if(!wj.has){ waistMsg = '<div class="muted" style="margin-top:6px">腰围留空：无法判断中心性肥胖。<b>建议量一下</b>——腰围比体重更能反映内脏脂肪。</div>'; }
+  else if(wj.level === 'central'){ waistMsg = '<div class="note bad" style="margin-top:8px"><b>中心性肥胖</b>：腰围 ' + r1(wj.w) + ' cm ≥ 标准 ' + wj.cut + ' cm<span class="ref">14</span>。碳水基线会自动下调 10%。</div>'; }
+  else if(wj.level === 'pre'){ waistMsg = '<div class="note warn" style="margin-top:8px">腰围 ' + r1(wj.w) + ' cm，处于中心型肥胖前期（标准 ' + wj.cut + ' cm）<span class="ref">14</span>，碳水基线下调 5%。</div>'; }
+  else { waistMsg = '<div class="muted" style="margin-top:6px">腰围 ' + r1(wj.w) + ' cm，低于中心型肥胖标准 ' + wj.cut + ' cm<span class="ref">14</span>。</div>'; }
+  $('#bmiBox').className = 'note' + (tone === 'ok' ? '' : ' ' + tone);
+  $('#bmiBox').innerHTML = msg + '<div class="muted" style="margin-top:6px">当前估算：基础代谢 <b>' + r0(bmr) +
+    ' kcal</b>　日常消耗 <b>' + r0(tdee) + ' kcal</b>（活动水平：' + (ACT[S.activity]||ACT.light).t + '）</div>' + bfMsg + waistMsg;
+}
+
+/* ---------- 第二步：目标校验 ---------- */
+function renderValidate(){
+  const v = validate(S);
+  const tone = v.tone === 'ok' ? 'ok' : (v.tone === 'warn' ? 'warn' : 'bad');
+  let html = '<div class="note ' + tone + '"><b>目标校验</b><br>' + v.msgs.join('<br>') + '</div>';
+  const sr = v.sr;
+  html += '<div class="grid3" style="margin-top:10px">' +
+    '<div class="stat"><div class="k">你的目标速率</div><div class="v">' + r1(v.rate) + ' <span class="u">' + sr.unit + '</span></div></div>' +
+    '<div class="stat"><div class="k">安全区间</div><div class="v">' + r1(sr.recMin) + '~' + r1(sr.recMax) + '</div></div>' +
+    '<div class="stat amber"><div class="k">最快安全达成</div><div class="v">' + (v.tr.kg>0 ? Math.ceil(v.tr.kg/sr.recMax) + (S.goal==='cut'?' 周':' 个月') : '—') + '</div></div>' +
+  '</div>';
+  if(S.goal === 'cut'){
+    html += '<p class="muted" style="margin-top:8px">安全区间依据：中国居民膳食指南建议减重速度每月 2~4 kg<span class="ref">1</span>；同时每周降幅不超过体重的 1%<span class="ref">8</span>。</p>';
+  }else{
+    html += '<p class="muted" style="margin-top:8px">安全区间依据：新手每月增重 0.5~1 kg 属于合理范围；有训练基础后增速会自然放缓，每月 0.25~0.5 kg 更现实<span class="ref">6</span>。</p>';
+  }
+  $('#validBox').innerHTML = html;
+}
+
+
+/* ==========================================================
+   第三步 · 方案渲染
+   ========================================================== */
+const WEEK = {
+  none:  ['h','m','l','h','m','l','l'],
+  novice:['h','m','h','l','h','m','l'],
+  inter: ['h','m','h','h','m','h','l'],
+  adv:   ['h','h','m','h','h','h','l']
+};
+const WD = ['周一','周二','周三','周四','周五','周六','周日'];
+
+function renderPlan(){
+  const P = buildPlan(S);
+  const g = S.goal === 'cut' ? '减脂' : '增肌';
+  $('#planHead').innerHTML = '为 <b>' + (S.sex==='f'?'女性':'男性') + '、' + S.age + ' 岁、' + S.height + ' cm、' +
+    S.weight + ' kg</b>（' + (ACT[S.activity]||ACT.light).t + ' · ' + P.tp.t + '）生成的<b>' + g +
+    '</b>方案。目标：' + (S.goal==='cut'
+      ? (S.cutMode==='fat' ? ('体脂率降到 ' + num(S.cutFat) + '%，' + num(S.cutFatWeeks) + ' 周') : ('减 ' + num(S.cutWeight) + ' 斤，' + num(S.cutWeeks) + ' 周'))
+      : ('增 ' + num(S.bulkWeight) + ' 斤，' + num(S.bulkMonths) + ' 个月'));
+  renderPlanBody();
+}
+
+function renderPlanBody(){
+  const P = buildPlan(S);
+  if(curPlanTab === 'diet') $('#planBody').innerHTML = renderDiet(P);
+  else if(curPlanTab === 'train') $('#planBody').innerHTML = renderTrain(P);
+  else if(curPlanTab === 'faq') $('#planBody').innerHTML = renderFaq(P);
+  else if(curPlanTab === 'log') $('#planBody').innerHTML = renderLog(P);
+  else $('#planBody').innerHTML = renderWhy(P);
+}
+
+/* ---------- 饮食方案 ---------- */
+function renderDiet(P){
+  const s = P.s, g = s.goal;
+  const carbMain = P.carb * 0.55;
+  const rice = carbMain/0.259, bowl = rice/200, mantou = carbMain/0.47, bread = carbMain/0.41, sweet = carbMain/0.207;
+  const dset = s.diet || [];
+  const isVeg = dset.indexOf('素食') >= 0, noLact = dset.indexOf('乳糖不耐') >= 0;
+  const noSea = dset.indexOf('不吃海鲜') >= 0, noBeef = dset.indexOf('不吃牛羊') >= 0;
+  const half = P.protein*0.5, rest = P.protein*0.3;
+  const opts = [];
+  if(isVeg){
+    opts.push('北豆腐 <b>' + r0(half/0.122) + '</b> g');
+    opts.push('豆腐干 <b>' + r0(half/0.16) + '</b> g');
+    opts.push('煮熟黄豆 <b>' + r0(half/0.35) + '</b> g');
+  }else{
+    opts.push('鸡胸肉 <b>' + r0(half/0.246) + '</b> g');
+    if(!noBeef) opts.push('瘦牛肉 <b>' + r0(half/0.202) + '</b> g');
+    if(!noSea) opts.push('三文鱼 <b>' + r0(half/0.172) + '</b> g');
+    if(noBeef && noSea) opts.push('虾 <b>' + r0(half/0.186) + '</b> g');
+  }
+  const eggN = isVeg ? 0 : 2;
+  const drinkP = (isVeg || noLact) ? 0.03*500 : 7.5;          // 豆浆 500ml / 牛奶 250ml
+  const restP = Math.max(0, rest - eggN*6.5 - drinkP);
+  const tofuG = restP / 0.122;
+  const drinkTxt = (isVeg || noLact) ? '无糖豆浆 500 ml' : '牛奶 250 ml';
+  const restTxt = (eggN ? ('鸡蛋 ' + eggN + ' 个 + ') : '') + drinkTxt + ' + 北豆腐 <b>' + r0(tofuG) + '</b> g';
+  const meals = [
+    {n:'早餐', r:0.25, tip:'主食 + 鸡蛋 + 奶/豆浆，别只吃碳水'},
+    {n:'午餐', r:0.35, tip:'主食 + 一份优质蛋白 + 一大份蔬菜'},
+    {n:'晚餐', r:0.30, tip:'主食减一点，蛋白和蔬菜加一点'},
+    {n:'加餐', r:0.10, tip:'无糖酸奶 / 水果 / 一小把坚果'}
+  ];
+  const perMealPro = 0.25 * s.weight;
+
+  let h = '';
+  if(P.wj.level === 'unknown' || !s.bodyfat){
+    h += '<div class="note bad" style="margin:14px 0"><b>数据不完整，方案精度下降</b><br>' +
+      (!s.bodyfat ? '· 未填体脂率：蛋白质按体重估算，碳循环适配性无法判断。<br>' : '') +
+      (P.wj.level === 'unknown' ? '· 未填腰围：无法判断中心性肥胖，碳水基线未做修正。<br>' : '') +
+      '建议回到第一步补齐——这两个数据直接决定方案质量。</div>';
+  }
+  h += '<div class="card"><h2 class="sec">计算过程（每一步都可追溯）</h2>' +
+    '<p class="lead">这是你这份方案的完整推导链条。点每一步后面的数字可以看到原始来源。</p>' +
+    '<div class="scroll"><table class="trace">' +
+    P.trace.map(t => '<tr><td class="k">' + t.k + '</td><td class="f">' + t.f + '</td><td class="v">' + t.v + '</td><td>' + t.src.map(x => R(x)).join(' ') + '</td></tr>').join('') +
+    '</table></div>' +
+    (P.cs.why.length ? '<div class="note">' + P.cs.why.join('<br>') + '</div>' : '') +
+    (P.notes.length ? '<div class="note warn">' + P.notes.map(esc).join('<br>') + '</div>' : '') +
+  '</div>';
+  h += '<div class="card"><h2 class="sec">每日热量与营养素</h2>' +
+    '<div class="grid4" style="margin-top:10px">' +
+      '<div class="stat"><div class="k">基础代谢 BMR</div><div class="v">' + r0(P.bmr) + ' <span class="u">kcal</span></div></div>' +
+      '<div class="stat"><div class="k">日常消耗 TDEE</div><div class="v">' + r0(P.tdee) + ' <span class="u">kcal</span></div></div>' +
+      '<div class="stat amber"><div class="k">目标每日摄入</div><div class="v">' + r0(P.intake) + ' <span class="u">kcal</span></div></div>' +
+      '<div class="stat"><div class="k">' + (g==='cut'?'每日缺口':'每日盈余') + '</div><div class="v">' + (g==='cut'?'-':'+') + r0(Math.abs(P.deficit)) + ' <span class="u">kcal</span></div></div>' +
+    '</div>';
+
+  h += '<p class="muted" style="margin-top:10px">BMR 用 Mifflin-St Jeor 公式' + R(9) + '；TDEE = BMR × 活动系数 ' + P.act.k + '（' + P.act.t + '）' + R(9) + '。</p>';
+  if(g === 'cut'){
+    h += '<div class="note"><b>缺口怎么来：</b>每天少吃 <b>' + r0(P.dietDeficit) + ' kcal</b>' +
+      (P.exDeficit > 0 ? '（中国居民膳食指南建议减重期每天减少 300~500 kcal' + R(1) + '）' : '') +
+      (P.exDeficit > 0 ? '，再加上运动多消耗 <b>' + r0(P.exDeficit) + ' kcal</b>——大约相当于每天 <b>' + P.cardioMin + ' 分钟</b>中等强度有氧' + R(10) + '。' : '。') +
+      '<br>合计每天约 <b>' + r0(P.deficit) + ' kcal</b> 缺口，折合约每周 ' + r1(P.deficit*7/7700) + ' kg。</div>';
+  }else{
+    h += '<div class="note"><b>盈余怎么来：</b>每天比消耗多吃 <b>' + r0(P.surplus) + ' kcal</b>。增肌需要持续的能量盈余来支持合成代谢，但盈余不能大——多出来的热量大部分会变成脂肪' + R(6) + '。</div>';
+  }
+  if(P.notes.length) h += '<div class="note warn">' + P.notes.map(esc).join('<br>') + '</div>';
+
+  h += '<h3 class="sub">三大营养素</h3><div class="scroll"><table>' +
+    '<tr><th>营养素</th><th>克数</th><th>每公斤体重</th><th>占热量</th></tr>' +
+    '<tr><td><b>蛋白质</b>' + R(6) + '</td><td>' + r0(P.protein) + ' g</td><td>' + r1(P.proPerKg) + ' g/kg</td><td>' + r0(P.pPct) + '%</td></tr>' +
+    '<tr><td><b>脂肪</b>' + R(8) + '</td><td>' + r0(P.fat) + ' g</td><td>' + r1(P.fat/s.weight) + ' g/kg</td><td>' + r0(P.fPct) + '%</td></tr>' +
+    '<tr><td><b>碳水</b>' + R(11) + '</td><td>' + r0(P.carb) + ' g</td><td>' + r1(P.carb/s.weight) + ' g/kg</td><td>' + r0(P.cPct) + '%</td></tr>' +
+  '</table></div>';
+  h += '<p class="muted">蛋白质：热量缺口下按去脂体重 2.3~3.1 g/kg 保肌' + R(6) + (P.ffm ? '（你的去脂体重约 ' + r1(P.ffm) + ' kg）' : '') + '；脂肪控制在供能比 20%~30%' + R(8) + '；剩下的热量全部给碳水。碳水没有"必须吃多少"，它由前两者倒推出来。</p>';
+  if(P.carb < s.weight*2) h += '<div class="note warn">碳水只有 ' + r1(P.carb/s.weight) + ' g/kg，偏低。如果训练没劲、注意力差、特别馋碳水，说明热量压得太狠了——把目标时间放宽一点。</div>';
+
+  h += '</div>';
+
+  /* 碳循环 */
+  const wk = WEEK[s.training] || WEEK.novice;
+  const lvlChip = (v, label) => '<span class="chip' + (S.cycleLevel === v ? ' on' : '') + '" onclick="setCycleLevel(\'' + v + '\')">' + label + '</span>';
+  h += '<div class="card"><h2 class="sec">碳循环安排</h2>';
+  if(!P.useCycle){
+    h += '<div class="note warn"><b>不推荐碳循环，已改为恒定碳水方案</b><br>原因：' +
+      (P.cyFit.reasons.length ? P.cyFit.reasons.join('；') : '当前条件不适合') + '。<br>' +
+      '碳循环依赖两件事：<b>规律的训练日</b>和<b>规律的作息</b>。条件不满足时，高碳低碳的时间点会乱掉，反而更容易吃超，所以直接用每天恒定碳水更稳' + R(11) + '。</div>' +
+      '<div class="grid3">' +
+        '<div class="stat"><div class="k">每日碳水（恒定）</div><div class="v">' + r0(P.carb) + ' <span class="u">g</span></div><div class="muted">7 天都一样</div></div>' +
+        '<div class="stat"><div class="k">蛋白质</div><div class="v">' + r0(P.protein) + ' <span class="u">g</span></div><div class="muted">每天固定</div></div>' +
+        '<div class="stat amber"><div class="k">脂肪</div><div class="v">' + r0(P.fat) + ' <span class="u">g</span></div><div class="muted">每天固定</div></div>' +
+      '</div>' +
+      '<p class="muted" style="margin-top:9px">想强行启用也可以，等作息稳定、体脂降下来之后再切回去更合适。</p>' +
+      '<div class="actions"><button class="btn ghost sm" onclick="setCycleOn(true)">仍然启用碳循环</button></div>';
+  }else{
+    h += '<p class="lead">把 7 天的碳水按训练强度分布：<b>练得重的日子多吃、休息的日子少吃</b>。全周总量不变，只是重新分配' + R(11) + '。</p>' +
+      '<div class="field"><label>碳循环强度</label><div class="chips">' +
+        lvlChip('auto','自动匹配（推荐）') + lvlChip('gentle','温和') + lvlChip('standard','标准') + lvlChip('aggressive','激进') +
+      '</div><p class="muted" style="margin-top:6px">当前：<b>' + P.cyi.name + '</b> —— ' + P.cyi.note +
+      '（自动匹配规则：零基础→温和，有基础→标准，进阶→激进）</p></div>' +
+      '<div class="grid3">' +
+        '<div class="stat"><div class="k">高碳日 · 力量训练</div><div class="v">' + r0(P.carbHigh) + ' <span class="u">g 碳水</span></div><div class="muted">' + P.cy.h + ' 天／周</div></div>' +
+        '<div class="stat"><div class="k">中碳日 · 有氧日</div><div class="v">' + r0(P.carbMid) + ' <span class="u">g 碳水</span></div><div class="muted">' + P.cy.m + ' 天／周</div></div>' +
+        '<div class="stat amber"><div class="k">低碳日 · 休息</div><div class="v">' + r0(P.carbLow) + ' <span class="u">g 碳水</span></div><div class="muted">' + P.cy.l + ' 天／周</div></div>' +
+      '</div>' +
+      '<div class="week">' + wk.map((k,i) => {
+        const cls = k==='h'?'high':(k==='m'?'mid':'low');
+        const t = k==='h'?'力量训练':(k==='m'?'有氧':'休息');
+        const c = k==='h'?P.carbHigh:(k==='m'?P.carbMid:P.carbLow);
+        return '<div class="day ' + cls + '"><div class="d">' + WD[i] + '</div><div class="t">' + t + '</div><div class="c">' + r0(c) + 'g</div></div>';
+      }).join('') + '</div>' +
+      '<p class="muted" style="margin-top:9px">蛋白质和脂肪<b>每天都一样</b>，只调整碳水。高碳日把主食放在训练前后两餐；低碳日优先保证蛋白质和蔬菜，主食往下减。</p>' +
+      '<div class="note warn"><b>注意：</b>碳循环只是把同样的总热量换个分配方式，<b>它本身不额外制造缺口</b>。真正的减脂动力仍然是总热量缺口' + R(7) +
+      '。觉得麻烦的话，每天吃一样的碳水量完全可以。</div>' +
+      '<div class="actions"><button class="btn ghost sm" onclick="setCycleOn(false)">改回恒定碳水</button></div>';
+  }
+  h += '</div>';
+
+  /* 习惯适配 */
+  const hn = habitNotes(s);
+  if(hn.length){
+    h += '<div class="card"><h2 class="sec">按你现在的习惯，只需要改这几处</h2>' +
+      '<p class="lead">方案不要求你立刻变成另一个人。下面这些是从你现有习惯里挑出的改动点，改动越少越容易坚持' + R(7) + '。</p>' +
+      '<ul class="small" style="padding-left:20px;margin:4px 0">' + hn.map(x => '<li style="margin:7px 0">' + x + '</li>').join('') + '</ul></div>';
+  }
+
+  /* 餐次 */
+  h += '<div class="card"><h2 class="sec">每日餐次建议</h2>' +
+    '<p class="lead">蛋白质平均分到每餐吸收利用最好' + R(6) + '；进餐要规律' + R(5) + '。</p><div class="scroll"><table>' +
+    '<tr><th>餐次</th><th>热量</th><th>蛋白质</th><th>怎么搭配</th></tr>' +
+    meals.map(m => '<tr><td><b>' + m.n + '</b></td><td>' + r0(P.intake*m.r) + ' kcal</td><td>≥ ' + r0(P.protein*m.r) + ' g</td><td>' + m.tip + '</td></tr>').join('') +
+    '</table></div>' +
+    '<p class="muted">你的每餐蛋白质建议不少于 <b>' + r0(perMealPro) + ' g</b>（0.25 g/kg 体重）' + R(6) + '。</p></div>';
+
+  /* 食物换算 */
+  h += '<div class="card"><h2 class="sec">吃什么 · 食物换算</h2>' +
+    '<p class="lead">把克数翻译成你能直接买到的食物。数据来自《中国食物成分表》' + R(12) + '。</p><div class="scroll"><table>' +
+    '<tr><th>类别</th><th>你的目标</th><th>相当于</th></tr>' +
+    '<tr><td><b>主食</b></td><td>碳水 ' + r0(carbMain) + ' g（占碳水目标 55%）</td><td>熟米饭 <b>' + r0(rice) + ' g</b>（约 ' + r1(bowl) + ' 碗）<br>或 馒头 ' + r0(mantou) + ' g　或 全麦面包 ' + r0(bread) + ' g　或 蒸红薯 ' + r0(sweet) + ' g</td></tr>' +
+    '<tr><td><b>优质蛋白</b>' + (dset.length ? '<br><span class="muted">已按你的偏好调整</span>' : '') + '</td><td>蛋白 ' + r0(P.protein) + ' g</td><td>主蛋白（约占一半，任选其一，分 2~3 餐）：<br>' + opts.join('　或　') + '<br>再补齐剩下的：' + restTxt + '</td></tr>' +
+    '<tr><td><b>脂肪</b></td><td>' + r0(P.fat) + ' g</td><td>烹调油 <b>25~30 g</b>（约 2~3 瓷勺）' + R(5) + '＋ 坚果 10 g；剩下来自肉蛋奶本身</td></tr>' +
+    '<tr><td><b>蔬菜</b></td><td>≥ 300 g</td><td>深色蔬菜占一半，如西兰花、菠菜、油菜' + R(3) + '</td></tr>' +
+    '<tr><td><b>水果</b></td><td>200~350 g</td><td>约 1~2 个拳头，果汁不能代替鲜果' + R(3) + '</td></tr>' +
+    '<tr><td><b>奶类</b></td><td>相当于 300 ml 液态奶</td><td>牛奶 1 盒 + 无糖酸奶 1 杯' + R(3) + '</td></tr>' +
+    '<tr><td><b>盐 / 水</b></td><td>盐 ≤5 g，水 1500~1700 ml</td><td>少喝含糖饮料；添加糖每天不超过 50 g，最好 25 g 以下' + R(5) + '</td></tr>' +
+    '</table></div>' +
+    '<h3 class="sub">常见食物速查（每 100 g 可食部）</h3><div class="scroll"><table>' +
+    '<tr><th>食物</th><th>份量</th><th>热量</th><th>碳水</th><th>蛋白</th><th>脂肪</th></tr>' +
+    FOOD.map(f => '<tr><td>' + f.n + '</td><td>' + f.unit + '</td><td>' + f.kcal + ' kcal</td><td>' + f.c + ' g</td><td>' + f.p + ' g</td><td>' + f.f + ' g</td></tr>').join('') +
+    '</table></div></div>';
+
+  /* 上班族点餐 */
+  h += '<div class="card"><h2 class="sec">上班族点餐参考</h2>' +
+    '<p class="lead">指南对在外就餐的原则是：荤素搭配、清淡为主、尽量用鱼和豆制品代替畜禽肉' + R(4) + '。下面是落到具体场景的做法。</p>' +
+    (function(){
+      const tips = [];
+      if(dset.indexOf('素食')>=0) tips.push('<b>素食</b>：把荤菜换成豆腐、豆干、毛豆、鹰嘴豆；植物蛋白氨基酸不完整，注意<b>豆类 + 谷物搭配</b>（如米饭配豆腐），并关注维生素 B12、铁、锌、DHA 的补充。');
+      if(dset.indexOf('乳糖不耐')>=0) tips.push('<b>乳糖不耐</b>：牛奶换成无糖豆浆、无乳糖奶或酸奶（酸奶乳糖较低，多数人可以耐受）。');
+      if(dset.indexOf('不吃海鲜')>=0) tips.push('<b>不吃海鲜</b>：鱼虾用鸡胸、瘦牛肉、鸡蛋替代，蛋白质一样够；Omega-3 可从核桃、亚麻籽油补充。');
+      if(dset.indexOf('不吃牛羊')>=0) tips.push('<b>不吃牛羊</b>：红肉用鸡腿肉（去皮）、猪里脊、鱼虾替代；注意补铁，可搭配维生素 C 丰富的蔬果促进吸收。');
+      if(dset.indexOf('不吃辣')>=0) tips.push('<b>不吃辣</b>：麻辣烫换成清汤冒菜、水煮菜或轻食沙拉，一样可以多点蔬菜和蛋白。');
+      if(dset.indexOf('外卖为主')>=0) tips.push('<b>外卖为主</b>：外卖的隐形热量主要来自油和酱汁，点单时备注「少油少酱」能省下 100~200 kcal。');
+      if(dset.indexOf('食堂为主')>=0) tips.push('<b>食堂为主</b>：食堂最容易超标的是主食和油炸菜，先打菜后打饭、米饭要半份是最高效的两招。');
+      if(!tips.length) return '';
+      return '<div class="note"><b>按你的偏好做了这些调整</b><br>' + tips.join('<br>') + '</div>';
+    })() +
+    '<h4 class="subsub">🍱 食堂</h4><ul class="small" style="padding-left:20px;margin:4px 0">' +
+      '<li>先打菜再打饭，<b>米饭要半份</b>，或者用杂粮饭替代。</li>' +
+      '<li>荤菜优先选 <b>清蒸、白灼、卤、烤</b>；避开糖醋、红烧、油炸、勾芡的（这些一份能多 150~300 kcal）。</li>' +
+      '<li>主动加一份蛋白：水煮蛋、鸡胸、酱牛肉、豆腐。</li>' +
+      '<li>汤选清汤，别拿浓汤和免费甜饮料。</li>' +
+    '</ul>' +
+    '<h4 class="subsub">🥡 外卖</h4><ul class="small" style="padding-left:20px;margin:4px 0">' +
+      '<li><b>麻辣烫</b>：清汤或番茄汤底、免麻酱，多点蔬菜和豆腐/鸡胸/牛肉，面条减半。</li>' +
+      '<li><b>沙县 / 兰州拉面</b>：鸡腿饭去皮、米饭减半；牛肉面少面多牛肉，加个蛋。</li>' +
+      '<li><b>黄焖鸡 / 盖浇饭</b>：只吃一半米饭，汤汁别拌饭，鸡肉去皮。</li>' +
+      '<li><b>麦当劳 / 肯德基</b>：板烧鸡腿堡（去酱）+ 玉米杯，不要薯条和含糖可乐。</li>' +
+      '<li><b>轻食沙拉</b>：酱汁另放，选油醋汁；注意有些沙拉热量藏在酱里。</li>' +
+    '</ul>' +
+    '<h4 class="subsub">⏰ 加班 / 便利店</h4><ul class="small" style="padding-left:20px;margin:4px 0">' +
+      '<li>茶叶蛋 + 无糖豆浆 + 玉米，是性价比最高的一套。</li>' +
+      '<li>关东煮选豆腐、魔芋丝、鸡蛋；避开油炸串和浓汤。</li>' +
+      '<li>办公室常备：无糖酸奶、原味坚果小包、蛋白粉。</li>' +
+    '</ul>' +
+    '<div class="note">以上点餐建议是依据指南「少盐少油、在外就餐清淡荤素搭配」的原则' + R(4) + ' ' + R(5) + '做的<b>本土化落地</b>，具体热量因店家做法差异较大，仅作方向参考。</div>' +
+  '</div>';
+  return h;
+}
+
+
+/* ---------- 运动方案 ---------- */
+function renderTrain(P){
+  const s = P.s, tp = P.tp, wk = WEEK[s.training] || WEEK.novice;
+  const home = [
+    ['自重深蹲', '3 组 × 12~15 次', '膝盖对着脚尖方向，下蹲到大腿接近平行'],
+    ['俯卧撑（可跪姿降阶）', '3 组 × 8~15 次', '身体保持一条直线，肘部约 45°'],
+    ['臀桥 / 单腿臀桥', '3 组 × 15 次', '顶点夹紧臀部停 1 秒'],
+    ['箭步蹲', '3 组 × 每侧 10~12 次', '前脚掌踩实，膝盖不内扣'],
+    ['背包划船 / 桌沿反向划船', '3 组 × 10~15 次', '用装满书的背包替代哑铃'],
+    ['平板支撑', '3 组 × 30~60 秒', '腰别塌，臀部收紧']
+  ];
+  const gym = [
+    ['深蹲（杠铃/哑铃）', '4 组 × 8~12 次', '复合动作，优先练'],
+    ['卧推（杠铃/哑铃）', '4 组 × 8~12 次', '肩胛后收，脚踩实'],
+    ['坐姿划船 / 杠铃划船', '4 组 × 10~12 次', '补齐背部，改善久坐体态'],
+    ['罗马尼亚硬拉', '3 组 × 10~12 次', '屈髋为主，感受腘绳肌'],
+    ['高位下拉 / 引体', '3 组 × 8~12 次', '新手可用助力器'],
+    ['坐姿哑铃推举', '3 组 × 10~12 次', '核心收紧，不要过度挺腰'],
+    ['核心（卷腹 / 悬垂举腿）', '3 组 × 15 次', '收尾动作']
+  ];
+  const inj = (s.injury || []).filter(x => x !== '无');
+  const INJ = {
+    '膝': {bad:['深蹲','箭步蹲','跑步','跳绳','爬楼','爬坡'], use:'臀桥／臀推、靠墙静蹲（浅角度）、腿弯举、骑车、游泳、快走'},
+    '腰': {bad:['硬拉','划船','深蹲','山羊挺身'], use:'器械坐姿划船、高位下拉、鸟狗式、死虫式、臀桥'},
+    '肩': {bad:['推举','卧推','引体','下拉'], use:'器械推胸、哑铃中立握卧推、侧平举（轻重量）、绳索面拉'},
+    '腕': {bad:['俯卧撑','弯举'], use:'器械推胸、哑铃中立握、助力带、护腕'}
+  };
+  const injFlag = (name) => {
+    for(const k of inj){ const o = INJ[k]; if(o && o.bad.some(b => name.indexOf(b) >= 0)) return ' <span class="pill bad">建议替换</span>'; }
+    return '';
+  };
+  const tbl = (rows) => '<div class="scroll"><table><tr><th>动作</th><th>组数 × 次数</th><th>要点</th></tr>' +
+    rows.map(r => '<tr><td><b>' + r[0] + '</b>' + injFlag(r[0]) + '</td><td>' + r[1] + '</td><td>' + r[2] + '</td></tr>').join('') + '</table></div>';
+
+  let h = '';
+  h += '<div class="card"><h2 class="sec">训练总览</h2>' +
+    '<div class="grid4" style="margin-top:10px">' +
+      '<div class="stat"><div class="k">力量训练</div><div class="v">' + tp.days + ' <span class="u">天/周</span></div></div>' +
+      '<div class="stat"><div class="k">单次时长</div><div class="v">' + tp.min + ' <span class="u">分钟</span></div></div>' +
+      '<div class="stat"><div class="k">有氧</div><div class="v">' + Math.max(tp.cardio, P.exDeficit>0?3:1) + ' <span class="u">次/周</span></div></div>' +
+      '<div class="stat amber"><div class="k">最低要求</div><div class="v">150 <span class="u">分钟/周</span></div></div>' +
+    '</div>' +
+    '<p class="muted" style="margin-top:10px">频率按你的运动基础（' + tp.t + '）匹配。指南的底线是：每周至少 5 天中等强度身体活动、累计 150 分钟以上，抗阻运动每周 2~3 天' + R(1) + '——这是<b>健康下限</b>，想增肌需要练得更多。</p>' +
+    (s.goal === 'cut' && P.exDeficit > 0 ? '<div class="note"><b>为了凑够缺口：</b>你每天需要多消耗约 ' + r0(P.exDeficit) + ' kcal，相当于 <b>' + P.cardioMin + ' 分钟</b>中等强度有氧' + R(10) + '。指南对超重肥胖人群的建议是每天累计 60~90 分钟中等强度有氧、每周 5~7 天，抗阻训练隔天进行' + R(1) + '。</div>' : '') +
+  '</div>';
+
+  h += '<div class="card"><h2 class="sec">一周安排（与碳循环对应）</h2>' +
+    '<p class="lead">高碳日练力量，低碳日休息。这样碳水都用在刀刃上' + R(11) + '。</p>' +
+    '<div class="scroll"><table><tr><th>星期</th><th>安排</th><th>碳水</th><th>说明</th></tr>' +
+    wk.map((k,i) => {
+      const t = k==='h'?'力量训练':(k==='m'?'有氧':'休息 / 日常活动');
+      const c = P.useCycle ? (k==='h'?P.carbHigh:(k==='m'?P.carbMid:P.carbLow)) : P.carb;
+      const tip = !P.useCycle ? '每天碳水都一样，按当天训练量微调即可'
+        : (k==='h'?'训练前后各安排一餐含主食':(k==='m'?'有氧放在饭后 1.5 小时':(s.goal==='cut'?'主食减少，蛋白质蔬菜吃够':'正常吃，别低于目标')));
+      return '<tr><td><b>' + WD[i] + '</b></td><td>' + t + '</td><td>' + r0(c) + ' g</td><td>' + tip + '</td></tr>';
+    }).join('') + '</table></div></div>';
+
+  if(inj.length){
+    h += '<div class="card"><h2 class="sec">伤病适配</h2>' +
+      '<p class="lead">你勾选了：' + inj.join('、') + '。下表把可能加重不适的动作换成了替代方案——<b>有明确疼痛或伤病请先看医生</b>，这里只是训练层面的规避。</p>' +
+      '<div class="scroll"><table><tr><th>部位</th><th>建议避开</th><th>换成这些</th></tr>' +
+      inj.map(k => '<tr><td><b>' + k + '</b></td><td>' + (INJ[k] ? INJ[k].bad.join('、') : '—') + '</td><td>' + (INJ[k] ? INJ[k].use : '—') + '</td></tr>').join('') +
+      '</table></div></div>';
+  }
+  h += '<div class="card"><h2 class="sec">训练内容</h2>' +
+    '<p class="lead">两个版本任选一个，按你的条件来。核心原则一样：<b>复合动作优先、逐步加重量</b>' + R(11) + '。</p>' +
+    '<h3 class="sub">🏠 居家无器械版（每次 ' + tp.min + ' 分钟）</h3>' +
+    '<p class="small"><b>热身 5~8 分钟</b>：开合跳、原地快走、动态拉伸。<br><b>主训</b>：下面 6 个动作连成循环，做 3 轮，每个动作之间休息 30 秒，每轮之间休息 2 分钟。</p>' + tbl(home) +
+    '<p class="small"><b>收尾</b>：10~15 分钟有氧（原地高抬腿、开合跳、爬楼梯）。</p>' +
+    '<h3 class="sub">🏋️ 健身房器械版（每次 ' + tp.min + ' 分钟）</h3>' +
+    '<p class="small"><b>热身 8~10 分钟</b>：跑步机快走 + 动态拉伸。<br><b>主训</b>：每个动作做完再换下一个，组间休息 60~90 秒。</p>' + tbl(gym) +
+    '<p class="small"><b>收尾</b>：坡度快走或动感单车 15~20 分钟。</p>' +
+    '<div class="note"><b>渐进超负荷</b>：这是增肌的核心。做法是——当你能用标准动作完成目标次数的<b>上限</b>（比如 12 次），下次就加一点重量或加一组。重量、次数、组数、休息时间，任何一个变得更难，都是强度在提高' + R(11) + '。</div>' +
+  '</div>';
+
+  h += '<div class="card"><h2 class="sec">有氧与日常活动</h2>' +
+    '<ul class="small" style="padding-left:20px">' +
+      '<li><b>有氧</b>：每次 30~45 分钟中等强度（快走、爬坡、骑车、游泳），心率约为（220 − 年龄）的 60%~70%。</li>' +
+      '<li><b>别做太多</b>：有氧过多会挤占恢复、影响力量训练表现。它只是补足缺口的手段，力量训练才是保肌肉的关键。</li>' +
+      '<li><b>减少久坐</b>：指南建议每小时起来动一动' + R(1) + '。上下班提前一站下车、午休走 15 分钟，都算数。</li>' +
+      '<li><b>日常步数</b>：指南提到主动身体活动最好每天 6000 步以上' + R(1) + '，可以用手机计步当参考。</li>' +
+    '</ul></div>';
+  return h;
+}
+
+/* ---------- 原理说明 ---------- */
+function renderWhy(P){
+  const s = P.s, g = s.goal;
+  const why = [];
+  if(g === 'cut'){
+    why.push(['为什么是这个热量？',
+      '你每天消耗大约 <b>' + r0(P.tdee) + ' kcal</b>，方案让你吃到 <b>' + r0(P.intake) + ' kcal</b>，中间差的 <b>' + r0(P.deficit) +
+      ' kcal</b> 就是缺口。减脂的唯一直接动力就是这个缺口——不是某一种食物、也不是某个时间点吃东西' + R(7) +
+      '。缺口我们拆成了两部分：<b>少吃 ' + r0(P.dietDeficit) + ' kcal</b>（指南推荐减重期每天减少 300~500 kcal' + R(1) + '）' +
+      (P.exDeficit>0 ? '，<b>多动 ' + r0(P.exDeficit) + ' kcal</b>' : '') +
+      '。为什么不干脆饿到 1000 kcal？因为缺口越大，掉的肌肉越多、代谢适应越强、越容易反弹，而且你根本坚持不住' + R(7) + '。']);
+  }else{
+    why.push(['为什么是「多吃一点」而不是「猛吃」？',
+      '增肌需要能量盈余来支持肌肉合成，但盈余越大不代表长肌肉越快。你每天消耗约 <b>' + r0(P.tdee) + ' kcal</b>，方案让你多吃 <b>' + r0(P.surplus) +
+      ' kcal</b>。研究显示，增肌期多余热量里只有一部分会变成肌肉，剩下的会成为脂肪' + R(6) +
+      '。所以「吃得多 ≠ 状态好」，小幅盈余 + 拼命练重，才是性价比最高的组合' + R(11) + '。']);
+  }
+  why.push(['为什么蛋白质要吃这么多？',
+    '你的目标是 <b>' + r0(P.protein) + ' g</b>（' + r1(P.proPerKg) + ' g/kg）。中国居民膳食指南给普通成年人的推荐量大约是每天 65 g（男）/ 55 g（女）' + R(1) +
+    '，那是<b>不运动的人</b>的底线。而运动人群的研究建议 1.4~2.0 g/kg' + R(6) + '；在热量缺口下，为了让肌肉少掉一点，需要提高到按去脂体重 2.3~3.1 g/kg' + R(6) +
+    '。蛋白质还有一个好处：它最扛饿，消化它本身也要消耗热量。']);
+  why.push(['为什么碳水要这样来回调？',
+    '碳水是你训练时的主要燃料。练力量的日子多吃碳水，训练强度和恢复都更好；休息的日子少吃碳水，把热量省下来' + R(11) +
+    '。这就是「碳循环」的全部逻辑——<b>它不是玄学，也不额外制造缺口</b>，只是把同一周的总碳水重新分配' + R(7) +
+    '。方案里高碳日 ' + r0(P.carbHigh) + ' g、低碳日 ' + r0(P.carbLow) + ' g，周总量和每天吃一样多是一样的。如果你嫌麻烦，每天都吃 ' + r0(P.carb) + ' g 完全可以。']);
+  why.push(['为什么要练力量，而不是只跑步？',
+    '只做有氧、热量缺口又大，掉的体重里相当一部分是肌肉，结果就是体重下来了但看起来松垮、代谢变低' + R(7) +
+    '。抗阻训练是<b>保住肌肉</b>的关键手段，指南也建议每周做 2~3 天抗阻运动' + R(1) +
+    '。而增肌的核心机制是<b>渐进超负荷</b>：重量、次数、组数、缩短休息，任何一个变难都算' + R(11) + '。']);
+  why.push(['为什么不能更快？',
+    '指南建议减重速度以每月 2~4 kg 为宜' + R(1) + '，同时每周降幅不要超过体重的 1%' + R(8) +
+    '。你现在的目标速率是 <b>' + r1(P.rate) + ' ' + P.val.sr.unit + '</b>，' + (P.val.tone==='ok'?'在安全区间内。':'已经调整到更保守的区间。') +
+    '太快会发生三件事：肌肉流失、代谢下降、以及几乎必然的反弹。慢，就是快。']);
+  why.push(['上班族怎么落地？',
+    '久坐 8 小时 + 外卖 + 加班，是上班族最大的三个变量' + R(1) + '。方案因此做了这些适配：训练时长控制在 ' + P.tp.min +
+    ' 分钟内、动作以复合动作为主（省时间）；点餐建议按食堂/外卖/便利店分场景给；食谱按常见中式主食换算成「几碗饭、几个鸡蛋」，不需要你称重' + R(12) +
+    '。原则是：<b>能在现有生活里执行的方案，才是有效的方案</b>' + R(7) + '。']);
+
+  let h = '<div class="card"><h2 class="sec">原理说明</h2><p class="lead">点击数字标记可以看到对应的原始出处。</p>';
+  why.forEach((w,i) => { h += '<h3 class="sub">' + (i+1) + '. ' + w[0] + '</h3><p>' + w[1] + '</p>'; });
+  h += '<div class="note warn"><b>哪些是文献结论，哪些是经验？</b><br>' +
+    '本方案中，热量计算（Mifflin-St Jeor' + R(9) + '）、活动系数' + R(9) + '、蛋白质用量' + R(6) + '、脂肪供能比' + R(8) +
+    '、减重速度' + R(1) + ' ' + R(8) + '、食物份量' + R(2) + ' ' + R(3) + ' ' + R(4) + ' ' + R(5) + ' ' + R(12) + ' 都有明确出处。' +
+    '而「碳循环」的具体比例、「微微饥饿感」这类说法来自你提供的博主经验' + R(11) + '，属于<b>个人经验总结</b>，没有被大型临床试验直接验证——本工具把它当作可执行的分配策略来用，原理上不违背能量守恒。' +
+    '<br>实践建议：把前两周当成校准期，用体重和训练状态来判断，再微调。</div></div>';
+  return h;
+}
+
+/* ---------- 每周记录与自动调整 ---------- */
+function logAdvice(P){
+  const logs = (S.logs || []).slice().sort((a,b) => a.date < b.date ? -1 : 1);
+  if(logs.length < 3) return {tone:'info', title:'记录还不够', lines:['连续记录 3 次（建议每周固定时间记录一次）才能给出调整建议。','每次只需要三样：体重、腰围、这周饿不饿。']};
+  const win = logs.slice(-6), first = win[0], last = win[win.length-1];
+  const span = Math.max(1, Math.round((new Date(last.date) - new Date(first.date)) / 86400000));
+  const dw = num(last.weight) - num(first.weight);
+  const pct = num(first.weight) > 0 ? dw / num(first.weight) * (7/span) * 100 : 0;
+  const hungry = win.filter(l => l.mood === 'hungry').length;
+  const full = win.filter(l => l.mood === 'full').length;
+  const dwW = num(last.waist) && num(first.waist) ? num(last.waist) - num(first.waist) : null;
+  const lines = ['体重变化 ' + (dw>0?'+':'') + r1(dw) + ' kg（' + span + ' 天，折合每周 ' + (pct>0?'+':'') + r1(pct) + '%）' +
+    (dwW !== null ? '；腰围变化 ' + (dwW>0?'+':'') + r1(dwW) + ' cm' : '')];
+  let tone = 'ok', title = '保持当前方案', adj = '碳水不变';
+  if(pct < -1.0){ tone='bad'; title='掉得偏快，先加回来'; adj='碳水 +0.3 g/kg ≈ +' + r0(0.3*P.s.weight) + ' g'; lines.push('每周降幅超过体重的 1%，掉的有相当一部分是水分和肌肉' + R(8) + '。','做法：碳水加回去，或直接加半碗主食；有氧先别加量。'); }
+  else if(pct > 0.3 && S.goal === 'cut'){ tone='warn'; title='方向反了，收紧一点'; adj='碳水 −0.2 g/kg ≈ −' + r0(0.2*P.s.weight) + ' g'; lines.push('体重在往上走，说明当前摄入大于消耗。','做法：先检查有没有漏记（油、酱汁、饮料、坚果），再把碳水降 0.2 g/kg，不要一次砍太多。'); }
+  else if(hungry >= Math.max(3, Math.ceil(win.length/2))){ tone='warn'; title='身体在要碳水，可以往上给'; adj='碳水 +0.3 g/kg ≈ +' + r0(0.3*P.s.weight) + ' g'; lines.push('多数时间"很饿、很想吃碳水"，说明碳水利用率在窗口期' + R(11) + '。','做法：碳水 +0.3 g/kg，蛋白质同步 −0.2 g/kg，脂肪不动，维持 10 天~半个月再评估。'); }
+  else if(full >= 3){ tone='warn'; title='该往下调一点了'; adj='碳水 −0.3 g/kg ≈ −' + r0(0.3*P.s.weight) + ' g'; lines.push('多次"不饿或吃撑"，而体重没在动，说明碳水利用率在下降。','做法：碳水 −0.3 g/kg，蛋白质同步 +0.2 g/kg，脂肪不动。'); }
+  else if(Math.abs(pct) < 0.2){ tone='ok'; title='体重稳定，看围度'; adj='保持不动'; lines.push('体重基本不动。别急着砍热量——先看腰围和照片，如果腰围在降、训练重量在涨，说明你在同时增肌减脂，这是最好的情况。','如果腰围也连续两周不动，再把碳水降 0.2 g/kg 或每天加 15 分钟有氧。'); }
+  else { lines.push('目前各项数据都在合理区间，按当前方案继续。'); }
+  if(S.logs.length >= 4 && !logs.some(l => num(l.waist) > 0)) lines.push('⚠ 一直没有记录腰围。腰围比体重更能反映内脏脂肪变化' + R(14) + '，建议每周量一次。');
+  return {tone, title, lines, adj};
+}
+function renderLog(P){
+  const logs = (S.logs || []).slice().sort((a,b) => a.date < b.date ? 1 : -1);
+  const a = logAdvice(P);
+  const moodTxt = {hungry:'很饿', ok:'微微饿', full:'不饿/撑', '':''};
+  const today = new Date();
+  const t = today.getFullYear() + '-' + String(today.getMonth()+1).padStart(2,'0') + '-' + String(today.getDate()).padStart(2,'0');
+  let h = '<div class="card"><h2 class="sec">下一周该怎么调</h2>' +
+    '<div class="row" style="align-items:center"><div style="flex:1"><b style="font-size:15px;color:var(--ink)">' + esc(a.title) + '</b></div>' +
+    '<span class="pill ' + (a.tone === 'ok' ? 'ok' : (a.tone === 'bad' ? 'bad' : (a.tone === 'warn' ? 'warn' : 'info'))) + '">' + esc(a.adj) + '</span></div>' +
+    '<div style="margin-top:8px;font-size:13.5px">' + a.lines.map(x => '<p style="margin:5px 0">' + x + '</p>').join('') + '</div></div>';
+
+  h += '<div class="card"><h2 class="sec">记一笔</h2>' +
+    '<p class="lead">建议每周固定一天（比如周日早上）记录。三个数就够：体重、腰围、这周的饥饿状态。</p>' +
+    '<div class="row">' +
+      '<div class="field"><label>日期</label><input id="lg_date" type="date" value="' + t + '"></div>' +
+      '<div class="field"><label>体重（kg）</label><input id="lg_weight" type="number" inputmode="decimal" step="0.1" value="' + (P.s.weight || '') + '"></div>' +
+    '</div>' +
+    '<div class="row">' +
+      '<div class="field"><label>腰围（cm）</label><input id="lg_waist" type="number" inputmode="decimal" step="0.5" placeholder="' + (S.waist || '') + '"></div>' +
+      '<div class="field"><label>这周的状态</label><select id="lg_mood">' +
+        '<option value="ok">微微饿（最佳）</option><option value="hungry">很饿 / 很想吃碳水</option><option value="full">不饿 / 吃撑了</option>' +
+      '</select></div>' +
+    '</div>' +
+    '<div class="actions"><button class="btn" onclick="saveLog()">保存记录</button></div></div>';
+
+  h += '<div class="card"><h2 class="sec">历史记录</h2>';
+  if(!logs.length) h += '<div class="empty">还没有记录</div>';
+  else {
+    h += '<div class="scroll"><table><tr><th>日期</th><th>体重</th><th>腰围</th><th>状态</th><th></th></tr>' +
+      logs.slice(0,20).map((l,i) => {
+        const idx = (S.logs || []).findIndex(x => x.date === l.date);
+        return '<tr><td><b>' + esc(l.date) + '</b></td><td>' + (num(l.weight) ? num(l.weight) + ' kg' : '—') + '</td><td>' +
+          (num(l.waist) ? num(l.waist) + ' cm' : '—') + '</td><td>' + esc(moodTxt[l.mood] || '—') +
+          '</td><td><a href="javascript:void(0)" onclick="delLog(' + idx + ')" style="color:var(--red);font-size:12px">删除</a></td></tr>';
+      }).join('') + '</table></div>';
+  }
+  h += '<div class="note warn" style="margin-top:10px">记录只存在你这台设备上。换设备前记得用上面的「复制方案文字」保存一份。</div></div>';
+  return h;
+}
+function saveLog(){
+  const d = $('#lg_date').value || '';
+  if(!d) return alert('请选择日期');
+  const item = {date:d, weight:num($('#lg_weight').value) || null, waist:num($('#lg_waist').value) || null, mood:$('#lg_mood').value};
+  S.logs = S.logs || [];
+  const i = S.logs.findIndex(x => x.date === item.date);
+  if(i >= 0) S.logs[i] = item; else S.logs.push(item);
+  S.logs.sort((a,b) => a.date < b.date ? -1 : 1);
+  if(item.weight){ S.weight = item.weight; if($('#f_weight')) $('#f_weight').value = item.weight; }
+  if(item.waist){ S.waist = item.waist; if($('#f_waist')) $('#f_waist').value = item.waist; }
+  saveS();
+  alert('已记录 ' + d + (item.weight ? '，体重 ' + item.weight + ' kg' : '') + '。最新数据已回写到基础信息。');
+  renderPlanBody();
+}
+function delLog(i){
+  if(i < 0 || !S.logs || !S.logs[i]) return;
+  if(!confirm('删除 ' + S.logs[i].date + ' 的记录？')) return;
+  S.logs.splice(i,1); saveS(); renderPlanBody();
+}
+
+/* ---------- 常见问题 ---------- */
+function renderFaq(P){
+  const s = P.s, g = s.goal;
+  const qa = [
+    ['体重好几天不掉了，是平台期吗？',
+     '先别急，<b>连续 2~3 周</b>体重和腰围都没变化才算平台期，一周不动很正常——水分、糖原、生理周期、前一天吃的盐都会影响体重' + R(1) +
+     '。真的卡住了，按顺序排查三件事：① 有没有漏记（油、酱汁、饮料、坚果最容易漏）；② 睡眠够不够，睡不够会让脂肪减少量大幅下降' + R(15) +
+     '；③ 日常活动量是不是下降了（很多人减脂后期不知不觉走得少了）。确认无误再考虑减少 100~150 kcal 或增加有氧，别一次砍太多。'],
+    ['训练没劲、提不起重量怎么办？',
+     '先看三个地方：<b>碳水够不够</b>（训练前 1~2 小时吃一份主食会明显不一样）、<b>睡眠够不够</b>' + R(15) +
+     '、<b>缺口是不是太大了</b>。如果三者都没问题，就是减脂期的正常现象——能量不足时力量小幅波动很常见，重点是把重量和动作质量<b>尽量维持住</b>，而不是追求涨。' +
+     '真掉得厉害，就把缺口收小一点（比如把目标时间放宽两周）。'],
+    ['能不能喝酒？应酬躲不掉怎么办？',
+     '指南的建议是成年人不饮酒；如饮酒，一天酒精量不超过 15 g' + R(5) +
+     '（大约啤酒 450 ml 或白酒 45 ml）。酒精本身有热量、还会抑制脂肪氧化、影响睡眠和恢复。应酬时的实操：先吃菜和蛋白再动杯、选低度酒、一口酒一口水、当天把主食减半，别指望"喝完再补运动"。'],
+    ['一定要吃蛋白粉吗？',
+     '不必。指南建议的蛋白质来源是鱼、禽、蛋、瘦肉、奶、大豆制品' + R(1) + ' ' + R(3) + ' ' + R(4) +
+     '，食物优先。蛋白粉的价值是<b>方便</b>——当你确实吃不到目标蛋白量（比如外卖党、饭量小）时，用它补上最省事。你现在需要 ' + r0(P.protein) + ' g 蛋白，如果靠食物有困难，用 1 勺粉（约 20~25 g）补齐是完全合理的。'],
+    ['掉秤了但看起来没瘦，为什么？',
+     '体重下降不等于脂肪下降。热量缺口大、蛋白质不够、又不做力量训练时，掉的可能一半是肌肉和水' + R(7) +
+     '。这就是为什么方案里蛋白质给到 ' + r0(P.protein) + ' g、还必须做力量训练' + R(1) + '。' +
+     '判断标准换成三个：<b>腰围</b>、<b>同一角度的照片</b>、<b>训练重量</b>——它们比体重更能说明问题。'],
+    ['需要每天称体重吗？',
+     '建议<b>固定时间称</b>（晨起、空腹、上完厕所、同一台秤），然后看<b>一周的平均值</b>，而不是单日数字。波动 1~2 kg 基本都是水分。' +
+     '同时也量腰围（每周一次），两个一起看才准' + R(14) + '。'],
+    ['生理期 / 生病了怎么办？',
+     '生理期前一周体重上浮 0.5~2 kg 是常见现象，不需要因此减热量。这期间以维持为主，训练量可以降一点。' +
+     '生病（发烧、肠胃炎等）时优先恢复：暂停缺口、吃到维持热量、以蛋白质和水分优先，好了再继续。'],
+    ['什么时候能看到变化？',
+     '按当前方案（' + r1(P.rate) + ' ' + P.val.sr.unit + '）：<b>2 周</b>能看到体重趋势，<b>4 周</b>腰围开始有变化，' +
+     '<b>8~12 周</b>照片对比才明显。这是身体的正常速度，不需要靠更激进的方式去加速——参考指南的减重速度建议' + R(1) + '。']
+  ];
+  let h = '<div class="card"><h2 class="sec">常见问题</h2><p class="lead">执行过程中最常遇到的几个问题。</p>';
+  qa.forEach(q => { h += '<h3 class="sub">' + q[0] + '</h3><p>' + q[1] + '</p>'; });
+  h += '</div>';
+  return h;
+}
+
+/* ---------- 来源列表 ---------- */
+function renderRefs(){
+  $('#refList').innerHTML = SRC.map(s => '<li id="src' + s.n + '"><b>' + s.n + '. ' + esc(s.t) + '</b><br>' + esc(s.d) +
+    (s.u ? '<br><a href="' + s.u + '" target="_blank" rel="noopener" style="color:var(--teal);word-break:break-all">' + s.u + '</a>' : '') + '</li>').join('');
+}
+
+/* ---------- 碳循环开关 ---------- */
+function setCycleLevel(v){ S.cycleLevel = v; saveS(); renderPlanBody(); }
+function setCycleOn(v){ S.cycleOn = !!v; saveS(); renderPlanBody(); }
+
+/* ---------- 复制方案文字 ---------- */
+function goalText(){
+  return S.goal === 'cut'
+    ? (S.cutMode === 'fat' ? ('把体脂率降到 ' + num(S.cutFat) + '%，用时 ' + num(S.cutFatWeeks) + ' 周')
+                           : ('减重 ' + num(S.cutWeight) + ' 斤，用时 ' + num(S.cutWeeks) + ' 周'))
+    : ('增重 ' + num(S.bulkWeight) + ' 斤，用时 ' + num(S.bulkMonths) + ' 个月');
+}
+function copyPlan(){
+  const P = buildPlan(S);
+  const t = [
+    '【' + (S.goal==='cut'?'减脂':'增肌') + '方案】' + goalText(),
+    '基础：' + (S.sex==='f'?'女':'男') + ' ' + S.age + ' 岁 ' + S.height + 'cm ' + S.weight + 'kg · ' + (ACT[S.activity]||ACT.light).t + ' · ' + P.tp.t,
+    '热量：BMR ' + r0(P.bmr) + ' / TDEE ' + r0(P.tdee) + ' / 目标摄入 ' + r0(P.intake) + ' kcal（' + (S.goal==='cut'?'缺口':'盈余') + ' ' + r0(Math.abs(P.deficit)) + '）',
+    '营养素：蛋白质 ' + r0(P.protein) + ' g　脂肪 ' + r0(P.fat) + ' g　碳水 ' + r0(P.carb) + ' g',
+    '碳循环：高碳 ' + r0(P.carbHigh) + ' g × ' + P.cy.h + ' 天 / 中碳 ' + r0(P.carbMid) + ' g × ' + P.cy.m + ' 天 / 低碳 ' + r0(P.carbLow) + ' g × ' + P.cy.l + ' 天',
+    '训练：力量 ' + P.tp.days + ' 天/周，每次 ' + P.tp.min + ' 分钟；高碳日练力量，低碳日休息',
+    '—— 依据《中国居民膳食指南（2022）》与 ISSN 立场声明等公开文献，非医疗建议'
+  ].join('\n');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(
+      () => alert('已复制，可以直接粘贴到微信/备忘录：\n\n' + t),
+      () => prompt('复制以下内容：', t));
+  } else prompt('复制以下内容：', t);
+}
+
+/* ---------- 启动 ---------- */
+function boot(){
+  loadS();
+  fillForm();
+  bindChips();
+  renderBMI();
+  renderRefs();
+  goStep(1);
+}
+document.addEventListener('DOMContentLoaded', boot);
+window.goStep = goStep; window.setCycleLevel = setCycleLevel; window.saveLog = saveLog; window.delLog = delLog; window.setCycleOn = setCycleOn; window.toggleEstimator = toggleEstimator; window.applyEstimate = applyEstimate; window.pickBF = pickBF;
+window.copyPlan = copyPlan;
+</script>
+</body>
+</html>
+

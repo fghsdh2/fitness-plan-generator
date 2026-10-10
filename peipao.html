@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#145A54">
+<title>减脂陪跑 · 增肌减脂与掉秤管理</title>
+<style>
+:root{
+  --teal:#145A54; --teal-d:#0E403C; --teal-l:#EDF4F2; --teal-b:#D2DEDB;
+  --amber:#A84E08; --amber-l:#FBF1E4;
+  --ink:#22282B; --body:#333A3E; --gray:#6B7280; --line:#E5EAE9;
+  --bg:#F4F6F5; --card:#FFFFFF; --red:#B4232A; --green:#1F7A4D;
+  --r:14px; --sh:0 1px 2px rgba(16,32,30,.06),0 6px 18px rgba(16,32,30,.06);
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;padding:0}
+body{
+  font-family:"Microsoft YaHei","PingFang SC","Noto Sans SC","Helvetica Neue",Arial,sans-serif;
+  background:var(--bg); color:var(--body); font-size:15px; line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:760px;margin:0 auto;padding:0 14px 96px}
+header.top{
+  position:sticky;top:0;z-index:20;background:linear-gradient(135deg,var(--teal-d),var(--teal));
+  color:#fff;padding:14px 14px 12px;box-shadow:0 2px 12px rgba(14,64,60,.22)
+}
+header.top .hin{max-width:760px;margin:0 auto;display:flex;align-items:center;gap:10px}
+header.top h1{font-size:17px;margin:0;font-weight:700;letter-spacing:.3px}
+header.top .sub{font-size:11.5px;opacity:.82;margin-top:2px}
+header.top .logo{
+  width:34px;height:34px;border-radius:10px;background:rgba(255,255,255,.16);
+  display:grid;place-items:center;font-size:17px;flex:0 0 auto
+}
+.tabs{display:flex;gap:6px;max-width:760px;margin:12px auto 0;padding:0 14px;overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{
+  flex:0 0 auto;border:1px solid var(--teal-b);background:#fff;color:var(--teal);
+  padding:7px 14px;border-radius:999px;font-size:13.5px;font-weight:600;cursor:pointer;white-space:nowrap
+}
+.tab.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:16px;margin-top:12px}
+.card.tight{padding:12px}
+h2.sec{font-size:15px;color:var(--teal-d);margin:20px 0 8px;font-weight:700;display:flex;align-items:center;gap:7px}
+h2.sec::before{content:"";width:4px;height:15px;border-radius:2px;background:var(--teal)}
+h3.sub{font-size:13.5px;color:var(--teal);margin:14px 0 6px;font-weight:700}
+p{margin:6px 0}
+.muted{color:var(--gray);font-size:12.5px}
+.small{font-size:12.5px}
+.row{display:flex;gap:10px}
+.row>*{flex:1;min-width:0}
+.field{margin-bottom:11px}
+.field label{display:block;font-size:12.5px;color:var(--gray);margin-bottom:4px;font-weight:600}
+input,select,textarea{
+  width:100%;padding:10px 11px;border:1px solid var(--line);border-radius:10px;
+  font-size:15px;font-family:inherit;color:var(--ink);background:#fff;outline:none
+}
+input:focus,select:focus,textarea:focus{border-color:var(--teal);box-shadow:0 0 0 3px rgba(20,90,84,.1)}
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  background:var(--teal);color:#fff;border:0;border-radius:10px;padding:11px 18px;
+  font-size:15px;font-weight:600;cursor:pointer;font-family:inherit
+}
+.btn:active{transform:translateY(1px)}
+.btn.block{width:100%}
+.btn.ghost{background:#fff;color:var(--teal);border:1px solid var(--teal-b)}
+.btn.danger{background:#fff;color:var(--red);border:1px solid #EBD5D6}
+.btn.sm{padding:7px 12px;font-size:13px;border-radius:9px}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+@media(max-width:520px){.grid3{grid-template-columns:1fr 1fr}}
+.stat{background:var(--teal-l);border-radius:12px;padding:11px 12px}
+.stat .k{font-size:11.5px;color:var(--gray);font-weight:600}
+.stat .v{font-size:19px;color:var(--teal-d);font-weight:700;line-height:1.25}
+.stat .u{font-size:12px;color:var(--gray);font-weight:600}
+.pill{display:inline-block;padding:3px 9px;border-radius:999px;font-size:11.5px;font-weight:700}
+.pill.ok{background:#E4F3EA;color:var(--green)}
+.pill.warn{background:var(--amber-l);color:var(--amber)}
+.pill.bad{background:#FBE9EA;color:var(--red)}
+.pill.info{background:var(--teal-l);color:var(--teal)}
+.note{border-left:3px solid var(--teal);background:var(--teal-l);border-radius:0 10px 10px 0;padding:10px 12px;margin:10px 0;font-size:13px}
+.note.warn{border-left-color:var(--amber);background:var(--amber-l)}
+.note b{color:var(--teal-d)}
+.note.warn b{color:var(--amber)}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+th{background:var(--teal);color:#fff;font-weight:600;padding:8px;text-align:left;font-size:12.5px}
+th:first-child{border-radius:8px 0 0 0}th:last-child{border-radius:0 8px 0 0}
+td{padding:8px;border-bottom:1px solid var(--line);vertical-align:top}
+tr:nth-child(even) td{background:#FAFCFB}
+.scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.people{display:grid;gap:10px}
+.person{
+  background:#fff;border-radius:var(--r);box-shadow:var(--sh);padding:13px 14px;
+  display:flex;align-items:center;gap:12px;cursor:pointer;border:2px solid transparent
+}
+.person.on{border-color:var(--teal)}
+.avatar{
+  width:42px;height:42px;border-radius:12px;background:var(--teal-l);color:var(--teal-d);
+  display:grid;place-items:center;font-weight:700;font-size:16px;flex:0 0 auto
+}
+.person .nm{font-weight:700;color:var(--ink);font-size:15px}
+.person .mt{font-size:12px;color:var(--gray)}
+.empty{text-align:center;color:var(--gray);padding:26px 10px;font-size:13.5px}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin-top:6px}
+.chip{
+  border:1px solid var(--teal-b);border-radius:999px;padding:6px 13px;font-size:13px;
+  background:#fff;color:var(--teal);cursor:pointer;font-weight:600
+}
+.chip.on{background:var(--teal);color:#fff;border-color:var(--teal)}
+.chip.hungry.on{background:var(--amber);border-color:var(--amber)}
+.chip.full.on{background:var(--red);border-color:var(--red)}
+.spark{width:100%;height:130px;display:block}
+.bar{height:8px;border-radius:99px;background:var(--teal-l);overflow:hidden;margin-top:6px}
+.bar>i{display:block;height:100%;background:var(--teal)}
+.hist{display:flex;flex-direction:column;gap:8px}
+.hitem{border:1px solid var(--line);border-radius:10px;padding:9px 11px;font-size:13px}
+.hitem .hd{display:flex;justify-content:space-between;gap:8px;align-items:center}
+.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.footer{text-align:center;color:var(--gray);font-size:11.5px;padding:22px 6px 8px;line-height:1.7}
+details.src{border:1px solid var(--line);border-radius:10px;padding:9px 12px;margin-top:8px;background:#FBFCFC}
+details.src summary{cursor:pointer;font-size:13px;font-weight:700;color:var(--teal)}
+details.src ul{margin:8px 0 2px;padding-left:18px;font-size:12.5px;color:var(--gray)}
+details.src li{margin:4px 0}
+.hidden{display:none!important}
+.fab{
+  position:fixed;right:16px;bottom:18px;z-index:30;box-shadow:0 8px 20px rgba(20,90,84,.35);
+  border-radius:14px;padding:13px 18px;font-size:15px
+}
+@media print{header.top,.tabs,.fab,.btn{display:none!important}.wrap{max-width:none}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="hin">
+    <div class="logo">🔥</div>
+    <div style="min-width:0">
+      <h1>减脂陪跑</h1>
+      <div class="sub">增肌减脂 · 掉秤管理 · 多人档案</div>
+    </div>
+  </div>
+</header>
+
+<div class="tabs" id="tabs">
+  <button class="tab on" data-view="list">学员档案</button>
+  <button class="tab" data-view="checkin">今日打卡</button>
+  <button class="tab" data-view="src">数据依据</button>
+</div>
+
+<div class="wrap">
+
+  <!-- ============ 学员列表 ============ -->
+  <section id="view-list">
+    <div class="card" id="coachBox">
+      <div class="row" style="align-items:center">
+        <div>
+          <div style="font-weight:700;color:var(--ink);font-size:15px" id="coachTitle">学员档案</div>
+          <div class="muted" id="coachSub">还没有学员，先添加一个</div>
+        </div>
+        <button class="btn sm" style="flex:0 0 auto" onclick="openForm()">+ 添加</button>
+      </div>
+    </div>
+    <div class="people" id="peopleList"></div>
+  </section>
+
+  <!-- ============ 学员详情 ============ -->
+  <section id="view-detail" class="hidden"></section>
+
+  <!-- ============ 新增/编辑表单 ============ -->
+  <section id="view-form" class="hidden"></section>
+
+  <!-- ============ 今日打卡 ============ -->
+  <section id="view-checkin" class="hidden"></section>
+
+  <!-- ============ 数据依据 ============ -->
+  <section id="view-src" class="hidden">
+    <div class="card">
+      <h2 class="sec" style="margin-top:0">这套数据是怎么来的</h2>
+      <p class="small">本工具把 <b>视频里的经验方法</b> 和 <b>公开的运动营养学文献</b> 分开处理：算法默认值取自文献，视频那套"凭感觉的波形调整"则做成可记录的每日信号，两者互相校验。</p>
+
+      <details class="src" open>
+        <summary>① 蛋白质：视频说 1.2~2.0 g/kg，文献更精确</summary>
+        <ul>
+          <li><b>视频</b>：1.2~2.0 g/kg，用"放屁多且臭"判断是否过量。</li>
+          <li><b>ISSN 2017 蛋白质立场声明</b>（Jäger 等，PMID 28642676）：大多数训练人群 <b>1.4~2.0 g/kg/天</b> 已足够。</li>
+          <li>减脂期保肌需求更高：<b>2.3~3.1 g/kg</b>（按去脂体重 FFM 计）才可能最大化保肌；&gt;3.0 g/kg 的额外好处还在研究。</li>
+          <li>每餐建议 <b>0.25 g/kg 或 20~40 g</b> 优质蛋白，均匀分配到每餐；睡前酪蛋白 30~40 g。</li>
+          <li><b>结论</b>：视频的 1.2~2.0 是"下限够用"，减脂期可以往 2.0 甚至更高走；"放屁判断"没有文献支撑，只能当主观参考。</li>
+        </ul>
+      </details>
+
+      <details class="src">
+        <summary>② 减脂速度：视频说"缺口 200~300 大卡"，文献给的是范围</summary>
+        <ul>
+          <li><b>视频</b>：缺口控制在 200~300 大卡，不精确算卡。</li>
+          <li><b>Helms 等 2014</b>（PMID 24864135）：备赛减脂建议 <b>每周减重 0.5%~1% 体重</b>。</li>
+          <li><b>ISSN 2017 体成分立场声明</b>（PMID 28630601）：体脂越高，缺口可以越激进；越瘦的人，减得越慢越能保住肌肉。</li>
+          <li>该声明同时指出：<b>间歇性断食 vs 每日热量限制没有明显差别</b>，长期成功取决于依从性和代谢适应。</li>
+          <li><b>结论</b>：200~300 大卡 ≈ 60kg 的人一周减 0.2~0.3kg，属于"很保守"的缺口，适合"增肌减脂同时进行"；如果目标是<b>掉秤</b>，需要按体重百分比反推更大的缺口。</li>
+        </ul>
+      </details>
+
+      <details class="src">
+        <summary>③ 脂肪与碳水：文献没给固定克数</summary>
+        <ul>
+          <li><b>视频</b>：脂肪 0.6~0.8 g/kg 固定；碳水 2.5~3.5 g/kg 起步做波形。</li>
+          <li><b>Helms 2014</b>：脂肪占热量 <b>15%~30%</b>，其余热量给碳水。</li>
+          <li><b>结论</b>：两者并不冲突。工具里脂肪默认取 <b>0.7~1.0 g/kg</b>（同时满足两个来源），碳水用"剩余热量"反算，再和视频的 2.5~3.5 g/kg 对照显示。</li>
+        </ul>
+      </details>
+
+      <details class="src">
+        <summary>④ 没有文献支持、但可以保留为"经验信号"的部分</summary>
+        <ul>
+          <li>"微微饥饿感"是最佳状态 —— 主观感受，无量化依据，但作为<b>依从性信号</b>是合理的：能长期坚持的饮食才有效。</li>
+          <li>"饥饿感抗炎" —— 说法不严谨。热量限制对炎症指标的影响有研究，但"饥饿=抗炎"不能直接成立。</li>
+          <li>"熬夜让线粒体堆积" —— 表述不准确。睡眠不足影响代谢与训练恢复是确定的，机制说法不必深究。</li>
+          <li>有氧 3~4 次 × 30~40 分钟、提升线粒体 —— 方向正确，但"另一种线粒体能力"属于通俗说法。</li>
+        </ul>
+      </details>
+
+      <details class="src">
+        <summary>⑤ 本工具不做什么</summary>
+        <ul>
+          <li>不做医疗诊断，不替代医生或注册营养师。有基础疾病、孕期、进食障碍史请勿自行套用。</li>
+          <li>不承诺具体掉秤速度。所有数字都是起点，靠每周数据校准。</li>
+          <li>不联网上传任何数据：所有档案只存在你这台设备的浏览器里。</li>
+        </ul>
+      </details>
+    </div>
+    <div class="footer">数据仅保存在本机浏览器 · 建议定期用"导出备份"保存一份</div>
+  </section>
+
+</div>
+
+<button class="btn fab hidden" id="fab">+ 记录今天</button>
+
+<script>
+
+/* ============================================================
+   减脂陪跑 · 逻辑层
+   所有数据只存本地浏览器 localStorage，不上传任何服务器
+   ============================================================ */
+const KEY = 'jianzhi_peipao_v1';
+let DB = { people: [], activeId: null, coach: '我' };
+
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw) DB = Object.assign(DB, JSON.parse(raw));
+  }catch(e){ console.warn('读取失败', e); }
+  if(!DB.people) DB.people = [];
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(DB)); }
+  catch(e){ alert('保存失败：浏览器存储空间不足或被禁用'); }
+}
+const uid = () => Math.random().toString(36).slice(2,9) + Date.now().toString(36).slice(-4);
+const num = v => { const n = parseFloat(v); return isFinite(n) ? n : 0; };
+const r1 = v => Math.round(v*10)/10;
+const todayStr = () => { const d=new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); };
+const daysAgo = (a,b) => Math.round((new Date(b) - new Date(a)) / 86400000);
+
+/* ---------- 活动系数 ---------- */
+const ACT = {
+  '1.2':'久坐（几乎不运动）','1.375':'轻度（每周 1~3 次训练）','1.55':'中度（每周 3~5 次）',
+  '1.725':'高度（每周 6~7 次）','1.9':'极高（体力工作 / 一天两练）'
+};
+
+/* ---------- 核心计算 ---------- */
+function calc(p){
+  const w = num(p.weight), h = num(p.height), a = num(p.age);
+  const sex = p.sex === 'f' ? 'f' : 'm';
+  const act = num(p.activity) || 1.375;
+
+  // BMR — Mifflin-St Jeor
+  const bmr = 10*w + 6.25*h - 5*a + (sex === 'm' ? 5 : -161);
+  const tdee = bmr * act;
+
+  const ffm = (p.bodyfat && num(p.bodyfat) > 0)
+    ? w * (1 - num(p.bodyfat)/100) : null;
+
+  let kcal, deficit, note = [], mode = p.goal || 'recomp';
+
+  if(mode === 'cut'){
+    // 掉秤模式：按"每周减重 %体重"反推缺口（Helms 2014: 0.5%~1%/周）
+    const rate = Math.min(1.0, Math.max(0.4, num(p.rate) || 0.7)); // %体重/周
+    const weekly = w * rate / 100;
+    deficit = weekly * 7700 / 7;
+    const cap = tdee * 0.25;                       // 缺口不超过 25% TDEE
+    if(deficit > cap){ deficit = cap; note.push('缺口原本按目标算得太大，已自动限制在 TDEE 的 25% 以内。'); }
+    kcal = tdee - deficit;
+    const floor = sex === 'f' ? 1200 : 1500;
+    if(kcal < floor){ kcal = floor; note.push('已触及最低热量下限（' + floor + ' kcal），再低需要专业人士介入。'); }
+  }else{
+    // 增肌减脂模式：视频的 200~300 大卡小缺口
+    deficit = 250;
+    kcal = tdee - deficit;
+  }
+
+  // 蛋白质
+  let proPerKg = mode === 'cut' ? 2.2 : 1.8;
+  if(ffm){
+    // 用去脂体重校准（ISSN：减脂期 2.3~3.1 g/kg FFM）
+    const proFFM = mode === 'cut' ? 2.6 : 2.2;
+    const fromFFM = ffm * proFFM / w;      // 折算回每公斤体重
+    proPerKg = Math.max(proPerKg, Math.min(fromFFM, 3.0));
+  }
+  const protein = w * proPerKg;
+
+  // 脂肪：0.7~1.0 g/kg，同时限制在 15%~30% 热量
+  let fat = w * (mode === 'cut' ? 0.8 : 0.9);
+  const fatMin = kcal * 0.15 / 9, fatMax = kcal * 0.30 / 9;
+  if(fat < fatMin) fat = fatMin;
+  if(fat > fatMax) fat = fatMax;
+
+  // 碳水：剩余热量
+  let carbKcal = kcal - protein*4 - fat*9;
+  if(carbKcal < kcal * 0.20){ carbKcal = kcal * 0.20; note.push('碳水被压得过低，已保留至少 20% 热量给碳水。'); }
+  const carb = carbKcal / 4;
+  if(mode === 'cut' && carb / w < 2.0){
+    note.push('算出来的碳水只有 ' + r1(carb / w) + ' g/kg，低于常见的 2 g/kg。如果训练状态明显下滑，建议把每周掉秤目标调小一点（比如 0.5%），给碳水让出空间。');
+  }
+
+  return {
+    bmr, tdee, kcal, deficit, mode, ffm,
+    protein, proPerKg, proteinKcal: protein*4,
+    fat, fatKcal: fat*9, carb, carbKcal,
+    carbPerKg: carb / w, fatPerKg: fat / w,
+    proPct: protein*4/kcal*100, fatPct: fat*9/kcal*100, carbPct: carbKcal/kcal*100,
+    weeklyChange: (mode === 'cut' ? -(deficit*7/7700) : -(deficit*7/7700)),
+    note
+  };
+}
+
+/* ---------- 波形引擎：把"微微饥饿感"变成可执行建议 ---------- */
+function engine(p){
+  const logs = (p.logs || []).slice().sort((a,b)=> a.date < b.date ? -1 : 1);
+  if(logs.length < 3){
+    return { state:'thin', tone:'info', title:'数据还不够',
+      lines:['至少记录 3 天（建议连续 7 天）才能给建议。',
+             '每天只需要两件事：称体重 + 答一句"今天饿不饿"。'],
+      carbDelta:0, proDelta:0 };
+  }
+  const win = logs.slice(-14);
+  const first = win[0], last = win[win.length-1];
+  const span = Math.max(1, daysAgo(first.date, last.date));
+  const dw = num(last.weight) - num(first.weight);
+  const pctWeek = (dw / num(first.weight || 1)) * (7 / span) * 100;  // 每周体重变化 %
+
+  const cnt = { hungry:0, ok:0, full:0 };
+  let weightDays = 0;
+  win.forEach(l => { if(cnt[l.mood] !== undefined) cnt[l.mood]++; if(num(l.weight)>0) weightDays++; });
+  const n = win.length;
+  const lines = [];
+  let state = 'hold', tone = 'info', title = '保持当前方案', carbDelta = 0, proDelta = 0;
+
+  const trendTxt = (dw === 0 ? '体重持平'
+      : (dw < 0 ? '体重下降 ' + Math.abs(r1(dw)) + ' kg' : '体重上升 ' + r1(dw) + ' kg'))
+      + '（' + span + ' 天，折合每周 ' + (pctWeek>0?'+':'') + r1(pctWeek) + '%）';
+  lines.push(trendTxt);
+  lines.push('状态分布：很饿 ' + cnt.hungry + ' 天 / 微微饿 ' + cnt.ok + ' 天 / 不饿或撑 ' + cnt.full + ' 天');
+
+  if(pctWeek < -1.0){
+    state='fast'; tone='bad'; title='掉得太快了，先加回来';
+    carbDelta = 0.2; proDelta = 0;
+    lines.push('每周降幅超过体重 1%，超出文献建议的 0.5%~1% 区间，掉的有相当一部分可能是肌肉和水。');
+    lines.push('做法：碳水 +0.2 g/kg，或者直接加一顿碳水加餐；有氧先别加量。');
+  }else if(cnt.hungry >= Math.max(3, Math.ceil(n*0.5)) && pctWeek <= 0.15){
+    state='up'; tone='warn'; title='碳水可以往上提了';
+    carbDelta = 0.3; proDelta = -0.2;
+    lines.push('多数天数"很饿 + 对碳水渴望"，而且体重没往上走 —— 说明碳水利用率高、状态在窗口期。');
+    lines.push('做法：碳水 +0.3 g/kg，蛋白质同步 -0.2 g/kg，脂肪不动。维持 10 天~半个月再评估。');
+  }else if(cnt.full >= 3 && pctWeek >= -0.1){
+    state='down'; tone='warn'; title='该往下调一点了';
+    carbDelta = -0.3; proDelta = 0.2;
+    lines.push('已经有 ' + cnt.full + ' 天"不饿 / 吃撑"，而且体重没在往下走 —— 碳水利用率在下降。');
+    lines.push('做法：碳水 -0.3 g/kg，蛋白质同步 +0.2 g/kg，脂肪不动。下调是为了"养敏感度"，不是惩罚。');
+  }else if(Math.abs(pctWeek) < 0.35 && cnt.ok >= Math.ceil(n*0.5)){
+    state='hold'; tone='ok'; title='这就是最佳状态，别动';
+    lines.push('体重稳定、多数天数"微微饿" —— 正是视频里说的那个窗口。');
+    lines.push('做法：一切照旧，继续记录。连续 10 天以上都这样，再考虑小幅加碳水。');
+  }else{
+    lines.push('目前没有触发任何调整条件。');
+    lines.push('做法：按当前方案继续，把记录补齐（尤其别漏称体重）。');
+  }  if(weightDays < Math.ceil(n*0.5)){
+    lines.push('⚠ 近两周有一半天数没记体重，判断会不准 —— 尽量固定晨起空腹称重。');
+  }
+  return { state, tone, title, lines, carbDelta, proDelta, pctWeek, dw, span, cnt };
+}
+
+/* ---------- 分享链接：把参数编码进 URL（不含打卡记录） ---------- */
+function makeShare(p){
+  const q = { n:p.name, s:p.sex, a:p.age, h:p.height, w:p.weight, b:p.bodyfat||'', ac:p.activity, g:p.goal, r:p.rate||'' };
+  const s = Object.keys(q).map(k=> k+'='+encodeURIComponent(q[k]??'')).join('&');
+  return location.origin + location.pathname + '#p=' + btoa(unescape(encodeURIComponent(s)));
+}
+function readShare(){
+  try{
+    const h = location.hash || '';
+    const m = h.match(/#p=(.+)$/); if(!m) return null;
+    const s = decodeURIComponent(escape(atob(m[1])));
+    const q = {}; s.split('&').forEach(kv=>{ const i=kv.indexOf('='); if(i>0) q[kv.slice(0,i)] = decodeURIComponent(kv.slice(i+1)); });
+    if(!q.n || !q.w) return null;
+    return { id: uid(), name:q.n, sex:q.s||'m', age:num(q.a)||30, height:num(q.h)||170,
+             weight:num(q.w), bodyfat:num(q.b)||null, activity:q.ac||'1.375',
+             goal:q.g||'recomp', rate:num(q.r)||0.7, logs:[], created: todayStr() };
+  }catch(e){ return null; }
+}
+
+/* ============================================================
+   界面层
+   ============================================================ */
+const $  = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const esc = s => String(s==null?'':s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const active = () => DB.people.find(p => p.id === DB.activeId) || null;
+
+/* 视图分发：列表和详情在这里重绘；表单/打卡由各自函数渲染，避免重绘清空输入 */
+function render(v){
+  if(v === 'list') renderList();
+  else if(v === 'detail') renderDetail();
+}
+function show(view){
+  ['list','detail','form','checkin','src'].forEach(v => $('#view-'+v).classList.toggle('hidden', v !== view));
+  const tabFor = (view==='detail'||view==='form') ? 'list' : (view==='checkin' ? 'checkin' : view);
+  $$('#tabs .tab').forEach(t => t.classList.toggle('on', t.dataset.view === tabFor));
+  $('#fab').classList.toggle('hidden', !(view==='list' && DB.people.length));
+  window.scrollTo({top:0, behavior:'instant' in window ? 'instant' : 'auto'});
+}
+function go(v){ render(v); show(v); }
+
+/* ---------- 顶部概览 ---------- */
+function renderCoach(){
+  const n = DB.people.length;
+  $('#coachTitle').textContent = n ? ('我的学员（' + n + '）') : '学员档案';
+  $('#coachSub').textContent = n ? '点一个人查看方案和建议' : '还没有学员，先添加一个';
+}
+
+/* ---------- 学员列表 ---------- */
+function renderList(){
+  renderCoach();
+  const box = $('#peopleList');
+  if(!DB.people.length){
+    box.innerHTML = '<div class="card empty">还没有学员<br><span class="muted">点右上角「+ 添加」，填一个名字和体重就能出方案</span></div>';
+    return;
+  }
+  box.innerHTML = DB.people.map(p => {
+    const c = calc(p);
+    const last = (p.logs||[]).slice().sort((a,b)=> a.date < b.date ? 1 : -1)[0];
+    const inited = (p.logs||[]).length;
+    return '<div class="person" data-id="'+p.id+'" onclick="openDetail(\''+p.id+'\')">'+
+      '<div class="avatar">'+esc((p.name||'?').slice(0,1))+'</div>'+
+      '<div style="flex:1;min-width:0">'+
+        '<div class="nm">'+esc(p.name)+
+          ' <span class="pill '+(p.goal==='cut'?'warn':'info')+'">'+(p.goal==='cut'?'掉秤':'增肌减脂')+'</span></div>'+
+        '<div class="mt">'+num(p.weight)+' kg · 目标 '+Math.round(c.kcal)+' kcal · 蛋白 '+Math.round(c.protein)+' g</div>'+
+        '<div class="mt">'+ (inited>=3 ? ('已记录 '+inited+' 天，最近 '+esc(last.date)) : ('记录 '+inited+' 天（满 3 天出建议）')) +'</div>'+
+      '</div>'+
+      '<div style="color:var(--gray);font-size:20px">›</div>'+
+    '</div>';
+  }).join('');
+}
+
+/* ---------- 详情页 ---------- */
+function openDetail(id){ DB.activeId = id; save(); go('detail'); }
+
+function renderDetail(){
+  const p = active();
+  if(!p){ go('list'); return; }
+  const c = calc(p), e = engine(p);
+  const logs = (p.logs||[]).slice().sort((a,b)=> a.date < b.date ? 1 : -1);
+  const videoCarbLow = r1(num(p.weight)*2.5), videoCarbHigh = r1(num(p.weight)*3.5);
+  const moodTxt = {hungry:'很饿/渴望碳水', ok:'微微饿（最佳）', full:'不饿/吃撑'};
+
+  const toneClass = {info:'info', ok:'ok', warn:'warn', bad:'bad'}[e.tone] || 'info';
+  const adviceDelta = (e.carbDelta ? ('碳水 ' + (e.carbDelta>0?'+':'') + e.carbDelta + ' g/kg ≈ ' + (e.carbDelta>0?'+':'') + Math.round(e.carbDelta*num(p.weight)) + ' g') : '碳水不变');
+
+  $('#view-detail').innerHTML =
+  '<div class="card">'+
+    '<div class="row" style="align-items:center">'+
+      '<div style="flex:1">'+
+        '<div style="font-size:19px;font-weight:700;color:var(--ink)">'+esc(p.name)+'</div>'+
+        '<div class="muted">'+ (p.sex==='f'?'女':'男') +' · '+num(p.age)+' 岁 · '+num(p.height)+' cm · '+num(p.weight)+' kg'+
+          (p.bodyfat? (' · 体脂 '+num(p.bodyfat)+'%') : '') +'</div>'+
+      '</div>'+
+      '<button class="btn ghost sm" onclick="openForm(\''+p.id+'\')">编辑</button>'+
+    '</div>'+
+    '<div class="chips" style="margin-top:10px">'+
+      '<span class="pill '+(p.goal==='cut'?'warn':'info')+'">'+(p.goal==='cut'?'掉秤模式':'增肌减脂模式')+'</span>'+
+      '<span class="pill info">'+ (ACT[p.activity]||'轻度').split('（')[0] +'</span>'+
+      (c.ffm ? '<span class="pill info">去脂体重 '+r1(c.ffm)+' kg</span>' : '') +
+    '</div>'+
+    '<div class="actions">'+
+      '<button class="btn sm" onclick="openCheckin(\''+p.id+'\')">今天打卡</button>'+
+      '<button class="btn ghost sm" onclick="sharePerson(\''+p.id+'\')">分享给本人</button>'+
+      '<button class="btn ghost sm" onclick="copyPlan(\''+p.id+'\')">复制方案文字</button>'+
+      '<button class="btn ghost sm" onclick="exportPerson(\''+p.id+'\')">导出数据</button>'+
+      '<button class="btn danger sm" onclick="delPerson(\''+p.id+'\')">删除</button>'+
+    '</div>'+
+  '</div>'+
+
+  '<h2 class="sec">每日目标</h2>'+
+  '<div class="card">'+
+    '<div class="grid3">'+
+      '<div class="stat"><div class="k">基础代谢 BMR</div><div class="v">'+Math.round(c.bmr)+' <span class="u">kcal</span></div></div>'+
+      '<div class="stat"><div class="k">日常消耗 TDEE</div><div class="v">'+Math.round(c.tdee)+' <span class="u">kcal</span></div></div>'+
+      '<div class="stat" style="background:var(--amber-l)"><div class="k">每天该吃</div><div class="v" style="color:var(--amber)">'+Math.round(c.kcal)+' <span class="u">kcal</span></div></div>'+
+    '</div>'+
+    '<p class="muted" style="margin-top:9px">缺口 '+Math.round(c.deficit)+' kcal/天 ≈ 每周 '+
+      (c.deficit*7/7700).toFixed(2)+' kg（理论值）。'+
+      (p.goal==='cut' ? '按每周减 '+r1(num(p.rate)||0.7)+'% 体重反推。' : '用的是视频那套 200~300 大卡的小缺口。')+'</p>'+
+    (c.note.length ? '<div class="note warn">'+c.note.map(esc).join('<br>')+'</div>' : '')+
+
+    '<h3 class="sub">三大营养素</h3>'+
+    '<div class="scroll"><table>'+
+      '<tr><th>项目</th><th>克数</th><th>每公斤体重</th><th>占热量</th></tr>'+
+      '<tr><td><b>蛋白质</b></td><td>'+Math.round(c.protein)+' g</td><td>'+r1(c.proPerKg)+' g/kg</td><td>'+Math.round(c.proPct)+'%</td></tr>'+
+      '<tr><td><b>脂肪</b></td><td>'+Math.round(c.fat)+' g</td><td>'+r1(c.fatPerKg)+' g/kg</td><td>'+Math.round(c.fatPct)+'%</td></tr>'+
+      '<tr><td><b>碳水</b></td><td>'+Math.round(c.carb)+' g</td><td>'+r1(c.carbPerKg)+' g/kg</td><td>'+Math.round(c.carbPct)+'%</td></tr>'+
+    '</table></div>'+
+    '<div class="note">视频里的起始碳水是 <b>'+videoCarbLow+'~'+videoCarbHigh+' g</b>（2.5~3.5 g/kg）。'+
+      '本工具算出的 '+Math.round(c.carb)+' g 是按热量剩余倒推的，两者可以互相参照：先用算出来的数当基准，再用下面的波形去调。</div>'+
+  '</div>'+
+
+  '<h2 class="sec">本周调整建议</h2>'+
+  '<div class="card">'+
+    '<div class="row" style="align-items:center">'+
+      '<div style="flex:1"><b style="color:var(--ink);font-size:15px">'+esc(e.title)+'</b></div>'+
+      '<span class="pill '+toneClass+'">'+adviceDelta+'</span>'+
+    '</div>'+
+    '<div style="margin-top:8px;font-size:13.5px">'+e.lines.map(l=>'<p style="margin:5px 0">'+esc(l)+'</p>').join('')+'</div>'+
+    (e.proDelta ? '<div class="note">联动调整：蛋白质 '+(e.proDelta>0?'+':'')+e.proDelta+' g/kg ≈ '+(e.proDelta>0?'+':'')+Math.round(e.proDelta*num(p.weight))+' g，脂肪保持不变。</div>' : '')+
+    '<details class="src"><summary>这个建议是怎么来的</summary><ul>'+
+      '<li>依据你最近两周的打卡：体重变化 + 每天"饿不饿"的状态分布。</li>'+
+      '<li>规则来自视频的碳水波形法：很饿就上、吃撑就下，一次只动 0.3 g/kg。</li>'+
+      '<li>安全边界来自文献：每周降幅别超过体重 1%（Helms 2014）。</li>'+
+      '<li>样本越多越准，少于 3 天不给建议。</li>'+
+    '</ul></details>'+
+  '</div>'+
+
+  '<h2 class="sec">体重曲线</h2>'+
+  '<div class="card"><canvas class="spark" id="spark"></canvas>'+
+    '<div class="muted" id="sparkInfo" style="margin-top:6px"></div></div>'+
+
+  '<h2 class="sec">打卡记录</h2>'+
+  '<div class="card">'+
+    (logs.length ? '<div class="hist">'+ logs.slice(0,20).map(l =>
+      '<div class="hitem"><div class="hd"><b>'+esc(l.date)+'</b>'+
+      '<span class="pill '+(l.mood==='hungry'?'warn':(l.mood==='full'?'bad':'ok'))+'">'+esc(moodTxt[l.mood]||'—')+'</span></div>'+
+      '<div class="muted">'+ (num(l.weight)? ('体重 '+num(l.weight)+' kg　') : '') +
+        (l.training? ('训练：'+esc(l.training)+'　') : '') +
+        (l.sleep? ('睡眠：'+esc(l.sleep)+' h　') : '') + '</div>'+
+      (l.note? '<div class="small" style="margin-top:3px">'+esc(l.note)+'</div>' : '')+
+      '</div>').join('') + '</div>'
+      : '<div class="empty">还没有打卡记录</div>')+
+  '</div>';
+
+  drawSpark(p);
+}
+
+/* ---------- 体重曲线 ---------- */
+function drawSpark(p){
+  const cv = $('#spark'); if(!cv) return;
+  const pts = (p.logs||[]).filter(l => num(l.weight)>0).sort((a,b)=> a.date < b.date ? -1 : 1);
+  const info = $('#sparkInfo');
+  const dpr = window.devicePixelRatio || 1;
+  const W = cv.clientWidth || 320, H = 130;
+  cv.width = W*dpr; cv.height = H*dpr;
+  const g = cv.getContext('2d'); g.scale(dpr, dpr); g.clearRect(0,0,W,H);
+  if(pts.length < 2){ info.textContent = '至少记录 2 次体重才会画曲线'; return; }
+  const ws = pts.map(x=>num(x.weight));
+  const mn = Math.min.apply(null,ws), mx = Math.max.apply(null,ws), pad = Math.max(0.4,(mx-mn)*0.25);
+  const lo = mn-pad, hi = mx+pad;
+  const X = i => 12 + i*(W-24)/(pts.length-1);
+  const Y = w => H-14 - (w-lo)/(hi-lo)*(H-30);
+  g.strokeStyle = '#EDF4F2'; g.lineWidth = 1;
+  for(let k=0;k<=3;k++){ const y = 8 + k*(H-22)/3; g.beginPath(); g.moveTo(10,y); g.lineTo(W-10,y); g.stroke(); }
+  g.beginPath(); g.lineWidth = 2.5; g.strokeStyle = '#145A54';
+  pts.forEach((pt,i)=>{ const x=X(i), y=Y(num(pt.weight)); i?g.lineTo(x,y):g.moveTo(x,y); });
+  g.stroke();
+  g.fillStyle = '#145A54';
+  pts.forEach((pt,i)=>{ g.beginPath(); g.arc(X(i), Y(num(pt.weight)), 3, 0, Math.PI*2); g.fill(); });
+  const d = ws[ws.length-1] - ws[0];
+  info.textContent = '共 '+pts.length+' 次记录　最低 '+r1(mn)+' kg　最高 '+r1(mx)+' kg　整体 '+(d>0?'+':'')+r1(d)+' kg';
+}
+
+/* ---------- 新增 / 编辑 ---------- */
+function openForm(id){
+  const p = id ? DB.people.find(x=>x.id===id) : null;
+  const v = p || { name:'', sex:'m', age:30, height:170, weight:70, bodyfat:'', activity:'1.375', goal:'recomp', rate:0.7 };
+  $('#view-form').innerHTML =
+  '<div class="card">'+
+    '<div style="font-weight:700;font-size:16px;color:var(--ink)">'+(p?'编辑档案':'添加学员')+'</div>'+
+    '<p class="muted">填得越全，方案越准。体脂率没有可以不填。</p>'+
+    '<div class="field"><label>姓名 / 昵称</label><input id="f_name" value="'+esc(v.name)+'" placeholder="例如：小王"></div>'+
+    '<div class="row">'+
+      '<div class="field"><label>性别</label><select id="f_sex">'+
+        '<option value="m"'+(v.sex==='m'?' selected':'')+'>男</option>'+
+        '<option value="f"'+(v.sex==='f'?' selected':'')+'>女</option></select></div>'+
+      '<div class="field"><label>年龄</label><input id="f_age" type="number" inputmode="numeric" value="'+num(v.age)+'"></div>'+
+    '</div>'+
+    '<div class="row">'+
+      '<div class="field"><label>身高 (cm)</label><input id="f_height" type="number" inputmode="decimal" value="'+num(v.height)+'"></div>'+
+      '<div class="field"><label>当前体重 (kg)</label><input id="f_weight" type="number" inputmode="decimal" step="0.1" value="'+num(v.weight)+'"></div>'+
+    '</div>'+
+    '<div class="row">'+
+      '<div class="field"><label>体脂率 %（可不填）</label><input id="f_bodyfat" type="number" inputmode="decimal" step="0.1" value="'+(v.bodyfat==null?'':num(v.bodyfat))+'"></div>'+
+      '<div class="field"><label>训练活动量</label><select id="f_activity">'+
+        Object.keys(ACT).map(k=> '<option value="'+k+'"'+(String(v.activity)===k?' selected':'')+'>'+ACT[k]+'</option>').join('')+
+      '</select></div>'+
+    '</div>'+
+    '<div class="field"><label>目标</label><select id="f_goal" onchange="toggleRate()">'+
+      '<option value="recomp"'+(v.goal!=='cut'?' selected':'')+'>增肌减脂同时进行（小缺口 200~300 大卡）</option>'+
+      '<option value="cut"'+(v.goal==='cut'?' selected':'')+'>纯减脂掉秤（按每周减重 %）</option>'+
+    '</select></div>'+
+    '<div class="field" id="rateField"><label>每周减重目标（% 体重）— 文献建议 0.5~1.0</label>'+
+      '<input id="f_rate" type="number" inputmode="decimal" step="0.1" min="0.4" max="1.0" value="'+(num(v.rate)||0.7)+'"></div>'+
+    '<div class="actions">'+
+      '<button class="btn" onclick="savePerson(\''+(p?p.id:'')+'\')">保存</button>'+
+      '<button class="btn ghost" onclick="go(\''+(p?'detail':'list')+'\')">取消</button>'+
+    '</div>'+
+  '</div>';
+  toggleRate();
+  go('form');
+  setTimeout(()=>{ const el=$('#f_name'); if(el) el.focus(); }, 60);
+}
+function toggleRate(){
+  const g = $('#f_goal'), f = $('#rateField');
+  if(g && f) f.classList.toggle('hidden', g.value !== 'cut');
+}
+function savePerson(id){
+  const name = $('#f_name').value.trim();
+  const w = num($('#f_weight').value);
+  if(!name) return alert('请填姓名');
+  if(w <= 0) return alert('请填有效体重');
+  const data = {
+    name, sex:$('#f_sex').value, age:num($('#f_age').value)||30,
+    height:num($('#f_height').value)||170, weight:w,
+    bodyfat:num($('#f_bodyfat').value)||null, activity:$('#f_activity').value,
+    goal:$('#f_goal').value, rate:num($('#f_rate').value)||0.7
+  };
+  if(id){
+    const p = DB.people.find(x=>x.id===id);
+    Object.assign(p, data);
+    DB.activeId = id;
+  }else{
+    const p = Object.assign({ id:uid(), logs:[], created: todayStr() }, data);
+    DB.people.push(p); DB.activeId = p.id;
+  }
+  save(); go(id ? 'detail' : 'detail');
+}
+function delPerson(id){
+  const p = DB.people.find(x=>x.id===id); if(!p) return;
+  if(!confirm('删除「'+p.name+'」的档案和全部打卡记录？此操作不可撤销。')) return;
+  DB.people = DB.people.filter(x=>x.id!==id);
+  if(DB.activeId===id) DB.activeId = DB.people[0] ? DB.people[0].id : null;
+  save(); go('list');
+}
+
+/* ---------- 打卡 ---------- */
+function openCheckin(id){
+  if(id) DB.activeId = id;
+  if(!DB.people.length){ alert('先添加一个学员'); return go('list'); }
+  if(!DB.activeId) DB.activeId = DB.people[0].id;
+  const p = active();
+  const t = todayStr();
+  const exist = (p.logs||[]).find(l=>l.date===t) || {};
+  $('#view-checkin').innerHTML =
+  '<div class="card">'+
+    '<div style="font-weight:700;font-size:16px;color:var(--ink)">今日打卡</div>'+
+    '<p class="muted">每天两件事：称体重 + 答一句"今天饿不饿"。坚持记，建议才准。</p>'+
+    (DB.people.length>1 ? '<div class="field"><label>学员</label><select id="c_who" onchange="openCheckin(this.value)">'+
+      DB.people.map(x=>'<option value="'+x.id+'"'+(x.id===p.id?' selected':'')+'>'+esc(x.name)+'</option>').join('')+
+      '</select></div>' : '')+
+    '<div class="row">'+
+      '<div class="field"><label>日期</label><input id="c_date" type="date" value="'+(exist.date||t)+'"></div>'+
+      '<div class="field"><label>体重 (kg)</label><input id="c_weight" type="number" inputmode="decimal" step="0.1" placeholder="晨起空腹" value="'+(exist.weight||'')+'"></div>'+
+    '</div>'+
+    '<div class="field"><label>今天的状态</label><div class="chips" id="c_mood">'+
+      '<span class="chip hungry'+(exist.mood==='hungry'?' on':'')+'" data-m="hungry">很饿 / 很想吃碳水</span>'+
+      '<span class="chip'+(exist.mood==='ok'?' on':'')+'" data-m="ok">微微饿（最佳）</span>'+
+      '<span class="chip full'+(exist.mood==='full'?' on':'')+'" data-m="full">不饿 / 吃撑了</span>'+
+      (exist.mood?'':'<span class="chip on" data-m="">还没想好</span>')+
+    '</div></div>'+
+    '<div class="row">'+
+      '<div class="field"><label>今天训练</label><select id="c_training">'+
+        ['','力量训练','有氧 30~40 分钟','力量 + 有氧','休息日'].map(x=>'<option value="'+x+'"'+(exist.training===x?' selected':'')+'>'+(x||'未记录')+'</option>').join('')+
+      '</select></div>'+
+      '<div class="field"><label>睡眠 (小时)</label><input id="c_sleep" type="number" inputmode="decimal" step="0.5" placeholder="例如 7.5" value="'+(exist.sleep||'')+'"></div>'+
+    '</div>'+
+    '<div class="field"><label>备注（可不填）</label><textarea id="c_note" rows="2" placeholder="状态好不好、有没有外食、有氧几点做的……">'+esc(exist.note||'')+'</textarea></div>'+
+    '<div class="actions"><button class="btn" onclick="saveCheckin(\''+p.id+'\')">保存打卡</button>'+
+    '<button class="btn ghost" onclick="go(\'detail\')">返回</button></div>'+
+  '</div>'+
+  '<div class="note">状态三个选项对应视频里的判断树：<b>很饿</b> → 碳水往上提；<b>微微饿</b> → 别动，这是最佳状态；<b>不饿/撑</b> → 碳水往下调。</div>';
+  $$('#c_mood .chip').forEach(ch => ch.onclick = () => {
+    $$('#c_mood .chip').forEach(x => x.classList.remove('on'));
+    ch.classList.add('on');
+  });
+  go('checkin');
+}
+function saveCheckin(pid){
+  const p = DB.people.find(x=>x.id===pid); if(!p) return;
+  const moodEl = $('#c_mood .chip.on');
+  const log = {
+    date: $('#c_date').value || todayStr(),
+    weight: num($('#c_weight').value) || null,
+    mood: moodEl ? moodEl.dataset.m : '',
+    training: $('#c_training').value,
+    sleep: num($('#c_sleep').value) || null,
+    note: $('#c_note').value.trim()
+  };
+  p.logs = p.logs || [];
+  const i = p.logs.findIndex(l => l.date === log.date);
+  if(i >= 0) p.logs[i] = log; else p.logs.push(log);
+  if(log.weight) p.weight = log.weight;   // 最新体重自动回写到档案
+  DB.activeId = p.id;
+  save(); go('detail');
+}
+
+/* ---------- 导出 / 分享 / 备份 ---------- */
+function download(name, text){
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([text], {type:'application/json'}));
+  a.download = name; a.click(); URL.revokeObjectURL(a.href);
+}
+function exportPerson(id){
+  const p = DB.people.find(x=>x.id===id); if(!p) return;
+  download('学员-'+p.name+'-'+todayStr()+'.json', JSON.stringify(p, null, 2));
+}
+function backupAll(){ download('减脂陪跑-全部档案-'+todayStr()+'.json', JSON.stringify(DB, null, 2)); }
+function importAll(){
+  const inp = document.createElement('input'); inp.type = 'file'; inp.accept = '.json';
+  inp.onchange = () => {
+    const f = inp.files[0]; if(!f) return;
+    const rd = new FileReader();
+    rd.onload = () => {
+      try{
+        const d = JSON.parse(rd.result);
+        if(d.people && Array.isArray(d.people)){
+          if(confirm('导入 '+d.people.length+' 个学员，与现有数据合并？')){ 
+            d.people.forEach(np=>{ if(!DB.people.some(x=>x.id===np.id)) DB.people.push(np); });
+            save(); renderList(); go('list');
+          }
+        }else if(d.name && d.weight){
+          if(!DB.people.some(x=>x.id===d.id)) DB.people.push(d);
+          save(); alert('已导入：'+d.name); go('list');
+        }else alert('文件格式不对');
+      }catch(e){ alert('解析失败：'+e.message); }
+    };
+    rd.readAsText(f);
+  };
+  inp.click();
+}
+function sharePerson(id){
+  const p = DB.people.find(x=>x.id===id); if(!p) return;
+  const url = makeShare(p);
+  const done = () => alert('链接已复制。\n把它发给学员，他打开就能看到自己的方案并自己打卡（记录存在他手机上）。\n\n'+url);
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(url).then(done, () => prompt('复制这个链接发给学员：', url));
+  }else prompt('复制这个链接发给学员：', url);
+}
+
+/* ---------- 启动 ---------- */
+function boot(){
+  load();
+  const shared = readShare();
+  if(shared){
+    DB.people.push(shared); DB.activeId = shared.id; save();
+    history.replaceState(null,'',location.pathname);
+    alert('已载入分享的方案：'+shared.name+'。\n可以自己打卡，数据只存在这台设备上。');
+    renderDetail(); show('detail'); return;
+  }
+  if(!DB.activeId && DB.people[0]) DB.activeId = DB.people[0].id;
+  renderList(); show('list');
+  $$('#tabs .tab').forEach(t => t.onclick = () => {
+    const v = t.dataset.view;
+    if(v==='checkin') return openCheckin();
+    if(v==='list'){ renderList(); return go('list'); }
+    go(v);
+  });
+  $('#fab').onclick = () => openCheckin();
+  window.addEventListener('resize', () => { if(!$('#view-detail').classList.contains('hidden')) drawSpark(active()); });
+}
+document.addEventListener('DOMContentLoaded', boot);
+
+
+/* ---------- 列表页底部：备份 / 恢复 ---------- */
+const _renderList = renderList;
+renderList = function(){
+  _renderList();
+  const host = $('#view-list');
+  let f = $('#listFoot');
+  if(!f){ f = document.createElement('div'); f.id = 'listFoot'; host.appendChild(f); }
+  f.innerHTML =
+    '<div class="card tight">'+
+      '<div class="row" style="align-items:center">'+
+        '<div class="muted" style="flex:1">数据只存在这台设备。换手机或清缓存前，先导出一份。</div>'+
+      '</div>'+
+      '<div class="actions">'+
+        '<button class="btn ghost sm" onclick="backupAll()">导出全部备份</button>'+
+        '<button class="btn ghost sm" onclick="importAll()">导入备份</button>'+
+        '<button class="btn ghost sm" onclick="seedDemo()">载入示例学员</button>'+
+      '</div>'+
+    '</div>'+
+    '<div class="footer">减脂陪跑 · 本地版<br>算法依据 ISSN 立场声明与 Helms 2014 等公开文献，经验性内容已单独标注<br>不构成医疗建议</div>';
+};
+
+/* ---------- 一键载入示例，方便先看效果 ---------- */
+function seedDemo(){
+  if(DB.people.some(p=>p.name==='示例学员')) return alert('示例学员已经在列表里了');
+  const d = new Date();
+  const mk = (back, w, mood) => {
+    const t = new Date(d.getTime() - back*86400000);
+    return { date: t.getFullYear()+'-'+String(t.getMonth()+1).padStart(2,'0')+'-'+String(t.getDate()).padStart(2,'0'),
+             weight:w, mood, training:'力量 + 有氧', sleep:7.5, note:'' };
+  };
+  const p = {
+    id: uid(), name:'示例学员', sex:'f', age:28, height:163, weight:62, bodyfat:28,
+    activity:'1.375', goal:'cut', rate:0.7, created: todayStr(),
+    logs:[ mk(9,62.6,'full'), mk(8,62.4,'ok'), mk(6,62.1,'ok'), mk(4,61.8,'hun'+'gry'), mk(2,61.5,'hungry'), mk(0,61.2,'hungry') ]
+  };
+  DB.people.push(p); DB.activeId = p.id; save(); renderList(); openDetail(p.id);
+}
+
+function planText(p){
+  const c = calc(p), e = engine(p);
+  const d1 = e.carbDelta ? ('　碳水 ' + (e.carbDelta > 0 ? '+' : '') + e.carbDelta + ' g/kg（约 ' + (e.carbDelta > 0 ? '+' : '') + Math.round(e.carbDelta * num(p.weight)) + ' g）') : '';
+  const d2 = e.proDelta ? ('　蛋白质 ' + (e.proDelta > 0 ? '+' : '') + e.proDelta + ' g/kg') : '';
+  return [
+    '【' + (p.goal === 'cut' ? '减脂掉秤' : '增肌减脂') + '方案】' + p.name + '　' + num(p.weight) + ' kg',
+    '每天目标：' + Math.round(c.kcal) + ' kcal（基础代谢 ' + Math.round(c.bmr) + '，日常消耗 ' + Math.round(c.tdee) + '，缺口 ' + Math.round(c.deficit) + ' kcal）',
+    '蛋白质 ' + Math.round(c.protein) + ' g　脂肪 ' + Math.round(c.fat) + ' g　碳水 ' + Math.round(c.carb) + ' g',
+    '本周调整：' + e.title + d1 + d2,
+    '依据：' + e.lines[0] + (e.lines[1] ? ('；' + e.lines[1]) : ''),
+    '—— 依据 ISSN 蛋白质/体成分立场声明、Helms 2014，非医疗建议'
+  ].join('\n');
+}
+function copyPlan(id){
+  const p = DB.people.find(x => x.id === id); if(!p) return;
+  const t = planText(p);
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(t).then(() => alert('已复制，可直接粘贴给学员：\n\n' + t), () => prompt('复制以下内容发给学员：', t));
+  } else prompt('复制以下内容发给学员：', t);
+}
+
+/* ---------- 把散落的模块暴露给内联 onclick ---------- */
+window.openForm = openForm; window.openDetail = openDetail; window.savePerson = savePerson;
+window.delPerson = delPerson; window.openCheckin = openCheckin; window.saveCheckin = saveCheckin;
+window.exportPerson = exportPerson; window.sharePerson = sharePerson; window.backupAll = backupAll;
+window.importAll = importAll; window.go = go; window.seedDemo = seedDemo; window.toggleRate = toggleRate; window.copyPlan = copyPlan;
+</script>
+</body>
+</html>
+
