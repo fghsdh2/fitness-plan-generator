@@ -316,7 +316,7 @@ input:focus,select:focus,textarea:focus{background:#fff;border-color:var(--teal-
 .hero .hl{font-size:12.5px;opacity:.85;letter-spacing:.3px}
 .hero .hv{font-size:27px;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}
 .hero .hv small{font-size:13px;font-weight:600;opacity:.85}
-.hero .hs{font-size:12px;opacity:.8;margin-top:4px}
+.hero .hs{font-size:11.5px;opacity:.82;margin-top:5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* 食物卡片 */
 .scenegrid{grid-template-columns:repeat(2,1fr);gap:9px}
@@ -1968,7 +1968,7 @@ function renderToday(P){
   h += '<div class="hero" style="margin-top:12px"><div class="hring">' + heroRing(t.k, P.intake) + '</div>' +
     '<div style="flex:1;min-width:0"><div class="hl">' + (remain >= 0 ? '今天还能吃' : '今天已超出') + '</div>' +
     '<div class="hv">' + Math.abs(remain) + ' <small>kcal</small></div>' +
-    '<div class="hs">已吃 ' + Math.round(t.k) + ' kcal · 目标 ' + Math.round(P.intake) + ' kcal</div></div></div>' +
+    '<div class="hs">已吃 ' + Math.round(t.k) + ' · 目标 ' + Math.round(P.intake) + ' kcal</div></div></div>' +
     '<div class="ringgrid">' +
       ring(t.p, P.protein, '蛋白质', 'g', '#1E9A64') +
       ring(t.c, P.carb, '碳水', 'g', '#E0A22E') +
