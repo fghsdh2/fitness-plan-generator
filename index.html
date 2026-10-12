@@ -321,6 +321,22 @@ details.src li{margin:5px 0}
 .over{color:var(--pink)}.under{color:#D97706}
 .footer{text-align:center;color:var(--faint);font-size:11px;padding:22px 6px 8px;line-height:1.9}
 .empty{text-align:center;color:var(--muted);padding:28px 10px;font-size:13px}
+.suprow{padding:12px 0;border-bottom:1px solid var(--line2)}
+.suprow:last-of-type{border-bottom:0}
+.suphead{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;margin-bottom:7px}
+.suphead b{font-size:13.5px;color:var(--ink)}
+.supbar{display:flex;height:12px;border-radius:99px;background:#EEF2F1;overflow:hidden;margin-top:9px}
+.supbar>i{display:block;height:100%}
+.supfoot{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);margin-top:5px;font-variant-numeric:tabular-nums}
+.scorewrap{display:flex;align-items:center;gap:16px;margin:8px 0 14px}
+.scorenum{font-size:38px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;letter-spacing:-1px;flex:0 0 auto}
+.scorenum span{font-size:14px;color:var(--faint);font-weight:600}
+.scorerows{display:flex;flex-direction:column;gap:7px}
+.scorerow{display:flex;align-items:center;gap:9px;font-size:12.5px}
+.scorerow .lab{flex:0 0 34px;color:var(--muted);font-weight:700}
+.scorerow .bar{flex:1;height:7px;border-radius:99px;background:#EEF2F1;overflow:hidden}
+.scorerow .bar>i{display:block;height:100%;border-radius:99px;background:var(--grad-brand)}
+.scorerow .val{flex:0 0 46px;text-align:right;color:var(--ink);font-weight:700;font-variant-numeric:tabular-nums}
 .hidden{display:none!important}
 .card > h2.sec:first-child{border-bottom:1px solid var(--line2);padding-bottom:12px;margin-bottom:12px}
 @media print{header.top,.no-print{display:none!important}.wrap{max-width:none;padding:0}
@@ -509,6 +525,7 @@ details.src li{margin:5px 0}
       <div class="tabs" id="goalTabs" style="margin-bottom:14px">
         <button class="tab on" data-g="cut">我要减脂（掉秤 / 降体脂）</button>
         <button class="tab" data-g="bulk">我要增肌（长肌肉 / 涨体重）</button>
+        <button class="tab" data-g="tone">女性塑形（精瘦薄）</button>
       </div>
 
       <div id="goalCut">
@@ -637,6 +654,16 @@ const SRC = [
   d:'Deurenberg P, Weststrate JA, Seidell JC. Body mass index as a measure of body fatness: age- and sex-specific prediction formulas. Br J Nutr. 1991. 体脂率(%) = 1.20×BMI + 0.23×年龄 − 10.8×性别（男=1，女=0）− 5.4。属人群估算公式，个体误差约 ±3~5%。'},
  {n:14, t:'《成人体重判定》WS/T 428-2013', u:'',
   d:'国家卫生和计划生育委员会发布。中心型肥胖判定标准：男性腰围 ≥90 cm、女性腰围 ≥85 cm（中心型肥胖前期：男 85~90 cm，女 80~85 cm）。腰围比 BMI 更能反映内脏脂肪堆积。'},
+ {n:17, t:'ISSN 2017 · 肌酸补充的安全性与有效性立场声明', u:'https://pubmed.ncbi.nlm.nih.gov/28615996/',
+  d:'国际运动营养学会。长期补充肌酸安全且耐受性良好（最高 30 g/天连续 5 年）；维持期建议每天 3~5 g，保证肌肉肌酸处于饱和状态。ISSN 2023 女性立场声明亦明确对女性推荐 3~5 g/天。'},
+ {n:18, t:'ISSN 2025 · 长链 Omega-3 多不饱和脂肪酸立场声明', u:'https://pubmed.ncbi.nlm.nih.gov/39810703/',
+  d:'国际运动营养学会。EPA 与 DHA 补充可提升耐力能力与心血管指标，与抗阻训练结合可能改善力量，效果呈剂量依赖。常见有效摄入约 EPA+DHA 合计 1~2 g/天。'},
+ {n:19, t:'ISSN 2021 · 咖啡因与运动表现立场声明', u:'https://pubmed.ncbi.nlm.nih.gov/33388079/',
+  d:'国际运动营养学会。3~6 mg/kg 体重的咖啡因可稳定提升运动表现；最低有效剂量可能低至 2 mg/kg；9 mg/kg 等极剂量伴随较多副作用。咖啡因半衰期约 5~6 小时，下午摄入会影响睡眠。'},
+ {n:20, t:'Sports Med 2025 · 低能量可用性与 RED-S 系统综述与荟萃分析', u:'https://pubmed.ncbi.nlm.nih.gov/39485653/',
+  d:'系统综述显示约 44.7% 的运动员存在低能量可用性（女性 44.2%）。低能量可用性会损害月经功能、免疫功能、骨健康与蛋白合成，是女性减脂期最需要防范的风险。'},
+ {n:16, t:'健身博主「小李不吃🐷」· 女性减脂塑形（精瘦薄）要点', u:'',
+  d:'整理自该博主多期女性减脂塑形同主题视频：训练一周 3~4 练、每次不超过 60 分钟、中低强度中小重量 12~18 次、每组保留 1~2 次余力（RPE 8~9）、有氧心率 120~140；饮食上碳水不低于 150~180 g（小基数可安排约 250 g 高碳日）、蛋白质约 1.2~1.5 g/kg（含植物蛋白）、脂肪每日约 40~45 g，不做低碳高蛋白；强调睡眠与恢复优先，用皮尺和维度替代体重秤。属个人经验总结，本工具将其作为独立的「女性塑形」模式，与 ISSN 等文献口径分开呈现。'},
  {n:15, t:'Nedeltcheva et al., 2010 · 睡眠不足削弱减脂效果', u:'https://pubmed.ncbi.nlm.nih.gov/20921542/',
   d:'Annals of Internal Medicine。同样的热量缺口下，睡眠被限制到 5.5 小时的受试者，脂肪减少量比睡 8.5 小时组低约 55%，肌肉流失更多、饥饿感更强。说明睡眠是减脂的独立变量。'}
 ];
@@ -836,6 +863,8 @@ function dayTotals(day){
   MEALKEYS.forEach(m => ((day.meals||{})[m]||[]).forEach(e => {
     const x = mealTotals(e); t.k += x.k; t.p += x.p; t.c += x.c; t.f += x.f;
   }));
+  /* 补剂：蛋白粉计入蛋白，其余不计热量 */
+  if(day.supp && num(day.supp.protein)) t.p += num(day.supp.protein) * SUP_PROTEIN_PER_SCOOP;
   return t;
 }
 function mealCal(day, m){ const t={k:0,p:0,c:0,f:0}; ((day&&day.meals&&day.meals[m])||[]).forEach(e=>{const x=mealTotals(e);t.k+=x.k;t.p+=x.p;t.c+=x.c;t.f+=x.f;}); return t; }
@@ -847,6 +876,122 @@ function proteinOptions(s){
   if(d.indexOf('素食') >= 0) return '加一份北豆腐（+18 g）、一杯无糖豆浆（+7 g）或一份毛豆（+11 g）';
   if(d.indexOf('乳糖不耐') >= 0) return '加 1 个茶叶蛋（+7 g）、一份豆腐干（+16 g）或一份鸡胸（+25 g）';
   return '加 1 个茶叶蛋（+7 g）、一盒无糖酸奶（+7 g）或一份便利店鸡胸（+25 g）';
+}
+
+/* ==========================================================
+   补剂 · 睡眠深化 · 今日完成度 · 女性周期
+   ========================================================== */
+const SUP_PROTEIN_PER_SCOOP = 22;   /* 1 勺蛋白粉 ≈ 22 g 蛋白 */
+const SUPPS = [
+  {id:'protein', n:'蛋白粉',   type:'count', max:4, unit:'勺', tip:'1 勺约 22 g 蛋白，自动计入当日蛋白', src:[6]},
+  {id:'creatine',n:'肌酸',     type:'check', tip:'每天 3~5 g，长期吃才有效', src:[17]},
+  {id:'omega3',  n:'鱼油',     type:'check', tip:'EPA + DHA 合计约 1~2 g/天', src:[18]},
+  {id:'vitd',    n:'维生素 D', type:'check', tip:'1000~2000 IU，日照少时补；建议先查血', src:[]},
+  {id:'mag',     n:'镁',       type:'check', tip:'300~400 mg，睡前', src:[]},
+  {id:'caffeine',n:'咖啡因',   type:'count', max:3, unit:'杯', tip:'约 100 mg/杯；训练前 30~60 分钟，下午 2 点后别喝', src:[19]}
+];
+
+function getSupp(iso, create){
+  const d = getDay(iso, create);
+  if(!d) return null;
+  d.supp = d.supp || {};
+  return d.supp;
+}
+function creatineStreak(){
+  let n = 0, iso = todayISO();
+  const t0 = (S.days || {})[iso];
+  if(!(t0 && t0.supp && t0.supp.creatine)) iso = shiftDate(iso, -1);
+  for(let i = 0; i < 400; i++){
+    const d = (S.days || {})[iso];
+    if(d && d.supp && d.supp.creatine){ n++; iso = shiftDate(iso, -1); } else break;
+  }
+  return n;
+}
+
+/* ---------- 睡眠：入睡时间 → 作息稳定度 ---------- */
+function bedHour(v){
+  if(!v) return null;
+  const m = String(v).match(/^(\d{1,2}):(\d{2})$/);
+  if(!m) return null;
+  let x = num(m[1]) + num(m[2])/60;
+  if(x < 12) x += 24;          /* 凌晨 0~11 点算作前一天晚上 */
+  return x;
+}
+function sleepRegularity(){
+  const hs = [];
+  for(let i = 0; i < 7; i++){
+    const d = (S.days || {})[shiftDate(todayISO(), -i)];
+    const x = d && d.status ? bedHour(d.status.bedTime) : null;
+    if(x !== null) hs.push(x);
+  }
+  if(hs.length < 3) return null;
+  const mean = hs.reduce((a,b) => a+b, 0) / hs.length;
+  const sd = Math.sqrt(hs.reduce((a,b) => a + (b-mean)*(b-mean), 0) / hs.length);
+  const level = sd < 0.5 ? 'excellent' : (sd < 1 ? 'good' : (sd < 1.5 ? 'fair' : 'poor'));
+  const label = {excellent:'很稳定', good:'基本稳定', fair:'有点飘', poor:'很不规律'}[level];
+  return {n:hs.length, sd:Math.round(sd*100)/100, level, label, hours:hs.length};
+}
+
+/* ---------- 今日完成度（0~100） ---------- */
+function dailyScore(day, P){
+  if(!day) return null;
+  const t = dayTotals(day), st = day.status || {};
+  if(!(t.k > 0)) return {insufficient:true};
+  let diet = 0, sleep = 0, train = 0, state = 0;
+  const notes = [];
+
+  /* 饮食 40 */
+  const dk = Math.abs(t.k - P.intake) / P.intake;
+  diet += dk <= 0.10 ? 20 : (dk <= 0.20 ? 12 : 5);
+  const pr = P.protein > 0 ? t.p / P.protein : 1;
+  diet += pr >= 0.9 ? 12 : (pr >= 0.7 ? 8 : 4);
+  const dc = P.carb > 0 ? Math.abs(t.c - P.carb) / P.carb : 0;
+  diet += dc <= 0.20 ? 8 : 4;
+  if(pr < 0.8) notes.push('蛋白差 ' + Math.round(P.protein - t.p) + ' g');
+
+  /* 训练 25 */
+  const idx = (new Date(curDay + 'T00:00:00').getDay() + 6) % 7;
+  const planDay = (WEEK[P.s.training] || WEEK.novice)[idx];
+  if(st.exercise && st.exercise !== 'none'){
+    const done = st.done || 'all';
+    train = done === 'all' ? 25 : (done === 'most' ? 20 : (done === 'half' ? 14 : 8));
+    if(done !== 'all') notes.push('今天训练只完成了' + ({most:'大半',half:'一半',little:'一点'}[done] || '部分'));
+  }else{
+    train = planDay === 'l' ? 25 : 12;
+    if(planDay !== 'l') notes.push('今天是训练日，但你记的是没练');
+  }
+
+  /* 睡眠 25 */
+  const sh = num(st.sleepH);
+  sleep += sh >= 7 && sh <= 9 ? 12 : (sh >= 6 && sh < 10 ? 8 : (sh > 0 ? 3 : 0));
+  sleep += st.sleepQ === 'good' ? 8 : (st.sleepQ === 'ok' ? 5 : (st.sleepQ === 'bad' ? 2 : (st.sleepQ === 'late' ? 0 : 4)));
+  const reg = sleepRegularity();
+  sleep += reg ? ({excellent:5, good:4, fair:2, poor:0}[reg.level]) : 3;
+  if(sh > 0 && sh < 6.5) notes.push('昨晚只睡了 ' + sh + ' 小时');
+
+  /* 状态 10 */
+  state += st.hunger === 'ok' ? 5 : (st.hunger === 'hungry' ? 3 : (st.hunger === 'full' ? 2 : 3));
+  state += st.energy === 'high' ? 5 : (st.energy === 'mid' ? 3 : (st.energy === 'low' ? 1 : 3));
+  if(st.energy === 'low') notes.push('精力偏低');
+
+  const score = Math.round(diet + sleep + train + state);
+  const grade = score >= 90 ? '今天几乎满分' : score >= 75 ? '今天完成得不错' : score >= 60 ? '今天及格' : '今天不太理想，明天正常来就行';
+  return {score, grade, diet, sleep, train, state, notes, totals:t};
+}
+
+/* ---------- 女性周期 ---------- */
+function cycleInfo(){
+  const m = S.menstrual || {};
+  if(!m.on || !m.last) return null;
+  const len = clamp(num(m.len) || 28, 21, 40);
+  const days = Math.floor((new Date(todayISO() + 'T00:00:00') - new Date(m.last + 'T00:00:00')) / 86400000);
+  if(days < 0) return null;
+  const d = (days % len) + 1;
+  let phase, label, boost = 1;
+  if(d <= 5){ phase = 'menstrual'; label = '经期'; boost = 1; }
+  else if(d <= 14){ phase = 'follicular'; label = '卵泡期'; boost = 1; }
+  else { phase = 'luteal'; label = '黄体期'; boost = 1.15; }
+  return {day:d, len, phase, label, boost, nextIn: len - d + 1};
 }
 
 /* ---------- 当日小反馈 ---------- */
@@ -938,7 +1083,7 @@ function weeklyCalibration(P){
     const pct = num(a.weight) > 0 ? kw / num(a.weight) * 100 : 0;
     const dwW = (num(b.waist) && num(a.waist)) ? num(b.waist) - num(a.waist) : null;
     const vt = '每周 ' + (kw>0?'+':'') + r1(kw) + ' kg（' + (pct>0?'+':'') + r1(pct) + '%）' + (dwW !== null ? ('，腰围 ' + (dwW>0?'+':'') + r1(dwW) + ' cm') : '');
-    if(P.s.goal === 'cut'){
+    if(P.s.goal === 'cut' || P.s.goal === 'tone'){
       if(pct < -1.0){
         const d = pct < -1.5 ? 200 : 150;
         items.push({k:'体重', v:vt + '，掉速偏快', a:'每日摄入 + ' + d + ' kcal —— 掉太快丢的多半是水分和肌肉', hit:true, src:[1,8]});
@@ -1195,7 +1340,7 @@ function bmrOf(s){
 
 function targetRate(s){
   // 返回 {rate, unit} —— 单位：kg/周（减脂）或 kg/月（增肌）
-  if(s.goal === 'cut'){
+  if(s.goal === 'cut' || s.goal === 'tone'){
     if(s.cutMode === 'fat' && s.bodyfat > 0){
       const ffm = s.weight * (1 - s.bodyfat/100);
       const tgt = num(s.cutFat);
@@ -1212,6 +1357,10 @@ function targetRate(s){
 }
 
 function safeRange(s){
+  if(s.goal === 'tone'){
+    // 女性塑形不追求掉秤速度：区间更保守
+    return {min:0.15, max:0.6, recMin:0.25, recMax:0.5, unit:'kg/周'};
+  }
   if(s.goal === 'cut'){
     const byPct = s.weight * 0.01;                  // Helms：每周不超过体重 1% [来源 8]
     const max = clamp(Math.min(byPct, 1.0), 0.4, 1.0);
@@ -1230,15 +1379,16 @@ function validate(s){
     const minWeeks = Math.ceil(tr.kg / sr.max);
     out.tone = 'bad';
     out.msgs.push('按你的填法，需要 <b>' + r1(rate) + ' ' + sr.unit + '</b>，超过了安全上限 <b>' + r1(sr.max) + ' ' + sr.unit + '</b>。');
-    out.msgs.push('这样减/增，掉的多半是水分和肌肉，容易反弹。建议把时间放宽到 <b>' + minWeeks + (s.goal==='cut'?' 周':' 个月') + '</b> 以上，也就是速率控制在 ' + r1(sr.recMin) + '~' + r1(sr.recMax) + ' ' + sr.unit + '。');
+    out.msgs.push((s.goal === 'tone' ? '塑形期掉这么快，掉的会是肌肉和水分，还容易影响睡眠和姨妈。' : '这样减/增，掉的多半是水分和肌肉，容易反弹。') + '建议把时间放宽到 <b>' + minWeeks + (s.goal==='bulk'?' 个月':' 周') + '</b> 以上，也就是速率控制在 ' + r1(sr.recMin) + '~' + r1(sr.recMax) + ' ' + sr.unit + '。');
   }else if(rate < sr.min){
     const w = Math.ceil(tr.kg / sr.recMax);
     out.tone = 'warn';
     out.msgs.push('当前速率 <b>' + r1(rate) + ' ' + sr.unit + '</b> 偏慢，效果会不明显。');
-    out.msgs.push('如果想更有进展，可以压缩到 <b>' + w + (s.goal==='cut'?' 周':' 个月') + '</b> 左右（对应 ' + r1(sr.recMax) + ' ' + sr.unit + '）。');
+    out.msgs.push('如果想更有进展，可以压缩到 <b>' + w + (s.goal==='bulk'?' 个月':' 周') + '</b> 左右（对应 ' + r1(sr.recMax) + ' ' + sr.unit + '）。');
   }else{
     out.msgs.push('目标速率 <b>' + r1(rate) + ' ' + sr.unit + '</b>，在安全区间 ' + r1(sr.recMin) + '~' + r1(sr.recMax) + ' ' + sr.unit + ' 之内。');
     if(s.goal === 'cut' && rate > 0.75) out.msgs.push('注意：这个速度偏快，训练强度可能会掉，蛋白质一定要吃够。');
+    if(s.goal === 'tone') out.msgs.push('塑形期看的是腰围和紧致度，不是体重数字——建议用皮尺和照片做记录。');
   }
   return out;
 }
@@ -1261,7 +1411,15 @@ function buildPlan(s){
   /* ---------- 目标速率 → 热量 ---------- */
   let intake, deficit, surplus = 0, dietDeficit = 0, exDeficit = 0, floorHit = false, defCap = false;
   const trRate = tr.rate;
-  if(s.goal === 'cut'){
+  const isTone = (s.goal === 'tone');
+  if(isTone){
+    /* 女性塑形：小而稳的缺口，全部来自饮食，不靠加有氧硬凑 */
+    const total = clamp(trRate * 7700 / 7, 200, 400);
+    dietDeficit = total; exDeficit = 0; deficit = total;
+    intake = tdee - dietDeficit;
+    trace.push({k:'④ 目标速率', f:r1(trRate) + ' kg/周（塑形模式收敛到 200~400 kcal 缺口）', v:'缺口 ' + r0(total) + ' kcal/天', src:[16]});
+    trace.push({k:'⑤ 缺口来源', f:'全部来自饮食，不靠加有氧硬凑消耗', v:'摄入 ' + r0(intake) + ' kcal', src:[16]});
+  }else if(s.goal === 'cut'){
     const total = trRate * 7700 / 7;
     dietDeficit = clamp(total * 0.65, 250, 700);
     exDeficit = Math.max(0, total - dietDeficit);
@@ -1282,22 +1440,26 @@ function buildPlan(s){
   const bf = num(s.bodyfat) || null;
   const ffm = bf ? s.weight * (1 - bf/100) : null;
   let proPerKg;
-  if(s.goal === 'cut'){
+  if(isTone){
+    proPerKg = 1.35;   /* 文档口径：1.2~1.5 g/kg，含植物蛋白，不过量 */
+  }else if(s.goal === 'cut'){
     proPerKg = 1.8;
     if(bf){ proPerKg = bf > (s.sex==='f'?32:25) ? 1.6 : (bf < (s.sex==='f'?23:15) ? 2.2 : 1.8); }
   }else{
     proPerKg = 1.7;
   }
-  if(ffm){ const byFfm = ffm * (s.goal==='cut' ? 2.6 : 2.2) / s.weight; proPerKg = clamp(Math.max(proPerKg, byFfm), 1.4, 2.6); }
+  if(ffm && !isTone){ const byFfm = ffm * (s.goal==='cut' ? 2.6 : 2.2) / s.weight; proPerKg = clamp(Math.max(proPerKg, byFfm), 1.4, 2.6); }
   let protein = s.weight * proPerKg;
   const rni = s.sex === 'f' ? 55 : 65;
   if(protein < rni){ protein = rni; notes.push('蛋白质已按中国居民膳食指南的推荐摄入量下限（' + rni + ' g）兜底。'); }
   trace.push({k:'⑥ 蛋白质', f:r1(proPerKg) + ' g/kg × ' + s.weight + ' kg' + (ffm ? '（已按去脂体重 ' + r1(ffm) + ' kg 校准）' : ''), v:r0(protein) + ' g（' + r0(protein*4) + ' kcal）', src:[6, 1]});
 
-  let fat = s.weight * (s.goal === 'cut' ? 0.8 : 0.9);
+  let fat = isTone ? clamp(s.weight * 0.8, 40, 45) : s.weight * (s.goal === 'cut' ? 0.8 : 0.9);
   const fMin = intake*0.20/9, fMax = intake*0.30/9;
-  if(fat < fMin) fat = fMin;
-  if(fat > fMax) fat = fMax;
+  if(!isTone){
+    if(fat < fMin) fat = fMin;
+    if(fat > fMax) fat = fMax;
+  }else if(fat*9 > intake*0.34){ fat = intake*0.34/9; }
   trace.push({k:'⑦ 脂肪', f:'0.8~0.9 g/kg，并限制在供能比 20%~30%', v:r0(fat) + ' g（' + r0(fat*9) + ' kcal）', src:[8]});
 
   let carbKcal = intake - protein*4 - fat*9;
@@ -1309,13 +1471,25 @@ function buildPlan(s){
   /* ---------- 腰围 / 压力 → 碳水基线修正 ---------- */
   const cs = carbScale(s);
   const wj = waistJudge(s);
-  let carb = carbRaw * cs.k;
+  let carb = isTone ? carbRaw : carbRaw * cs.k;   /* 塑形不做低碳、不按腰围压碳水 */
   const calObj = s.calib || {};
   const calKcal = num(calObj.kcal) || 0, calLow = num(calObj.low) || 0;
   if(calKcal) carb = Math.max(60, carb + calKcal/4);
   let intake2 = protein*4 + fat*9 + carb*4;
 
-  if(s.goal === 'cut'){
+  let toneCarbFloor = false, lutealBoost = false;
+  if(isTone){
+    const carbFloor = 150;
+    if(carb < carbFloor){ carb = carbFloor; toneCarbFloor = true; }
+    const ciL = (s.sex === 'f') ? cycleInfo() : null;
+    if(ciL && ciL.phase === 'luteal'){ carb = carb * ciL.boost; lutealBoost = true; }
+    intake2 = protein*4 + fat*9 + carb*4;
+    const hardFloor = 1200;
+    if(intake2 < hardFloor){ intake2 = hardFloor; }
+    deficit = Math.max(0, tdee - intake2);
+    dietDeficit = deficit; exDeficit = 0;
+    if(lutealBoost) trace.push({k:'⑨c 黄体期', f:'生理周期第 ' + cycleInfo().day + ' 天（黄体期），碳水 +15%', v:'碳水 → ' + r0(carb) + ' g', src:[16]});
+  }else if(s.goal === 'cut'){
     const maxDef = tdee * 0.25;
     let def2 = tdee - intake2;
     if(def2 > maxDef){
@@ -1343,14 +1517,14 @@ function buildPlan(s){
   if(defCap) notes.push('把碳水降下来之后缺口超过了 TDEE 的 25%，已自动回补一部分碳水，缺口控制在安全上限内。');
   if(floorHit) notes.push('碳水下调后总摄入低于安全下限，已按下限回补碳水。想更快，应该增加运动消耗而不是继续少吃。');
   if(calKcal) trace.push({k:'⑨b 本周校准', f:'每日摄入 ' + (calKcal>0?'+':'') + calKcal + ' kcal（折算进碳水）', v:'碳水 ' + (calKcal>0?'+':'') + r0(calKcal/4) + ' g', src:[1, 8, 15]});
-  trace.push({k:'⑩ 最终每日摄入', f:r0(protein*4) + ' ＋ ' + r0(fat*9) + ' ＋ ' + r0(carb*4) + ' kcal', v:r0(intake) + ' kcal（' + (s.goal==='cut'?'缺口 ':'盈余 ') + r0(Math.abs(deficit)) + ' kcal）', src:[7]});
+  trace.push({k:'⑩ 最终每日摄入', f:r0(protein*4) + ' ＋ ' + r0(fat*9) + ' ＋ ' + r0(carb*4) + ' kcal', v:r0(intake) + ' kcal（' + ((s.goal==='cut'||isTone)?'缺口 ':'盈余 ') + r0(Math.abs(deficit)) + ' kcal）', src:[7]});
 
   const kcalPerMin = 0.105 * s.weight;
   const cardioMin = exDeficit > 0 ? Math.round(exDeficit / kcalPerMin) : 0;
 
   /* ---------- 碳循环适配 ---------- */
   const cyFit = cycleFit(s);
-  const useCycle = (s.cycleOn === null) ? cyFit.fit : !!s.cycleOn;
+  const useCycle = isTone ? false : ((s.cycleOn === null) ? cyFit.fit : !!s.cycleOn);
   const cyi = cycleIntensity(s, cyFit.fit);
   const cy = tp.cycle;
   const ch = s.goal === 'cut' ? cyi.ch : Math.min(cyi.ch, 1.15);
@@ -1366,6 +1540,10 @@ function buildPlan(s){
     v: useCycle ? (r0(carbHigh) + ' / ' + r0(carbMid) + ' / ' + r0(carbLow) + ' g') : (r0(carb) + ' g × 7 天'), src:[11]});
   if(calLow) trace.push({k:'⑪b 本周校准', f:'低碳日单独上调', v:'低碳日碳水 +' + r0(calLow) + ' g', src:[15]});
 
+  if(isTone){
+    if(toneCarbFloor) notes.push('塑形模式碳水不低于 150 g，已经按这个下限回补，所以实际缺口比目标小一些——这是刻意的，低碳会影响睡眠、食欲和气色。');
+    notes.push('塑形只看饮食和睡眠是不够的：一周 3~4 练、每次不超过 60 分钟、不追求力竭，练完当晚应该能正常入睡。');
+  }
   const life = cs.life;
   return {
     s, bmr, tdee, act, intake, deficit, surplus, dietDeficit, exDeficit, cardioMin,
@@ -1373,7 +1551,7 @@ function buildPlan(s){
     pKcal: protein*4, fKcal: fat*9, cKcal: carb*4,
     pPct: protein*4/intake*100, fPct: fat*9/intake*100, cPct: carb*4/intake*100,
     tp, cy, carbHigh, carbMid, carbLow, hc:ch*kk, mc:cm*kk, lc:cl*kk,
-    rate: tr.rate, rateKg: tr.kg, val, notes, trace,
+    rate: tr.rate, rateKg: tr.kg, val, notes, trace, isTone, toneCarbFloor,
     wj, cs, cyFit, useCycle, cyi, life, defCap, floorHit
   };
 }
@@ -1445,7 +1623,7 @@ function bindChips(){
     $$('#goalTabs .tab').forEach(x => x.classList.remove('on'));
     t.classList.add('on');
     S.goal = t.dataset.g;
-    $('#goalCut').classList.toggle('hidden', S.goal !== 'cut');
+    $('#goalCut').classList.toggle('hidden', S.goal !== 'cut' && S.goal !== 'tone');
     $('#goalBulk').classList.toggle('hidden', S.goal !== 'bulk');
     saveS(); renderValidate();
   });
@@ -1515,7 +1693,7 @@ function fillForm(){
   mark('#c_activity', S.activity); mark('#c_training', S.training); mark('#cutMode', S.cutMode);
   $$('#c_diet .chip').forEach(c => c.classList.toggle('on', (S.diet||[]).includes(c.dataset.v)));
   $$('#goalTabs .tab').forEach(t => t.classList.toggle('on', t.dataset.g === S.goal));
-  $('#goalCut').classList.toggle('hidden', S.goal !== 'cut');
+  $('#goalCut').classList.toggle('hidden', S.goal !== 'cut' && S.goal !== 'tone');
   $('#goalBulk').classList.toggle('hidden', S.goal !== 'bulk');
   $('#cutWeightRow').classList.toggle('hidden', S.cutMode !== 'weight');
   $('#cutFatRow').classList.toggle('hidden', S.cutMode !== 'fat');
@@ -1612,9 +1790,11 @@ function renderValidate(){
   html += '<div class="grid3" style="margin-top:10px">' +
     '<div class="stat"><div class="k">你的目标速率</div><div class="v">' + r1(v.rate) + ' <span class="u">' + sr.unit + '</span></div></div>' +
     '<div class="stat"><div class="k">安全区间</div><div class="v">' + r1(sr.recMin) + '~' + r1(sr.recMax) + '</div></div>' +
-    '<div class="stat amber"><div class="k">最快安全达成</div><div class="v">' + (v.tr.kg>0 ? Math.ceil(v.tr.kg/sr.recMax) + (S.goal==='cut'?' 周':' 个月') : '—') + '</div></div>' +
+    '<div class="stat amber"><div class="k">最快安全达成</div><div class="v">' + (v.tr.kg>0 ? Math.ceil(v.tr.kg/sr.recMax) + (S.goal==='bulk'?' 个月':' 周') : '—') + '</div></div>' +
   '</div>';
-  if(S.goal === 'cut'){
+  if(S.goal === 'tone'){
+    html += '<p class="muted" style="margin-top:8px">塑形模式的区间更保守：一周 0.25~0.5 kg。目标是"紧致"而不是"快掉秤"，掉太快会掉肌肉、影响睡眠和气色。</p>';
+  }else if(S.goal === 'cut'){
     html += '<p class="muted" style="margin-top:8px">安全区间依据：中国居民膳食指南建议减重速度每月 2~4 kg<span class="ref">1</span>；同时每周降幅不超过体重的 1%<span class="ref">8</span>。</p>';
   }else{
     html += '<p class="muted" style="margin-top:8px">安全区间依据：新手每月增重 0.5~1 kg 属于合理范围；有训练基础后增速会自然放缓，每月 0.25~0.5 kg 更现实<span class="ref">6</span>。</p>';
@@ -1636,7 +1816,7 @@ const WD = ['周一','周二','周三','周四','周五','周六','周日'];
 
 function renderPlan(){
   const P = buildPlan(S);
-  const g = S.goal === 'cut' ? '减脂' : '增肌';
+  const g = S.goal === 'cut' ? '减脂' : (S.goal === 'tone' ? '女性塑形（精瘦薄）' : '增肌');
   $('#planHead').innerHTML = '为 <b>' + (S.sex==='f'?'女性':'男性') + '、' + S.age + ' 岁、' + S.height + ' cm、' +
     S.weight + ' kg</b>（' + (ACT[S.activity]||ACT.light).t + ' · ' + P.tp.t + '）生成的<b>' + g +
     '</b>方案。目标：' + (S.goal==='cut'
@@ -1709,11 +1889,15 @@ function renderDiet(P){
       '<div class="stat"><div class="k">基础代谢 BMR</div><div class="v">' + r0(P.bmr) + ' <span class="u">kcal</span></div></div>' +
       '<div class="stat"><div class="k">日常消耗 TDEE</div><div class="v">' + r0(P.tdee) + ' <span class="u">kcal</span></div></div>' +
       '<div class="stat amber"><div class="k">目标每日摄入</div><div class="v">' + r0(P.intake) + ' <span class="u">kcal</span></div></div>' +
-      '<div class="stat"><div class="k">' + (g==='cut'?'每日缺口':'每日盈余') + '</div><div class="v">' + (g==='cut'?'-':'+') + r0(Math.abs(P.deficit)) + ' <span class="u">kcal</span></div></div>' +
+      '<div class="stat"><div class="k">' + ((g==='cut'||g==='tone')?'每日缺口':'每日盈余') + '</div><div class="v">' + ((g==='cut'||g==='tone')?'-':'+') + r0(Math.abs(P.deficit)) + ' <span class="u">kcal</span></div></div>' +
     '</div>';
 
   h += '<p class="muted" style="margin-top:10px">BMR 用 Mifflin-St Jeor 公式' + R(9) + '；TDEE = BMR × 活动系数 ' + P.act.k + '（' + P.act.t + '）' + R(9) + '。</p>';
-  if(g === 'cut'){
+  if(g === 'tone'){
+    h += '<div class="note"><b>缺口怎么来：</b>每天少吃 <b>' + r0(P.dietDeficit) + ' kcal</b>，' +
+      '缺口控制在 200~400 kcal，<b>全部来自饮食</b>——塑形不建议靠加有氧硬凑消耗' + R(16) + '。' +
+      '<br>碳水给你留了 <b>150 g 的下限</b>，所以缺口收得比较小。女性减脂最容易踩的坑就是低碳 + 猛练，结果睡眠差、食欲失控、掉发垮脸、姨妈紊乱' + R(16) + '。</div>';
+  }else if(g === 'cut'){
     h += '<div class="note"><b>缺口怎么来：</b>每天少吃 <b>' + r0(P.dietDeficit) + ' kcal</b>' +
       (P.exDeficit > 0 ? '（中国居民膳食指南建议减重期每天减少 300~500 kcal' + R(1) + '）' : '') +
       (P.exDeficit > 0 ? '，再加上运动多消耗 <b>' + r0(P.exDeficit) + ' kcal</b>——大约相当于每天 <b>' + P.cardioMin + ' 分钟</b>中等强度有氧' + R(10) + '。' : '。') +
@@ -1847,6 +2031,7 @@ function renderDiet(P){
 
 /* ---------- 运动方案 ---------- */
 function renderTrain(P){
+  if(P.s.goal === 'tone') return renderToneTrain(P);
   const s = P.s, tp = P.tp, wk = WEEK[s.training] || WEEK.novice;
   const home = [
     ['自重深蹲', '3 组 × 12~15 次', '膝盖对着脚尖方向，下蹲到大腿接近平行'],
@@ -1930,11 +2115,145 @@ function renderTrain(P){
   return h;
 }
 
+/* ==========================================================
+   女性塑形（精瘦薄）训练方案
+   内容整理自健身博主「小李不吃🐷」的多期同主题视频 [来源 16]
+   ========================================================== */
+function renderToneTrain(P){
+  const s = P.s;
+  const wk = ['周一','周二','周三','周四','周五','周六','周日'];
+  const tbl = (rows) => '<div class="scroll"><table><tr><th>动作</th><th>次数</th><th>组数</th><th>组间休息</th><th>要点</th></tr>' +
+    rows.map(r => '<tr><td><b>' + r[0] + '</b></td><td>' + r[1] + '</td><td>' + r[2] + '</td><td>' + (r[3]||'—') + '</td><td>' + r[4] + '</td></tr>').join('') + '</table></div>';
+
+  const hip = [
+    ['杠铃罗马尼亚硬拉','10~15 次','3~4 组','2.5~3 分钟','下肢力线归位后再做，优先练臀大肌与大腿后侧'],
+    ['杠铃臀推','10~15 次','3~4 组','2.5~3 分钟','主练臀部，膝盖稳定、顶髋向前上方'],
+    ['宽距深蹲','10~15 次','3~4 组','2.5~3 分钟','下肢主练项，注意膝盖朝向与脚尖一致']
+  ];
+  const upper = [
+    ['对卧高位下拉','10~15 次','3~4 组','—','主练背部宽度'],
+    ['水平划船','10~15 次','3~4 组','—','主练背部厚度与菱形肌'],
+    ['哑铃侧平举','10~15 次','3~4 组','—','主练肩部中束'],
+    ['固定器械推肩','10~15 次','3~4 组','—','器械更稳定安全']
+  ];
+
+  let h = '';
+
+  /* 认知：三种身材 */
+  h += '<div class="card"><h2 class="sec">先搞清楚：女性练力量只会落到两种身材</h2>' +
+    '<p class="lead">决定因素是训练与饮食的认知，不是蛮力。同一套器械，认知不同，练出来的身材完全相反' + R(16) + '。</p>' +
+    '<div class="grid3">' +
+      '<div class="stat tint4"><div class="k">脂包肌</div><div class="v" style="font-size:15px">肥壮、体脂高</div>' +
+        '<div class="muted" style="font-size:11.5px;line-height:1.6">迷信"大力出奇迹"：大重量、每组力竭、天天练。结果是睡不好、胃口越来越大，越练越狠越吃越多，体脂降不下来。</div></div>' +
+      '<div class="stat tint3"><div class="k">瘦胖子</div><div class="v" style="font-size:15px">松垮、易暴食</div>' +
+        '<div class="muted" style="font-size:11.5px;line-height:1.6">迷信节食、低碳、液断。掉的几乎都是水分和肌肉，体脂降得很少，身形松垮、特别容易暴食反弹。</div></div>' +
+      '<div class="stat tint1"><div class="k">精瘦薄 ✓</div><div class="v" style="font-size:15px">紧致、体脂低</div>' +
+        '<div class="muted" style="font-size:11.5px;line-height:1.6">力量训练适可而止，重视睡眠和恢复，干净均衡饮食、不盲目低碳。进入"睡好、恢复足、食欲稳、体脂低"的良性循环。</div></div>' +
+    '</div></div>';
+
+  /* 每周骨架 */
+  h += '<div class="card"><h2 class="sec">每周骨架</h2>' +
+    '<div class="scroll"><table>' +
+      '<tr><th>项目</th><th>安排</th><th>说明</th></tr>' +
+      '<tr><td><b>频率</b></td><td>一周 3~4 练</td><td>练一休一，或练 2 天休 1 天。每周运动总量约 3~4 小时就够，不需要天天练。</td></tr>' +
+      '<tr><td><b>单次时长</b></td><td>不超过 60 分钟</td><td>超过容易过度疲劳；练完当晚应该能正常入睡，不该酸痛到睡不着。</td></tr>' +
+      '<tr><td><b>分化</b></td><td>二分化 → 三分化</td><td>新手先用二分化打基础 1~2 个月，动作质量和力量提高后再切三分化。</td></tr>' +
+      '<tr><td><b>强度</b></td><td>中小重量</td><td>选能做 12~18 次的重量，全程缓慢控制，<b>不追求每组力竭</b>。</td></tr>' +
+      '<tr><td><b>有氧</b></td><td>中低心率</td><td>心率约 120~140，微微冒汗即可；不做高强度暴汗、HIIT、或长时间超 150 心率的训练。</td></tr>' +
+    '</table></div>' +
+    '<div class="note"><b>为什么用二分化/三分化，而不是分 5 天单独练部位？</b><br>' +
+    '普通人一周只有 3~4 天能健身。如果把肌肉分 5 天练，一块肌肉一周只能练到一次；二/三分化每次覆盖多块肌肉，一周能让全身被刺激 1.5~2 次，' +
+    '而且每块肌肉单次容量只有 4~8 组，动作标准、发力精准，不会徒增皮质醇' + R(16) + '。</div>' +
+  '</div>';
+
+  /* 阶段一 */
+  h += '<div class="card"><h2 class="sec">阶段一 · 二分化基础计划（新手先练 1~2 个月）</h2>' +
+    '<p class="lead">一周安排 2 次臀腿 + 1~2 次上半身。以复合动作为主，先把动作质量练标准，再逐步加重量。</p>' +
+    '<h3 class="sub">臀腿日（每周 2 次）</h3>' + tbl(hip) +
+    '<div class="note"><b>练臀前必须热身（顺序别省）：</b><br>' +
+    '① 5~10 分钟臀腿肌肉放松（泡沫轴 / 筋膜球）→ ② 5 分钟 90/90 呼吸 + 死虫激活核心 → ③ 髋关节灵活度训练（如 90/90 内外旋）。<br>' +
+    '徒手后踢腿、螃蟹步、夹腿这些只能当<b>激活动作</b>，不能当训练主项' + R(16) + '。</div>' +
+    '<h3 class="sub">上半身日（每周 1~2 次）</h3>' + tbl(upper) +
+    '<p class="muted">练上半身前：先做呼吸训练与核心四足支撑等激活动作，再进入正式训练。</p>' +
+    '<div class="note ok"><b>这套计划要老老实实练 3~6 个月。</b>重点是把动作的重量和质量不断提高，' +
+    '别在动作还没学扎实的时候追求花哨的变化。如果有体态问题导致发力不对，先把体态调整好再上重量' + R(16) + '。</div>' +
+  '</div>';
+
+  /* 阶段二 */
+  h += '<div class="card"><h2 class="sec">阶段二 · 三分化进阶计划（练 1~2 个月后）</h2>' +
+    '<p class="lead">肌肉募集和力量提高之后，切换成三分化：每次练多块肌肉，但不把任何一块肌肉练透。</p>' +
+    '<div class="scroll"><table><tr><th>部位</th><th>动作数</th><th>要点</th></tr>' +
+      '<tr><td><b>臀腿</b></td><td>4~5 个动作</td><td>下半身肌肉多，容量可以稍大，但每个部位每次仍控制在 4~8 组。</td></tr>' +
+      '<tr><td><b>背部</b></td><td>2~3 个动作</td><td>以划船、下拉类为主。</td></tr>' +
+      '<tr><td><b>肩部</b></td><td>2~3 个动作</td><td>推举加侧平举。</td></tr>' +
+      '<tr><td><b>胸部</b></td><td>1 个动作</td><td>胸不贪多，1 个主动作就够。</td></tr>' +
+      '<tr><td><b>手臂</b></td><td>不用单独练</td><td>练胸背时会顺带带到手臂，无需单独安排。</td></tr>' +
+    '</table></div>' +
+    '<p class="muted" style="margin-top:8px">这样每次 1 小时能练到几块肌肉，每块既有有效刺激又不至于过度。一周练 3 天就能覆盖全身，还可以加 1 天专门练弱项；休息日可以加低强度有氧增加消耗' + R(16) + '。</p>' +
+  '</div>';
+
+  /* 剂量原则 */
+  h += '<div class="card"><h2 class="sec">训练剂量与强度原则</h2>' +
+    '<div class="scroll"><table><tr><th>项目</th><th>原则</th></tr>' +
+      '<tr><td><b>重量选择</b></td><td>选能做 12~18 次的重量，全程缓慢控制。女性肌肉控制能力弱于男性，重量一大就容易代偿到其他肌肉，练出奇怪的体态。</td></tr>' +
+      '<tr><td><b>力竭把握</b></td><td>不追求每组力竭，每组保留 1~2 次余力（约 RPE 8~9）。力竭对神经压力大、影响睡眠和恢复、还增加受伤风险。</td></tr>' +
+      '<tr><td><b>有氧强度</b></td><td>心率控制在 120~140，微微冒汗、不太喘；避免超过 150~160 心率的高强度训练。高强度一次不要超过 20 分钟，或改成 40~60 分钟低强度有氧。</td></tr>' +
+      '<tr><td><b>睡眠信号</b></td><td>练完当晚睡不好、浅睡多梦、反复醒来 = <b>强度过大</b>，应该降强度或减量。睡眠是身体给出的第一个调整信号。</td></tr>' +
+    '</table></div></div>';
+
+  /* 饮食与恢复 */
+  h += '<div class="card"><h2 class="sec">饮食与恢复要点</h2>' +
+    '<p class="lead">减脂的核心从来不是死磕运动，而是饮食和睡眠。睡好吃好、饮食干净均衡，体脂自然能降；盲目低碳高蛋白 + 嘎嘎练，反而气血虚、姨妈乱、越练越肥' + R(16) + '。</p>' +
+    '<div class="scroll"><table><tr><th>事项</th><th>要点</th></tr>' +
+      '<tr><td><b>碳水</b></td><td>运动人群碳水不能太低。小基数全天至少 150~180 g，状态差时可以安排高碳日约 250 g。<b>不吃低碳</b>——低碳容易食欲失控、睡不好、气血虚。</td></tr>' +
+      '<tr><td><b>蛋白质</b></td><td>合理摄入即可，约体重的 1.2~1.5 g/kg（含植物蛋白），不必过量高蛋白。</td></tr>' +
+      '<tr><td><b>脂肪</b></td><td>每日约 40~45 g，优先橄榄油、山茶油、牛油果、核桃、亚麻籽等优质脂肪。</td></tr>' +
+      '<tr><td><b>睡眠</b></td><td>尽量 23 点前睡、睡够 8 小时；多晒太阳、注意补镁，帮助提升睡眠质量。</td></tr>' +
+      '<tr><td><b>运动时机</b></td><td>避免空腹做高强度训练、晚上 7 点后猛练、刚吃饱就练；中高强度训练安排在上午到下午 6 点前更合适。</td></tr>' +
+      '<tr><td><b>恢复优先</b></td><td>累了、没睡好、生理期就休息或改成散步。如果身体虚弱、姨妈已经出问题，减脂期先暂停一切运动，把饮食和睡眠调回来。</td></tr>' +
+    '</table></div>' +
+    '<div class="note ok">你当前的方案：碳水 <b>' + r0(P.carb) + ' g</b>（不低于 150 g）、蛋白质 <b>' + r0(P.protein) +
+    ' g</b>（' + r1(P.proPerKg) + ' g/kg）、脂肪 <b>' + r0(P.fat) + ' g</b>。已经把文档口径直接算进方案里了。</div>' +
+  '</div>';
+
+  /* 禁忌 + 正向 */
+  h += '<div class="card"><h2 class="sec">要避开的做法（这些是"脂包肌"练法）</h2><ul class="small" style="padding-left:20px;margin:6px 0">' +
+      '<li><b>不要分部位单独练透</b>：胸、背、肩、臀、腿、手臂分天各练 5~6 个动作 20 多组，热量消耗不足、肌肉过度发炎、还影响睡眠。</li>' +
+      '<li><b>不要大重量 + 力竭</b>：两者叠加只会练出脂包肌，还大幅增加受伤风险。</li>' +
+      '<li><b>不要低碳高蛋白</b>：那是男性增肌饮食。女性叠加高强度训练极易导致皮质醇紊乱、睡眠差、食欲失控、姨妈紊乱、掉发垮脸。</li>' +
+      '<li><b>不要一周 5~6 练、力量后再加有氧、空腹有氧</b>：对普通女性属于过度训练，越练越虚。</li>' +
+      '<li><b>不要盲目模仿"天天练、练到力竭"的男主播或私教方法</b>：女性激素与恢复特点不同，训练量必须跟着生活、工作、睡眠动态调整。</li>' +
+    '</ul></div>' +
+    '<div class="card"><h2 class="sec">正向原则</h2><ul class="small" style="padding-left:20px;margin:6px 0">' +
+      '<li><b>训练适度</b>：普通女性一周 3~4 小时、每次 8 分力就够，练好呼吸、动作质量优先于重量。</li>' +
+      '<li><b>一次练多块肌肉</b>：每周 3 天就能覆盖全身，留足恢复时间。</li>' +
+      '<li><b>饮食睡眠为先</b>：先养成干净均衡饮食与早睡早起的习惯，再谈给力量训练加强度，否则只会变成脂包肌。</li>' +
+      '<li><b>用皮尺替代体重秤</b>：关注腰围、围度和紧致度的变化，不要天天盯体重数字。</li>' +
+    '</ul>' +
+    '<div class="note warn">以上内容整理自博主「小李不吃🐷」的多期女性减脂塑形视频，属<b>个人经验总结</b>' + R(16) +
+    '，与方案里其他基于 ISSN 等文献的数值口径分开标注。有伤病、孕期哺乳期或月经异常，请先咨询医生或专业教练。</div>' +
+  '</div>';
+
+  return h;
+}
+
 /* ---------- 原理说明 ---------- */
 function renderWhy(P){
   const s = P.s, g = s.goal;
   const why = [];
-  if(g === 'cut'){
+  if(g === 'tone'){
+    why.push(['为什么是这个热量和这个碳水？',
+      '你每天消耗约 <b>' + r0(P.tdee) + ' kcal</b>，方案让你吃到 <b>' + r0(P.intake) + ' kcal</b>，缺口只有 <b>' + r0(P.deficit) +
+      ' kcal</b>。女性塑形和男性减脂最大的区别就在这里：<b>不能靠大缺口 + 低碳</b>' + R(16) +
+      '。女性叠加高强度训练时，低碳高蛋白容易让皮质醇紊乱，结果是睡眠变差、食欲失控、掉发、姨妈紊乱——体重可能掉了，但看起来更松更垮。' +
+      '所以碳水给你保底 150 g，蛋白质只给到 ' + r1(P.proPerKg) + ' g/kg（' + r0(P.protein) + ' g），脂肪 ' + r0(P.fat) + ' g 且优先优质脂肪。']);
+    why.push(['为什么建议做力量训练？',
+      '塑形要的是"紧致"，而紧致来自肌肉张力，不是来自体重数字。文档里的训练思路是：一周 3~4 练、每次不超过 60 分钟、用能做 12~18 次的重量、<b>每组保留 1~2 次余力</b>，' +
+      '不做大重量力竭、不分部位单独练透' + R(16) + '。女性肌肉控制能力弱于男性，重量一大就会代偿到别的肌肉，练出奇怪的体态。']);
+    why.push(['为什么睡眠比运动还重要？',
+      '文档反复强调：睡好吃好，体脂自然降。练完当晚如果睡不好、浅睡多梦，说明当天强度已经过大了，应该降强度或减量' + R(16) +
+      '。睡眠是身体给出的第一个调整信号，比体重秤灵敏得多。']);
+  }else if(g === 'cut'){
     why.push(['为什么是这个热量？',
       '你每天消耗大约 <b>' + r0(P.tdee) + ' kcal</b>，方案让你吃到 <b>' + r0(P.intake) + ' kcal</b>，中间差的 <b>' + r0(P.deficit) +
       ' kcal</b> 就是缺口。减脂的唯一直接动力就是这个缺口——不是某一种食物、也不是某个时间点吃东西' + R(7) +
@@ -2047,6 +2366,9 @@ function renderToday(P){
   if(cy) h += '<div class="note warn"><b>碳循环智能调度</b><br>' + cy.msg + '</div>';
   h += '</div>';
 
+  /* 今日完成度 */
+  h += '<div id="scoreCard">' + renderScoreCard(P) + '</div>';
+
   /* 餐次 */
   h += '<div class="card"><h2 class="sec">按餐次记录</h2><p class="lead">不用称重，点选就行。份量按感觉选，系统自动换算成热量和营养素。</p>';
   MEALS.forEach(m => {
@@ -2068,25 +2390,63 @@ function renderToday(P){
   });
   h += '<div id="pickerBox"></div></div>';
 
+  /* 补剂 */
+  h += '<div id="suppCard">' + renderSuppCard(P) + '</div>';
+
   /* 状态 */
   h += '<div id="statusCard">' + renderStatusCard(P) + '</div>';
+
+  /* 生理周期（女性） */
+  h += renderCycleCard(P);
   return h;
 }
 
 function renderStatusCard(P){
   const d = getDay(curDay, false); const st = (d && d.status) || {};
   const chip = (k, v, label) => '<span class="chip' + (st[k] === v ? ' on' : '') + '" onclick="setStatus(\'' + k + '\',\'' + v + '\')">' + label + '</span>';
-  let h = '<div class="card"><h2 class="sec">今天的身体状态</h2><p class="lead">30 秒点完，用来判断方案要不要调整。</p>';
+  const reg = sleepRegularity();
+  let h = '<div class="card"><h2 class="sec">今天的身体状态</h2><p class="lead">30 秒点完。这些主观感受比数字更能反映身体状态。</p>';
+
+  /* 运动 */
   h += '<h4 class="subsub">运动</h4><div class="chips">' +
-    chip('exercise','strength','力量训练') + chip('exercise','cardio','有氧') + chip('exercise','both','力量＋有氧') + chip('exercise','none','没练') + '</div>';
+    chip('exercise','strength','力量训练') + chip('exercise','cardio','有氧') +
+    chip('exercise','both','力量＋有氧') + chip('exercise','none','没练') + '</div>';
   if(st.exercise && st.exercise !== 'none'){
-    h += '<div class="row" style="margin-top:10px"><div class="field"><label>大概多久（分钟）</label><input id="st_min" type="number" inputmode="numeric" value="' + (st.exMin || 45) + '" onchange="setStatus(\'exMin\', this.value)"></div>' +
-      '<div class="field"><label>主观强度</label><div class="chips">' + chip('intensity','easy','轻松') + chip('intensity','normal','正常') + chip('intensity','hard','吃力') + '</div></div></div>';
+    h += '<div class="row" style="margin-top:10px"><div class="field"><label>大概多久（分钟）</label>' +
+      '<input type="number" inputmode="numeric" value="' + (st.exMin || 45) + '" onchange="setStatus(\'exMin\', this.value)"></div>' +
+      '<div class="field"><label>主观强度</label><div class="chips">' +
+      chip('intensity','easy','轻松') + chip('intensity','normal','正常') + chip('intensity','hard','吃力') + '</div></div></div>';
+    h += '<div class="field"><label>今天计划完成得怎么样</label><div class="chips">' +
+      chip('done','all','全部完成') + chip('done','most','完成大半') + chip('done','half','完成一半') + chip('done','little','只做了一点') + '</div></div>';
   }
-  h += '<h4 class="subsub">睡眠（昨晚）</h4><div class="row"><div class="field"><label>睡了几小时</label>' +
-    '<input id="st_sleep" type="number" inputmode="decimal" step="0.5" value="' + (st.sleepH || '') + '" placeholder="例如 7" onchange="setStatus(\'sleepH\', this.value)"></div>' +
+
+  /* 睡眠 */
+  h += '<h4 class="subsub">睡眠（昨晚）</h4><div class="row">' +
+    '<div class="field"><label>睡了几小时</label><input type="number" inputmode="decimal" step="0.5" value="' + (st.sleepH || '') + '" placeholder="例如 7" onchange="setStatus(\'sleepH\', this.value)"></div>' +
     '<div class="field"><label>睡眠质量</label><div class="chips">' + chip('sleepQ','good','好') + chip('sleepQ','ok','一般') + chip('sleepQ','bad','差') + chip('sleepQ','late','熬夜') + '</div></div></div>';
-  h += '<h4 class="subsub">体感</h4><div class="field"><label>饥饿感</label><div class="chips">' +
+  h += '<div class="row"><div class="field"><label>入睡时间</label>' +
+    '<input type="time" value="' + (st.bedTime || '') + '" onchange="setStatus(\'bedTime\', this.value)"></div>' +
+    '<div class="field"><label>起床时间（选填）</label>' +
+    '<input type="time" value="' + (st.wakeTime || '') + '" onchange="setStatus(\'wakeTime\', this.value)"></div></div>';
+  h += '<details class="src"><summary>手表数据（选填，有手表就抄一下）</summary>' +
+    '<div class="row" style="margin-top:10px">' +
+      '<div class="field"><label>深睡（小时）</label><input type="number" step="0.1" value="' + (st.deepSleep || '') + '" onchange="setStatus(\'deepSleep\', this.value)"></div>' +
+      '<div class="field"><label>手表睡眠分</label><input type="number" inputmode="numeric" value="' + (st.sleepScore || '') + '" onchange="setStatus(\'sleepScore\', this.value)"></div>' +
+      '<div class="field"><label>夜里醒来次数</label><input type="number" inputmode="numeric" value="' + (st.wakeUps || '') + '" onchange="setStatus(\'wakeUps\', this.value)"></div>' +
+    '</div>' +
+    '<div class="field"><label>白天困不困</label><div class="chips">' +
+      chip('daytime','fresh','不困') + chip('daytime','soso','一般') + chip('daytime','sleepy','很困') + '</div></div></details>';
+  if(reg){
+    h += '<div class="note ' + (reg.level === 'poor' ? 'warn' : (reg.level === 'excellent' ? 'ok' : '')) + '" style="margin-top:10px">' +
+      '<b>作息稳定度：' + reg.label + '</b>（最近 ' + reg.n + ' 天入睡时间波动 ±' + reg.sd + ' 小时）<br>' +
+      '<span class="muted">研究显示，睡眠的“规律性”比“时长”更能预测健康结局——每天 1 点睡 8 小时，不如每天 11 点睡 7 小时。</span></div>';
+  }else{
+    h += '<p class="muted" style="margin-top:8px">填 3 天以上的「入睡时间」，就能算出你的作息稳定度。</p>';
+  }
+
+  /* 体感 */
+  h += '<h4 class="subsub">体感</h4>';
+  h += '<div class="field"><label>饥饿感</label><div class="chips">' +
     chip('hunger','hungry','很饿') + chip('hunger','ok','微微饿') + chip('hunger','full','不饿 / 撑') + '</div></div>';
   h += '<div class="field"><label>精力水平</label><div class="chips">' +
     chip('energy','high','精神好') + chip('energy','mid','一般') + chip('energy','low','很累、不想动') + '</div></div>';
@@ -2094,6 +2454,115 @@ function renderStatusCard(P){
     chip('craving','yes','特别馋') + chip('craving','no','还好') + '</div></div>';
   h += '<div class="field"><label>备注（可不填）</label><textarea rows="2" onchange="setStatus(\'note\', this.value)" placeholder="加班、应酬、生病、生理期……">' + esc(st.note || '') + '</textarea></div>';
   h += '<div class="note">这些是主观感受，比纯数字更能反映身体状态。连续睡不好或持续很累时，方案会自动放宽碳水，而不是硬压' + R(15) + '。</div></div>';
+  return h;
+}
+
+/* ---------- 补剂卡片 ---------- */
+function renderSuppCard(P){
+  const sp = getSupp(curDay, false) || {};
+  const t = dayTotals(getDay(curDay, false));
+  const addP = num(sp.protein) * SUP_PROTEIN_PER_SCOOP;
+  const foodP = Math.max(0, t.p - addP);
+  const tgt = P.protein || 1;
+  const a = Math.min(100, foodP / tgt * 100);
+  const b = Math.min(100 - a, addP / tgt * 100);
+  const streak = creatineStreak();
+
+  let h = '<div class="card"><h2 class="sec">补剂 · 今天</h2>' +
+    '<p class="lead">点一下就行。蛋白粉会自动计入当日蛋白，其他只做依从性打卡。</p>';
+
+  /* 蛋白粉 —— 带进度条联动 */
+  h += '<div class="suprow"><div class="suphead"><b>蛋白粉</b>' +
+    '<span class="muted">1 勺 ≈ ' + SUP_PROTEIN_PER_SCOOP + ' g 蛋白' + (addP ? '　已加 ' + r1(addP) + ' g' : '') + '</span></div>' +
+    '<div class="chips">' + [0,1,2,3].map(n =>
+      '<span class="chip' + (num(sp.protein) === n ? ' on' : '') + '" onclick="setSupp(\'protein\',' + n + ')">' + (n === 0 ? '没喝' : n + ' 勺') + '</span>').join('') + '</div>' +
+    '<div class="supbar"><i style="width:' + a.toFixed(0) + '%;background:linear-gradient(135deg,#10B981,#34D399)"></i>' +
+      '<i style="width:' + b.toFixed(0) + '%;background:linear-gradient(135deg,#22C1DC,#5B6CFF)"></i></div>' +
+    '<div class="supfoot"><span>食物蛋白 ' + Math.round(foodP) + ' g' + (addP ? ' ＋ 补剂 ' + r1(addP) + ' g' : '') + '</span>' +
+      '<span><b>' + Math.round(t.p) + ' / ' + Math.round(P.protein) + ' g</b></span></div>' +
+    '<div class="muted" style="font-size:11.5px;margin-top:2px">绿色＝食物，蓝色＝补剂</div></div>';
+
+  /* 肌酸 —— 连续打卡 */
+  const on = !!(sp.creatine);
+  h += '<div class="suprow"><div class="suphead"><b>肌酸</b><span class="muted">每天 3~5 g，长期吃才有效' + R(17) + '</span></div>' +
+    '<div class="chips"><span class="chip' + (on ? ' on' : '') + '" onclick="setSupp(\'creatine\')" style="min-width:110px">' +
+      (on ? '今天吃了 ✓' : '点这里打卡') + '</span>' +
+      '<span class="pill ' + (streak >= 7 ? 'ok' : 'info') + '" style="align-self:center">已连续 ' + streak + ' 天</span></div>' +
+    (streak === 0 && !on ? '<div class="muted" style="font-size:11.5px;margin-top:4px">今天还没打卡；中断了也不怕，重新开始计数就行。</div>' : '') + '</div>';
+
+  /* 其他勾选 */
+  const others = SUPPS.filter(x => x.type === 'check' && x.id !== 'creatine');
+  h += '<div class="suprow"><div class="suphead"><b>其他（选填）</b><span class="muted">不影响热量统计</span></div>' +
+    '<div class="chips">' + others.map(x =>
+      '<span class="chip opt' + (sp[x.id] ? ' on' : '') + '" onclick="setSupp(\'' + x.id + '\')" title="' + x.tip + '">' + x.n + '</span>').join('') + '</div></div>';
+
+  /* 咖啡因 */
+  const cf = num(sp.caffeine);
+  h += '<div class="suprow"><div class="suphead"><b>咖啡因</b><span class="muted">约 100 mg/杯；下午 2 点后别喝，会影响睡眠</span></div>' +
+    '<div class="chips">' + [0,1,2,3].map(n =>
+      '<span class="chip' + (cf === n ? ' on' : '') + '" onclick="setSupp(\'caffeine\',' + n + ')">' + (n === 0 ? '没喝' : n + ' 杯') + '</span>').join('') + '</div></div>';
+
+  h += '<details class="src"><summary>为什么是这几样</summary><ul>' +
+    '<li><b>肌酸</b>：ISSN 2017 立场声明（安全，≤30 g/天连续 5 年）；ISSN 2023 女性立场声明<b>明确推荐女性 3~5 g/天</b>' + R(17) + R(16) + '</li>' +
+    '<li><b>蛋白粉</b>：不是补剂，是方便的蛋白来源；女性每日蛋白 1.4~2.2 g/kg' + R(16) + '</li>' +
+    '<li><b>咖啡因</b>：3~6 mg/kg 训练前 30~60 分钟；半衰期 5~6 小时' + R(19) + '</li>' +
+    '<li><b>鱼油</b>：EPA+DHA 1~2 g/天' + R(18) + '</li>' +
+    '<li><b>维生素 D / 镁</b>：没有 ISSN 立场声明，证据等级较低，建议先做血液检测再定</li>' +
+  '</ul></details></div>';
+  return h;
+}
+
+/* ---------- 今日完成度 ---------- */
+function renderScoreCard(P){
+  const sc = dailyScore(getDay(curDay, false), P);
+  let h = '<div class="card"><h2 class="sec">今日完成度</h2>';
+  if(!sc || sc.insufficient){
+    return h + '<p class="lead">先记一下今天吃了什么，才能算完成度。</p></div>';
+  }
+  const col = sc.score >= 90 ? 'var(--green)' : (sc.score >= 75 ? '#22A2E8' : (sc.score >= 60 ? 'var(--amber)' : 'var(--coral)'));
+  h += '<div class="scorewrap"><div class="scorenum" style="color:' + col + '">' + sc.score + '<span>/100</span></div>' +
+    '<div style="flex:1;min-width:0"><b style="color:var(--ink)">' + sc.grade + '</b>' +
+    '<div class="muted" style="margin-top:3px">' + (sc.notes.length ? ('最该改：' + sc.notes[0]) : '今天没什么要改的，保持') + '</div></div></div>' +
+    '<div class="scorerows">' +
+      [['饮食', sc.diet, 40], ['训练', sc.train, 25], ['睡眠', sc.sleep, 25], ['状态', sc.state, 10]].map(x =>
+        '<div class="scorerow"><span class="lab">' + x[0] + '</span>' +
+        '<span class="bar"><i style="width:' + (x[1]/x[2]*100).toFixed(0) + '%"></i></span>' +
+        '<span class="val">' + x[1] + '/' + x[2] + '</span></div>').join('') +
+    '</div>' +
+    '<div class="note" style="margin-top:10px">这个分数只用来提示方向，不是考核。<b>休息日不扣分</b>，没记录也不会算 0 分——它只回答一件事：今天哪一项离目标最远。</div>' +
+  '</div>';
+  return h;
+}
+
+/* ---------- 女性周期 ---------- */
+function renderCycleCard(P){
+  if(P.s.sex !== 'f') return '';
+  const m = S.menstrual || {};
+  const ci = cycleInfo();
+  const t = todayISO();
+  let h = '<div class="card"><h2 class="sec">生理周期</h2>' +
+    '<p class="lead">记录周期后，方案会按阶段调节碳水——尤其是黄体期，文献支持这时需要更多碳水' + R(16) + '。</p>' +
+    '<div class="row"><div class="field"><label>这次经期开始日期</label>' +
+      '<input type="date" value="' + (m.last || '') + '" onchange="setMenstrual(\'last\', this.value)"></div>' +
+      '<div class="field"><label>周期长度（天）</label>' +
+      '<input type="number" inputmode="numeric" value="' + (m.len || 28) + '" onchange="setMenstrual(\'len\', this.value)"></div></div>' +
+    '<div class="chips"><span class="chip opt' + (m.on ? ' on' : '') + '" onclick="setMenstrual(\'on\', ' + (m.on ? 'false' : 'true') + ')">' +
+      (m.on ? '已开启周期记录' : '开启周期记录') + '</span></div>';
+  if(ci){
+    h += '<div class="note ' + (ci.phase === 'luteal' ? 'warn' : '') + '" style="margin-top:12px">' +
+      '<b>今天是周期第 ' + ci.day + ' 天 · ' + ci.label + '</b><br>' +
+      (ci.phase === 'luteal'
+        ? '黄体期：碳水建议 +15%（约 +' + Math.round(P.carb * 0.15) + ' g），并且这期间体重上浮 0.5~2 kg 是正常的，<b>不要因此减热量</b>。'
+        : (ci.phase === 'menstrual'
+          ? '经期：维持现有热量，不额外压。累了就休息或改散步。'
+          : '卵泡期：按基准方案执行，这通常是状态最好、最能吃的时候。')) +
+      '<div class="muted" style="margin-top:4px">距离下次经期约 ' + ci.nextIn + ' 天</div></div>';
+    if(ci.phase === 'luteal' && !S.carbBoostOff){
+      h += '<div class="muted" style="font-size:11.5px">已自动应用黄体期 +15% 碳水，可在「饮食方案 → 计算过程」看到这一步。</div>';
+    }
+  }
+  h += '<div class="note bad" style="margin-top:10px">如果<b>连续两个周期不规律或停经</b>，请先停下来看医生，而不是继续减脂。这是低能量可用性（LEA）最典型的信号' + R(20) + '。</div>';
+  h += '</div>';
   return h;
 }
 
@@ -2242,10 +2711,32 @@ function goDay(n){ curDay = shiftDate(curDay, n); pick = {meal:null,scene:null,f
 function setStatus(k, v){
   const d = getDay(curDay, true);
   d.status = d.status || {};
-  d.status[k] = (k === 'exMin' || k === 'sleepH') ? num(v) : v;
+  const numeric = ['exMin','sleepH','deepSleep','sleepScore','wakeUps'];
+  if(numeric.indexOf(k) >= 0){ d.status[k] = num(v); }
+  else if(d.status[k] === v){ d.status[k] = ''; }
+  else { d.status[k] = v; }
   saveS();
   const box = document.getElementById('statusCard');
   if(box) box.innerHTML = renderStatusCard(buildPlan(S));
+  const sc = document.getElementById('scoreCard');
+  if(sc) sc.innerHTML = renderScoreCard(buildPlan(S));
+}
+function setSupp(id){
+  const sp = getSupp(curDay, true);
+  if(id === 'protein' || id === 'caffeine'){
+    const v = arguments[1];
+    sp[id] = (num(sp[id]) === num(v)) ? 0 : num(v);
+  }else{
+    sp[id] = !sp[id];
+  }
+  saveS();
+  renderPlanBody();
+}
+function setMenstrual(k, v){
+  S.menstrual = S.menstrual || {on:false, last:'', len:28};
+  S.menstrual[k] = v;
+  saveS();
+  renderPlanBody();
 }
 
 /* ---------- 每周记录与自动调整 ---------- */
@@ -2263,7 +2754,7 @@ function logAdvice(P){
     (dwW !== null ? '；腰围变化 ' + (dwW>0?'+':'') + r1(dwW) + ' cm' : '')];
   let tone = 'ok', title = '保持当前方案', adj = '碳水不变';
   if(pct < -1.0){ tone='bad'; title='掉得偏快，先加回来'; adj='碳水 +0.3 g/kg ≈ +' + r0(0.3*P.s.weight) + ' g'; lines.push('每周降幅超过体重的 1%，掉的有相当一部分是水分和肌肉' + R(8) + '。','做法：碳水加回去，或直接加半碗主食；有氧先别加量。'); }
-  else if(pct > 0.3 && S.goal === 'cut'){ tone='warn'; title='方向反了，收紧一点'; adj='碳水 −0.2 g/kg ≈ −' + r0(0.2*P.s.weight) + ' g'; lines.push('体重在往上走，说明当前摄入大于消耗。','做法：先检查有没有漏记（油、酱汁、饮料、坚果），再把碳水降 0.2 g/kg，不要一次砍太多。'); }
+  else if(pct > 0.3 && (S.goal === 'cut' || S.goal === 'tone')){ tone='warn'; title='方向反了，收紧一点'; adj='碳水 −0.2 g/kg ≈ −' + r0(0.2*P.s.weight) + ' g'; lines.push('体重在往上走，说明当前摄入大于消耗。','做法：先检查有没有漏记（油、酱汁、饮料、坚果），再把碳水降 0.2 g/kg，不要一次砍太多。'); }
   else if(hungry >= Math.max(3, Math.ceil(win.length/2))){ tone='warn'; title='身体在要碳水，可以往上给'; adj='碳水 +0.3 g/kg ≈ +' + r0(0.3*P.s.weight) + ' g'; lines.push('多数时间"很饿、很想吃碳水"，说明碳水利用率在窗口期' + R(11) + '。','做法：碳水 +0.3 g/kg，蛋白质同步 −0.2 g/kg，脂肪不动，维持 10 天~半个月再评估。'); }
   else if(full >= 3){ tone='warn'; title='该往下调一点了'; adj='碳水 −0.3 g/kg ≈ −' + r0(0.3*P.s.weight) + ' g'; lines.push('多次"不饿或吃撑"，而体重没在动，说明碳水利用率在下降。','做法：碳水 −0.3 g/kg，蛋白质同步 +0.2 g/kg，脂肪不动。'); }
   else if(Math.abs(pct) < 0.2){ tone='ok'; title='体重稳定，看围度'; adj='保持不动'; lines.push('体重基本不动。别急着砍热量——先看腰围和照片，如果腰围在降、训练重量在涨，说明你在同时增肌减脂，这是最好的情况。','如果腰围也连续两周不动，再把碳水降 0.2 g/kg 或每天加 15 分钟有氧。'); }
@@ -2398,7 +2889,7 @@ function setCycleOn(v){ S.cycleOn = !!v; saveS(); renderPlanBody(); }
 
 /* ---------- 复制方案文字 ---------- */
 function goalText(){
-  return S.goal === 'cut'
+  return (S.goal === 'cut' || S.goal === 'tone')
     ? (S.cutMode === 'fat' ? ('把体脂率降到 ' + num(S.cutFat) + '%，用时 ' + num(S.cutFatWeeks) + ' 周')
                            : ('减重 ' + num(S.cutWeight) + ' 斤，用时 ' + num(S.cutWeeks) + ' 周'))
     : ('增重 ' + num(S.bulkWeight) + ' 斤，用时 ' + num(S.bulkMonths) + ' 个月');
@@ -2406,9 +2897,9 @@ function goalText(){
 function copyPlan(){
   const P = buildPlan(S);
   const t = [
-    '【' + (S.goal==='cut'?'减脂':'增肌') + '方案】' + goalText(),
+    '【' + (S.goal==='cut'?'减脂':(S.goal==='tone'?'女性塑形':'增肌')) + '方案】' + goalText(),
     '基础：' + (S.sex==='f'?'女':'男') + ' ' + S.age + ' 岁 ' + S.height + 'cm ' + S.weight + 'kg · ' + (ACT[S.activity]||ACT.light).t + ' · ' + P.tp.t,
-    '热量：BMR ' + r0(P.bmr) + ' / TDEE ' + r0(P.tdee) + ' / 目标摄入 ' + r0(P.intake) + ' kcal（' + (S.goal==='cut'?'缺口':'盈余') + ' ' + r0(Math.abs(P.deficit)) + '）',
+    '热量：BMR ' + r0(P.bmr) + ' / TDEE ' + r0(P.tdee) + ' / 目标摄入 ' + r0(P.intake) + ' kcal（' + ((S.goal==='cut'||S.goal==='tone')?'缺口':'盈余') + ' ' + r0(Math.abs(P.deficit)) + '）',
     '营养素：蛋白质 ' + r0(P.protein) + ' g　脂肪 ' + r0(P.fat) + ' g　碳水 ' + r0(P.carb) + ' g',
     '碳循环：高碳 ' + r0(P.carbHigh) + ' g × ' + P.cy.h + ' 天 / 中碳 ' + r0(P.carbMid) + ' g × ' + P.cy.m + ' 天 / 低碳 ' + r0(P.carbLow) + ' g × ' + P.cy.l + ' 天',
     '训练：力量 ' + P.tp.days + ' 天/周，每次 ' + P.tp.min + ' 分钟；高碳日练力量，低碳日休息',
@@ -2442,7 +2933,7 @@ document.addEventListener('DOMContentLoaded', boot);
 window.goStep = goStep; window.exportData = exportData; window.importData = importData; window.clearAllData = clearAllData; window.setCycleLevel = setCycleLevel; window.saveLog = saveLog; window.delLog = delLog; window.applyAllCalib = applyAllCalib; window.clearCalib = clearCalib;
 window.openPicker = openPicker; window.closePicker = closePicker; window.pickScene = pickScene;
 window.pickFood = pickFood; window.setMult = setMult; window.toggleMod = toggleMod;
-window.confirmAdd = confirmAdd; window.confirmCustom = confirmCustom; window.cuMode = cuMode; window.cuCat = cuCat; window.cuPortion = cuPortion; window.cuInput = cuInput; window.delItem = delItem; window.goDay = goDay; window.setStatus = setStatus; window.setCycleOn = setCycleOn; window.toggleEstimator = toggleEstimator; window.applyEstimate = applyEstimate; window.pickBF = pickBF;
+window.confirmAdd = confirmAdd; window.confirmCustom = confirmCustom; window.cuMode = cuMode; window.cuCat = cuCat; window.cuPortion = cuPortion; window.cuInput = cuInput; window.delItem = delItem; window.goDay = goDay; window.setStatus = setStatus; window.setSupp = setSupp; window.setMenstrual = setMenstrual; window.setCycleOn = setCycleOn; window.toggleEstimator = toggleEstimator; window.applyEstimate = applyEstimate; window.pickBF = pickBF;
 window.copyPlan = copyPlan;
 </script>
 </body>
